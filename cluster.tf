@@ -1,72 +1,10 @@
-resource tls_private_key k8s_cluster {
-  algorithm   = "ECDSA"
-  ecdsa_curve = "P384"
-}
-
-data template_file k8s_cloud_config {
-  template = file("${path.module}/files/k8s_master_cloud_config.yml.tpl")
-
-  vars = {
-    ssh_key     = tls_private_key.k8s_cluster.public_key_openssh
-    hostname    = var.k8s_master_hostname
-    domain      = var.k8s_domain
-    dns_servers = join(",", var.dns_servers)
-  }
-}
-
-resource vsphere_virtual_machine k8s_master {
-  name             = "K8sMaster"
-  resource_pool_id = data.vsphere_resource_pool.pool.id
-  datastore_id     = data.vsphere_datastore.vm_datastore.id
-
-  num_cpus              = 1
-  num_cores_per_socket  = 1
-  memory                = 2048
-  guest_id              = "other4xLinux64Guest"
-  alternate_guest_name  = "RancherOS"
-  firmware              = "bios"
-  scsi_type             = "pvscsi"
-  force_power_off       = true
-  shutdown_wait_timeout = 1
-
-  extra_config = {
-    #"guestinfo.cloud-init.config.data"   = base64encode(data.template_file.k8s_cloud_config.rendered)
-    #"guestinfo.cloud-init.data.encoding" = "base64"
-    "guestinfo.cloud-init.config.data"   = base64gzip(data.template_file.k8s_cloud_config.rendered)
-    "guestinfo.cloud-init.data.encoding" = "gzip+base64"
-  }
-
-  cdrom {
-    datastore_id = data.vsphere_datastore.iso_datastore.id
-    path         = var.rancher_iso_path
-  }
-
-  network_interface {
-    network_id   = data.vsphere_network.vm.id
-    adapter_type = "vmxnet3"
-  }
-
-  network_interface {
-    network_id   = data.vsphere_network.storage.id
-    adapter_type = "vmxnet3"
-  }
-
-  disk {
-    label            = "os_disk"
-    size             = 8
-    path             = "OS.vmdk"
-    thin_provisioned = true
-    eagerly_scrub    = false
-  }
-}
-
 resource rancher2_cluster test {
   name = "test"
   rke_config {
     authentication {
       sans = [
-        "10.1.1.185",
-        "k8s-master.synchro.dev"
+        "${var.k8s_cluster[0].name}.${var.k8s_domain}",
+        split("/", var.k8s_cluster[0].address_cidr_ipv4)[0],
       ]
     }
     network {
@@ -103,25 +41,92 @@ resource rancher2_cluster test {
       }
     }*/
   }
+}
 
-  depends_on = [vsphere_virtual_machine.k8s_master]
+resource tls_private_key k8s_cluster {
+  algorithm   = "ECDSA"
+  ecdsa_curve = "P384"
+}
+
+data template_file k8s_cloud_config {
+  count    = length(var.k8s_cluster)
+  template = file("${path.module}/files/k8s_master_cloud_config.yml.tpl")
+
+  vars = {
+    ssh_key           = tls_private_key.k8s_cluster.public_key_openssh
+    hostname          = "${var.k8s_cluster[count.index].name}.${var.k8s_domain}"
+    docker_registry   = var.docker_registry
+    dns_servers       = join(",", var.dns_servers)
+    dns_domain        = var.k8s_domain
+    address_cidr_ipv4 = var.k8s_cluster[count.index].address_cidr_ipv4
+    gateway_ipv4      = var.k8s_cluster[count.index].gateway_ipv4
+  }
+}
+
+resource vsphere_virtual_machine k8s_node {
+  count            = length(var.k8s_cluster)
+  name             = var.k8s_cluster[count.index].name
+  resource_pool_id = data.vsphere_resource_pool.pool.id
+  datastore_id     = data.vsphere_datastore.vm_datastore.id
+
+  num_cpus              = 1
+  num_cores_per_socket  = 1
+  memory                = 2048
+  guest_id              = "other4xLinux64Guest"
+  alternate_guest_name  = "RancherOS"
+  firmware              = "bios"
+  scsi_type             = "pvscsi"
+  force_power_off       = true
+  shutdown_wait_timeout = 1
+
+  extra_config = {
+    "guestinfo.cloud-init.config.data"   = base64encode(data.template_file.k8s_cloud_config[count.index].rendered)
+    "guestinfo.cloud-init.data.encoding" = "base64"
+    #"guestinfo.cloud-init.config.data"   = base64gzip(data.template_file.k8s_cloud_config.rendered)
+    #"guestinfo.cloud-init.data.encoding" = "gzip+base64"
+  }
+
+  cdrom {
+    datastore_id = data.vsphere_datastore.iso_datastore.id
+    path         = var.rancher_iso_path
+  }
+
+  network_interface {
+    network_id   = data.vsphere_network.vm.id
+    adapter_type = "vmxnet3"
+  }
+
+  network_interface {
+    network_id   = data.vsphere_network.storage.id
+    adapter_type = "vmxnet3"
+  }
+
+  disk {
+    label            = "os_disk"
+    size             = 8
+    path             = "OS.vmdk"
+    thin_provisioned = true
+    eagerly_scrub    = false
+  }
 }
 
 resource null_resource k8s_master_provision {
+  count = length(var.k8s_cluster)
   triggers = {
-    node_instance_id = vsphere_virtual_machine.k8s_master.id
+    node_instance_id = vsphere_virtual_machine.k8s_node[count.index].id
+    cluster_token    = rancher2_cluster.test.cluster_registration_token[0].token
   }
 
   provisioner remote-exec {
     connection {
       type        = "ssh"
-      host        = "10.1.1.185"
+      host        = split("/", var.k8s_cluster[count.index].address_cidr_ipv4)[0]
       user        = "rancher"
       private_key = tls_private_key.k8s_cluster.private_key_pem
     }
 
     inline = [
-      "${rancher2_cluster.test.cluster_registration_token[0].node_command} --etcd --controlplane --worker"
+      "${rancher2_cluster.test.cluster_registration_token[0].node_command} --${join(" --", var.k8s_cluster[count.index].roles)}"
     ]
   }
 }

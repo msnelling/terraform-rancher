@@ -5,20 +5,20 @@ provider rancher2 {
   insecure  = true
 }
 
-resource "rancher2_bootstrap" "admin" {
+resource rancher2_bootstrap admin {
   provider   = "rancher2.bootstrap"
   password   = var.rancher_admin_password
   telemetry  = true
   depends_on = [vsphere_virtual_machine.rancher]
 }
 
-provider "rancher2" {
+provider rancher2 {
   api_url   = "${rancher2_bootstrap.admin.url}"
   token_key = "${rancher2_bootstrap.admin.token}"
   insecure  = true
 }
 
-resource "rancher2_cloud_credential" "vsphere_homelab" {
+resource rancher2_cloud_credential vsphere_homelab {
   name = "homelab"
   vsphere_credential_config {
     vcenter      = var.vsphere_server
@@ -28,7 +28,7 @@ resource "rancher2_cloud_credential" "vsphere_homelab" {
   }
 }
 
-resource "rancher2_node_template" "small" {
+resource rancher2_node_template small {
   name                = "1vCPU-2GiRAM-8GiSSD"
   cloud_credential_id = rancher2_cloud_credential.vsphere_homelab.id
   vsphere_config {
@@ -40,10 +40,10 @@ resource "rancher2_node_template" "small" {
     datastore   = var.vsphere_vm_datastore
     network     = [var.vsphere_vm_network, "Storage Network"]
   }
-  engine_registry_mirror = ["https://docker-registry.${var.rancher_domain}"]
+  engine_registry_mirror = ["https://${var.docker_registry}"]
 }
 
-resource "rancher2_node_template" "medium" {
+resource rancher2_node_template medium {
   name                = "2vCPU-4GiRAM-16GiSSD"
   cloud_credential_id = rancher2_cloud_credential.vsphere_homelab.id
   vsphere_config {
@@ -55,10 +55,10 @@ resource "rancher2_node_template" "medium" {
     datastore   = var.vsphere_vm_datastore
     network     = [var.vsphere_vm_network, "Storage Network"]
   }
-  engine_registry_mirror = ["https://docker-registry.${var.rancher_domain}"]
+  engine_registry_mirror = ["https://${var.docker_registry}"]
 }
 
-resource "vsphere_virtual_machine" "rancher" {
+resource vsphere_virtual_machine rancher {
   name             = "Rancher"
   resource_pool_id = data.vsphere_resource_pool.pool.id
   datastore_id     = data.vsphere_datastore.vm_datastore.id
@@ -72,10 +72,10 @@ resource "vsphere_virtual_machine" "rancher" {
   scsi_type            = "pvscsi"
 
   extra_config = {
-    #"guestinfo.cloud-init.config.data"   = base64encode(data.template_file.rancher_cloud_config.rendered)
-    #"guestinfo.cloud-init.data.encoding" = "base64"
-    "guestinfo.cloud-init.config.data"   = base64gzip(data.template_file.rancher_cloud_config.rendered)
-    "guestinfo.cloud-init.data.encoding" = "gzip+base64"
+    "guestinfo.cloud-init.config.data"   = base64encode(data.template_file.rancher_cloud_config.rendered)
+    "guestinfo.cloud-init.data.encoding" = "base64"
+    #"guestinfo.cloud-init.config.data"   = base64gzip(data.template_file.rancher_cloud_config.rendered)
+    #"guestinfo.cloud-init.data.encoding" = "gzip+base64"
   }
 
   cdrom {
@@ -97,12 +97,13 @@ resource "vsphere_virtual_machine" "rancher" {
   }
 }
 
-data "template_file" "rancher_cloud_config" {
+data template_file rancher_cloud_config {
   template = file("${path.module}/files/rancher_cloud_config.yml.tpl")
 
   vars = {
     rancher_hostname = var.rancher_hostname
     rancher_domain   = var.rancher_domain
+    docker_registry  = var.docker_registry
     dns_servers      = join(",", var.dns_servers)
   }
 }

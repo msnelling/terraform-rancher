@@ -4,8 +4,6 @@ ssh_authorized_keys:
   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDcQE/cTtzHHZ6c1R0ZwGGmebYQI4mzZcdAydfJR/MlQnjW1974tP7EDQ4lM0jL/PqNoePc2t/5TVuG7e+JR/SnJi4wpflRuCZPVyfnf5Q6z/gXPzzdeL15XYPlZJNRrZF5UCBMVR6u9+nMCOLp5uIrSGisBya40elTvxxWeTbmhheXwlUgRFFqujgDm69LaqgQMfctrbjGqbMtmzWxtczYL2ArQKyuml6BYt9itrAb2MGJFLTyyqooWP2rcrrpoKEYhTj6cXA/b750q+CwXhieQuquy2E4ceDDqk2Z/ysiocnnfAsYiUI6lnDTjnJpGJetcR5zLftnHlYXJVxPwBSt
   - ${ssh_key}
 
-#hostname: ${hostname}
-
 write_files:
   - path: /opt/rancher/bin/start.sh
     permissions: "0700"
@@ -28,11 +26,11 @@ write_files:
         docker:
           engine: docker-19.03.1
         bootstrap_docker:
-          registry_mirror: "https://docker-registry.${domain}"
+          registry_mirror: "https://${docker_registry}"
         docker:
-          registry_mirror: "https://docker-registry.${domain}"
+          registry_mirror: "https://${docker_registry}"
         system_docker:
-          registry_mirror: "https://docker-registry.${domain}"
+          registry_mirror: "https://${docker_registry}"
         services_include:
           kernel-extras: true
           volume-nfs: true
@@ -43,11 +41,13 @@ write_files:
               - ${address}
 %{ endfor ~}
             search:
-              - ${domain}
-            interfaces:
-              eth0:
-                dhcp: true
-                mtu: 1500
-              eth1:
-                dhcp: true
-                mtu: 9000
+              - ${dns_domain}
+          interfaces:
+            eth0:
+              dhcp: false
+              address: ${address_cidr_ipv4}
+              gateway: ${gateway_ipv4}
+              mtu: 1500
+            eth1:
+              dhcp: true
+              mtu: 9000

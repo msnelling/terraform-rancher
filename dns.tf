@@ -1,4 +1,4 @@
-provider "dns" {
+provider dns {
   update {
     server        = var.dns_update_server
     key_name      = var.dns_update_key
@@ -7,7 +7,7 @@ provider "dns" {
   }
 }
 
-resource "dns_a_record_set" "rancher" {
+resource dns_a_record_set rancher {
   zone      = "${var.rancher_domain}."
   name      = var.rancher_hostname
   addresses = [vsphere_virtual_machine.rancher.default_ip_address]
