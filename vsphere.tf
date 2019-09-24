@@ -26,7 +26,7 @@ data vsphere_network vm {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data vsphere_network storage {
-  name          = var.vsphere_storage_network
+data vsphere_network aux {
+  name          = var.vsphere_aux_network
   datacenter_id = data.vsphere_datacenter.dc.id
 }
