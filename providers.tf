@@ -26,7 +26,11 @@ data vsphere_network vm {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data vsphere_network aux {
-  name          = var.vsphere_aux_network
-  datacenter_id = data.vsphere_datacenter.dc.id
+provider dns {
+  update {
+    server        = var.dns_update_server
+    key_name      = var.dns_update_key
+    key_algorithm = var.dns_update_algorithm
+    key_secret    = var.dns_update_secret
+  }
 }

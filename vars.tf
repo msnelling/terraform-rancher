@@ -3,7 +3,7 @@
 terraform {
   backend "remote" {
     hostname     = "app.terraform.io"
-    organization = "synchro"
+    organization = "xmple"
 
     workspaces {
       name = "rancher"
@@ -24,9 +24,6 @@ variable vsphere_datacenter {
 }
 variable vsphere_vm_network {
   default = "VM Network"
-}
-variable vsphere_aux_network {
-  default = "Storage Network"
 }
 variable vsphere_vm_datastore {}
 variable vsphere_iso_datastore {}
@@ -53,43 +50,3 @@ variable dns_update_server {}
 variable dns_update_key {}
 variable dns_update_algorithm {}
 variable dns_update_secret {}
-
-###############################################################################
-# Kubernetes Cluster
-variable k8s_domain {}
-variable k8s_cluster {
-  default = [
-    {
-      name              = "k8s01"
-      cpu_cores         = 1
-      memory_mb         = 1500
-      disk_gb           = 8
-      address_cidr_ipv4 = "10.1.1.40/24"
-      gateway_ipv4      = "10.1.1.1"
-      roles             = ["etcd", "controlplane"]
-      labels            = {}
-    },
-    {
-      name              = "k8s02"
-      cpu_cores         = 6
-      memory_mb         = 2048
-      disk_gb           = 8
-      address_cidr_ipv4 = "10.1.1.41/24"
-      gateway_ipv4      = "10.1.1.1"
-      roles             = ["worker"]
-      labels            = {}
-    },
-    {
-      name              = "k8s03"
-      cpu_cores         = 6
-      memory_mb         = 2048
-      disk_gb           = 8
-      address_cidr_ipv4 = "10.1.1.42/24"
-      gateway_ipv4      = "10.1.1.250"
-      roles             = ["worker"]
-      labels = {
-        gateway = "vpn"
-      }
-    }
-  ]
-}

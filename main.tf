@@ -74,8 +74,6 @@ resource vsphere_virtual_machine rancher {
   extra_config = {
     "guestinfo.cloud-init.config.data"   = base64encode(data.template_file.rancher_cloud_config.rendered)
     "guestinfo.cloud-init.data.encoding" = "base64"
-    #"guestinfo.cloud-init.config.data"   = base64gzip(data.template_file.rancher_cloud_config.rendered)
-    #"guestinfo.cloud-init.data.encoding" = "gzip+base64"
   }
 
   cdrom {
@@ -98,7 +96,7 @@ resource vsphere_virtual_machine rancher {
 }
 
 data template_file rancher_cloud_config {
-  template = file("${path.module}/files/rancher_cloud_config.yml.tpl")
+  template = file("${path.module}/templates/cloud_config.yml.tpl")
 
   vars = {
     rancher_hostname = var.rancher_hostname
@@ -106,4 +104,11 @@ data template_file rancher_cloud_config {
     docker_registry  = var.docker_registry
     dns_servers      = join(",", var.dns_servers)
   }
+}
+
+resource dns_a_record_set rancher {
+  zone      = "${var.rancher_domain}."
+  name      = var.rancher_hostname
+  addresses = [vsphere_virtual_machine.rancher.default_ip_address]
+  ttl       = 60
 }
