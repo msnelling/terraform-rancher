@@ -42,6 +42,11 @@ variable rancher_iso_path {
 }
 
 ###############################################################################
+# NFS
+variable nfs_server_ipv4 {}
+variable nfs_mount {}
+
+###############################################################################
 # DNS
 variable dns_servers {
   type = list(string)
@@ -50,3 +55,8 @@ variable dns_update_server {}
 variable dns_update_key {}
 variable dns_update_algorithm {}
 variable dns_update_secret {}
+
+###############################################################################
+# Cloudflare
+variable cloudflare_api_email {}
+variable cloudflare_api_key {}

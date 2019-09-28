@@ -7,9 +7,10 @@ provider rancher2 {
 
 resource rancher2_bootstrap admin {
   provider   = "rancher2.bootstrap"
+
   password   = var.rancher_admin_password
   telemetry  = true
-  depends_on = [vsphere_virtual_machine.rancher]
+  depends_on = [dns_a_record_set.rancher]
 }
 
 provider rancher2 {
@@ -99,10 +100,14 @@ data template_file rancher_cloud_config {
   template = file("${path.module}/templates/cloud_config.yml.tpl")
 
   vars = {
-    rancher_hostname = var.rancher_hostname
-    rancher_domain   = var.rancher_domain
-    docker_registry  = var.docker_registry
-    dns_servers      = join(",", var.dns_servers)
+    rancher_hostname     = var.rancher_hostname
+    rancher_domain       = var.rancher_domain
+    nfs_server_ipv4      = var.nfs_server_ipv4
+    nfs_mount            = var.nfs_mount
+    docker_registry      = var.docker_registry
+    dns_servers          = join(",", var.dns_servers)
+    cloudflare_api_email = var.cloudflare_api_email
+    cloudflare_api_key   = var.cloudflare_api_key
   }
 }
 
