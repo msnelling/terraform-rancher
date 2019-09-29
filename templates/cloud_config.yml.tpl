@@ -48,6 +48,8 @@ write_files:
           rancher-server:
             hostname: rancher
             image: rancher/rancher:latest
+            command:
+              - --no-cacerts
             volumes:
               - /var/lib/rancher:/var/lib/rancher:rw
             restart: unless-stopped
@@ -64,6 +66,7 @@ write_files:
               traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto: https
               traefik.http.services.rancher.loadbalancer.server.scheme: http
               traefik.http.services.rancher.loadbalancer.server.port: "80"
+              traefik.http.services.rancher.loadbalancer.passhostheader: "true"
           traefik:
             image: traefik:v2.0
             command:
@@ -77,7 +80,7 @@ write_files:
               - --providers.docker.exposedbydefault=false
               - --certificatesResolvers.default=true
               - --certificatesResolvers.default.acme.storage=/acme/acme.json
-              - --certificatesResolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+              #- --certificatesResolvers.default.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
               - --certificatesResolvers.default.acme.dnschallenge=true
               - --certificatesResolvers.default.acme.dnschallenge.provider=cloudflare
               - --certificatesResolvers.default.acme.dnschallenge.delayBeforeCheck=0
