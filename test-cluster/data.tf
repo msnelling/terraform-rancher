@@ -9,7 +9,7 @@ data null_data_source values {
   }
 }
 
-data template_file k8s_cloud_config {
+data template_file cloud_config {
   count    = length(var.k8s_cluster)
   template = file("${path.module}/templates/cloud_config.yml.tpl")
 

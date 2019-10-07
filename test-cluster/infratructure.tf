@@ -14,7 +14,7 @@ resource vsphere_virtual_machine k8s_node {
   shutdown_wait_timeout = 1
 
   extra_config = {
-    "guestinfo.cloud-init.config.data"   = base64encode(data.template_file.k8s_cloud_config[count.index].rendered)
+    "guestinfo.cloud-init.config.data"   = base64encode(data.template_file.cloud_config[count.index].rendered)
     "guestinfo.cloud-init.data.encoding" = "base64"
   }
 
