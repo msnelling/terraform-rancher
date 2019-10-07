@@ -3,5 +3,6 @@ output api_url {
 }
 
 output token_key {
-  value = rancher2_bootstrap.admin.token
+  value     = rancher2_bootstrap.admin.token
+  sensitive = true
 }

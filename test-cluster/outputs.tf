@@ -1,5 +1,5 @@
 output kube_config {
-  value = "${rancher2_cluster.cluster.kube_config}"
+  value     = "${rancher2_cluster.cluster.kube_config}"
   sensitive = true
 }
 

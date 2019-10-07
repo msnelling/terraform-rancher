@@ -1,5 +1,5 @@
 resource rancher2_bootstrap admin {
-  provider   = "rancher2.bootstrap"
+  provider = "rancher2.bootstrap"
 
   password   = var.rancher_admin_password
   telemetry  = true
