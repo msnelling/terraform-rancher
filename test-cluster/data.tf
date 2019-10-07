@@ -1,3 +1,14 @@
+data terraform_remote_state rancher {
+  backend = "remote"
+
+  config = {
+    organization = "xmple"
+    workspaces = {
+      name = "rancher"
+    }
+  }
+}
+
 data null_data_source values {
   count = length(var.k8s_cluster)
 

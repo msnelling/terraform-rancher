@@ -1,14 +1,3 @@
-data terraform_remote_state rancher {
-  backend = "remote"
-
-  config = {
-    organization = "xmple"
-    workspaces = {
-      name = "rancher"
-    }
-  }
-}
-
 provider dns {
   update {
     server        = var.dns_update_server
