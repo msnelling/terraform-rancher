@@ -1,5 +1,6 @@
 output kube_config {
-  value = "\n${rancher2_cluster.cluster.kube_config}"
+  value = "${rancher2_cluster.cluster.kube_config}"
+  sensitive = true
 }
 
 output system_project_id {

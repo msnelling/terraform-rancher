@@ -1,17 +1,4 @@
 ###############################################################################
-# Remote State
-terraform {
-  backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "xmple"
-
-    workspaces {
-      name = "k8s-test"
-    }
-  }
-}
-
-###############################################################################
 # vSphere
 variable vsphere_server {}
 variable vsphere_username {}
