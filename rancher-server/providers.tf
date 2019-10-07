@@ -5,27 +5,6 @@ provider vsphere {
   allow_unverified_ssl = true
 }
 
-data vsphere_datacenter dc {
-  name = var.vsphere_datacenter
-}
-
-data vsphere_datastore vm_datastore {
-  name          = var.vsphere_vm_datastore
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
-data vsphere_datastore iso_datastore {
-  name          = var.vsphere_iso_datastore
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
-data vsphere_resource_pool pool {}
-
-data vsphere_network vm {
-  name          = var.vsphere_vm_network
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
 provider dns {
   update {
     server        = var.dns_update_server
@@ -33,4 +12,17 @@ provider dns {
     key_algorithm = var.dns_update_algorithm
     key_secret    = var.dns_update_secret
   }
+}
+
+provider rancher2 {
+  alias     = "bootstrap"
+  api_url   = "https://${var.rancher_hostname}.${var.rancher_domain}"
+  bootstrap = true
+  insecure  = true
+}
+
+provider rancher2 {
+  api_url   = rancher2_bootstrap.admin.url
+  token_key = rancher2_bootstrap.admin.token
+  insecure  = true
 }
