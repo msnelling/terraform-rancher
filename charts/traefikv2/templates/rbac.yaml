@@ -65,7 +65,6 @@ rules:
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  namespace: traefik-ingress
   name: traefik-ingress-controller
 
 ---
