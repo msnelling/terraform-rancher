@@ -31,7 +31,9 @@ data:
       default:
         acme:
           storage: /acme/acme.json
-          caServer: {{ .Values.acme.caServer }}
+          {{- if .Values.acme.staging }}
+          caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+          {{- end }}
           {{- if eq .Values.acme.challengeType "dns-01" }}
           dnsChallenge:
             provider: {{ .Values.acme.dnsProvider.name | quote }}
