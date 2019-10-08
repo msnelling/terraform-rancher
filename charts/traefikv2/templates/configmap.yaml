@@ -1,0 +1,47 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: traefik-config
+
+data:
+  traefik.yaml: |
+    global:
+      sendAnonymousUsage: true
+    api:
+      insecure: true
+      dashboard: true
+    metrics:
+      prometheus: {} # Enable with defaults
+    log:
+      level: INFO
+    accessLog: {} # Enable with defaults
+    entryPoints:
+      web:
+        address: :80
+      websecure:
+        address: :443
+    forwardedHeaders:
+      insecure: true
+    providers:
+      kubernetesCRD:
+        ingressClass: traefik
+        namespaces: [] # All namespaces
+    certificatesResolvers:
+      default:
+        acme:
+          storage: /acme/acme.json
+          caServer: {{ .Values.acme.caServer }}
+          {{- if eq .Values.acme.challengeType "dns-01" }}
+          dnsChallenge:
+            provider: {{ .Values.acme.dnsProvider.name | quote }}
+            {{- if .Values.acme.delayBeforeCheck }}
+            delayBeforeCheck: {{ .Values.acme.delayBeforeCheck }}
+            {{- end }}
+            {{- with .Values.acme.dnsChallenge }}
+            resolvers:
+              {{- range .resolvers }}
+              - {{ . }}
+              {{- end }}
+            {{- end }}
+          {{- end }}

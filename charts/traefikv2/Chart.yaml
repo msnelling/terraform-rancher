@@ -1,5 +1,12 @@
 apiVersion: v1
-appVersion: "1.0"
-description: A Helm chart for Kubernetes
 name: traefikv2
 version: 0.1.0
+appVersion: "2.0"
+description: A Helm chart for Traefik v2.0
+keywords:
+  - traefik
+  - ingress
+  - acme
+  - letsencrypt
+engine: gotpl
+icon: https://docs.traefik.io/img/traefik.logo.png
