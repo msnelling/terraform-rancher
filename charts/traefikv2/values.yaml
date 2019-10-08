@@ -4,10 +4,6 @@
 
 replicaCount: 1
 
-namespace:
-  create: false
-  name: traefik-ingress
-
 dashboard:
   enabled: true
 
