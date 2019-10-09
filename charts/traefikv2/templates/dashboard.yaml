@@ -16,7 +16,7 @@ spec:
       name: admin
       port: 8080
   selector:
-    app: traefik
+    app: {{ template "traefikv2.fullname" . }}
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
