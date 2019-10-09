@@ -20,6 +20,7 @@ spec:
       labels:
         app: traefik
     spec:
+      serviceAccountName: {{ template "traefikv2.fullname" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
