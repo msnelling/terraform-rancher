@@ -41,5 +41,5 @@ data:
             delayBeforeCheck: {{ .Values.acme.delayBeforeCheck }}
             {{- end }}
             resolvers:
-              {{ toYaml .Values.acme.resolvers | indent 16 }}
+              {{ toYaml .Values.acme.resolvers | nindent 14 }}
           {{- end }}
