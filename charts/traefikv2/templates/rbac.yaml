@@ -1,7 +1,7 @@
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: traefik-ingress-controller
+  name: {{ template "traefikv2.fullname" . }}
 
 rules:
   - apiGroups:
@@ -65,19 +65,19 @@ rules:
 kind: ServiceAccount
 apiVersion: v1
 metadata:
-  name: traefik-ingress-controller
+  name: {{ template "traefikv2.fullname" . }}
 
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: traefik-ingress-controller
+  name: {{ template "traefikv2.fullname" . }}
 
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: traefik-ingress-controller
+  name: {{ template "traefikv2.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    namespace: traefik-ingress
-    name: traefik-ingress-controller
+    namespace: {{ .Release.Namespace }}
+    name: {{ template "traefikv2.fullname" . }}
