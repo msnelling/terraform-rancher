@@ -9,8 +9,12 @@ resource rancher2_app traefik_ingress {
   project_id       = data.rancher2_project.system.id
   target_namespace = rancher2_namespace.traefik_ingress.name
   template_name    = "traefikv2"
-  template_version = "0.1.14"
   values_yaml      = <<EOF
+dashboard:
+  enabled: true
+  hostname: ${var.traefik_dashboard_hostname}
+  htpasswd: |
+    ${var.admin_username}:${local.traefik_password}
 acme: 
   dnsProvider: 
     cloudflare: 
@@ -20,4 +24,6 @@ acme:
   persistence: 
     storageClass: nfs-client
 EOF
+
+  depends_on = [rancher2_app.nfs_client_provisioner]
 }

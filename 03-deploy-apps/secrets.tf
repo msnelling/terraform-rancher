@@ -11,14 +11,18 @@ resource rancher2_secret cloudflare_api {
     email = base64encode(var.cloudflare_api_email)
     key   = base64encode(var.cloudflare_api_key)
   }
+
+  count = 0
 }
 
 resource rancher2_secret traefik_admin_auth {
-  name       = "traefik-admin-auth"
+  name       = "traefik-admin-htpasswd"
   project_id = data.rancher2_project.system.id
   data = {
     users = base64encode("${var.admin_username}:${local.traefik_password}")
   }
+
+  count = 0
 }
 
 resource rancher2_secret consul_admin_auth {
@@ -27,4 +31,6 @@ resource rancher2_secret consul_admin_auth {
   data = {
     users = base64encode("${var.admin_username}:${local.consul_password}")
   }
+
+  count = 0
 }
