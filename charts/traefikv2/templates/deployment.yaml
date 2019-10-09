@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   namespace: {{ .Values.namespace }}
@@ -54,7 +54,7 @@ spec:
             - name: config-volume
               mountPath: /etc/traefik
             - name: acme
-              mountPath: /acme/acme.json
+              mountPath: /acme
       volumes:
       - name: config-volume
         configMap:
