@@ -40,6 +40,8 @@ data:
             {{- if .Values.acme.delayBeforeCheck }}
             delayBeforeCheck: {{ .Values.acme.delayBeforeCheck }}
             {{- end }}
+            {{- with .Values.acme.resolvers }}
             resolvers:
-              {{ toYaml .Values.acme.resolvers | nindent 14 }}
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
           {{- end }}
