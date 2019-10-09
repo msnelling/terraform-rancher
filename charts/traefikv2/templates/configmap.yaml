@@ -40,8 +40,6 @@ data:
             {{- if .Values.acme.delayBeforeCheck }}
             delayBeforeCheck: {{ .Values.acme.delayBeforeCheck }}
             {{- end }}
-            {{- with .Values.acme.dnsChallenge }}
             resolvers:
-              {{ toYaml .resolvers | indent 16 }}
-            {{- end }}
+              {{ toYaml .Values.acme.resolvers | indent 16 }}
           {{- end }}
