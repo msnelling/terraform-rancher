@@ -1,8 +1,12 @@
-kind: ConfigMap
 apiVersion: v1
+kind: ConfigMap
 metadata:
-  namespace: {{ .Values.namespace }}
   name: traefik-config
+  labels:
+    app: {{ template "traefikv2.name" . }}
+    chart: {{ template "traefikv2.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
 
 data:
   traefik.yaml: |
@@ -11,6 +15,7 @@ data:
     api:
       insecure: true
       dashboard: true
+    ping: {} # Enable with defaults
     metrics:
       prometheus: {} # Enable with defaults
     log:

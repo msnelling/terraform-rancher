@@ -1,4 +1,8 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+{{- if semverCompare "^1.16-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- else }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- end }}
 kind: CustomResourceDefinition
 metadata:
   name: ingressroutes.traefik.containo.us
@@ -13,7 +17,11 @@ spec:
   scope: Namespaced
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+{{- if semverCompare "^1.16-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- else }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- end }}
 kind: CustomResourceDefinition
 metadata:
   name: ingressroutetcps.traefik.containo.us
@@ -28,7 +36,11 @@ spec:
   scope: Namespaced
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+{{- if semverCompare "^1.16-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- else }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- end }}
 kind: CustomResourceDefinition
 metadata:
   name: middlewares.traefik.containo.us
@@ -43,7 +55,11 @@ spec:
   scope: Namespaced
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+{{- if semverCompare "^1.16-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: rbac.authorization.k8s.io/v1
+{{- else }}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+{{- end }}
 kind: CustomResourceDefinition
 metadata:
   name: tlsoptions.traefik.containo.us
