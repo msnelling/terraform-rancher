@@ -42,8 +42,6 @@ data:
             {{- end }}
             {{- with .Values.acme.dnsChallenge }}
             resolvers:
-              {{- range .resolvers }}
-              - {{ . }}
-              {{- end }}
+              {{ toYaml .resolvers | indent 16 }}
             {{- end }}
           {{- end }}
