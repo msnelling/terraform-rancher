@@ -6,6 +6,10 @@ replicaCount: 1
 
 dashboard:
   enabled: true
+  hostname: traefik.k8s.xmple.io
+  htpasswd:
+    # admin:admin
+    - admin:$2y$11$u6LG0nADSjTivpcxvoQpzupgQSpeSPVL8exFEzcawSfnMEG68K5AO
 
 acme:
   enabled: true

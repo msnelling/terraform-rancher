@@ -1,0 +1,81 @@
+{{- if .Values.dashboard.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "traefikv2.fullname" . }}-dashboard
+
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      name: admin
+      port: 8080
+  selector:
+    app: traefik
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ template "traefikv2.fullname" . }}-dashboard-auth
+
+spec:
+  basicAuth:
+    secret: {{ template "traefikv2.fullname" . }}-dashboard-htpasswd
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
+
+spec:
+  redirectScheme:
+    scheme: https
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ template "traefikv2.fullname" . }}-dashboard
+  annotations:
+    kubernetes.io/ingress.class: traefik
+
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ .Values.dashboard.hostname }}`)
+      kind: Rule
+      priority: 1
+      middlewares:
+        - name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
+      services:
+        - name: {{ template "traefikv2.fullname" . }}-dashboard
+          port: 8080
+          scheme: http
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ template "traefikv2.fullname" . }}-dashboard-tls
+  annotations:
+    kubernetes.io/ingress.class: traefik
+
+spec:
+  entryPoints:
+    - websecure
+  tls:
+    certResolver: default
+  routes:
+    - match: Host(`{{ .Values.dashboard.hostname }}`)
+      kind: Rule
+      priority: 1
+      middlewares:
+        - name: {{ template "traefikv2.fullname" . }}-dashboard-auth
+      services:
+        - name: {{ template "traefikv2.fullname" . }}-dashboard
+          port: 8080
+          scheme: http
+{{- end }}
