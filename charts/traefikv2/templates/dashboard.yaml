@@ -21,7 +21,7 @@ kind: Middleware
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-auth
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
   basicAuth:
