@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "traefikv2.fullname" . }}
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -37,24 +37,24 @@ spec:
             - name: admin
               containerPort: 8080
             {{- end }}
-          #readinessProbe:
-          #  httpGet:
-          #    path: /ping
-          #    port: 80
-          #  failureThreshold: 1
-          #  initialDelaySeconds: 10
-          #  periodSeconds: 10
-          #  successThreshold: 1
-          #  timeoutSeconds: 2
-          #livenessProbe:
-          #  httpGet:
-          #    path: /ping
-          #    port: 80
-          #  failureThreshold: 3
-          #  initialDelaySeconds: 10
-          #  periodSeconds: 10
-          #  successThreshold: 1
-          #  timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
           env:
           {{- range $k, $v := (index .Values.acme.dnsProvider .Values.acme.dnsProvider.name) }}
             {{- if or $v $.Values.acme.dnsProvider.existingSecretName }}

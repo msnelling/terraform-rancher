@@ -7,7 +7,7 @@ kind: CustomResourceDefinition
 metadata:
   name: ingressroutes.traefik.containo.us
   labels:
-  {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": crd-install
 
@@ -30,7 +30,7 @@ kind: CustomResourceDefinition
 metadata:
   name: ingressroutetcps.traefik.containo.us
   labels:
-  {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": crd-install
     
@@ -53,7 +53,7 @@ kind: CustomResourceDefinition
 metadata:
   name: middlewares.traefik.containo.us
   labels:
-  {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": crd-install
     
@@ -76,7 +76,7 @@ kind: CustomResourceDefinition
 metadata:
   name: tlsoptions.traefik.containo.us
   labels:
-  {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": crd-install
     

@@ -8,7 +8,7 @@ metadata:
 {{- end }}
   name: {{ template "traefikv2.fullname" . }}-acme
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
   accessModes:

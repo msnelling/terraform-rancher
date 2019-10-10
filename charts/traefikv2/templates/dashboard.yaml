@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
   type: ClusterIP
@@ -33,7 +33,7 @@ kind: Middleware
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
   redirectScheme:
@@ -45,7 +45,7 @@ kind: IngressRoute
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
 
@@ -69,7 +69,7 @@ kind: IngressRoute
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-tls
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
 

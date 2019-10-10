@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: traefik-config
   labels:
-    {{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefikv2.labels" . | indent 4 }}
 
 data:
   traefik.yaml: |
