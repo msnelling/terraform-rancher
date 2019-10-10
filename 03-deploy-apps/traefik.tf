@@ -9,6 +9,7 @@ resource rancher2_app traefik_ingress {
   project_id       = data.rancher2_project.system.id
   target_namespace = rancher2_namespace.traefik_ingress.name
   template_name    = "traefikv2"
+  force_upgrade    = true
   values_yaml      = <<EOF
 dashboard:
   enabled: true

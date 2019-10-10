@@ -3,10 +3,6 @@ kind: ConfigMap
 metadata:
   name: traefik-config
   labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     {{ include "traefikv2.labels" . | indent 4 }}
 
 data:

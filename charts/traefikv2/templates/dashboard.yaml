@@ -4,10 +4,6 @@ kind: Service
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard
   labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     {{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
@@ -25,10 +21,6 @@ kind: Middleware
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-auth
   labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     {{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
@@ -41,10 +33,6 @@ kind: Middleware
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
   labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     {{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
@@ -57,10 +45,6 @@ kind: IngressRoute
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard
   labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -85,10 +69,6 @@ kind: IngressRoute
 metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-tls
   labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
     {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
