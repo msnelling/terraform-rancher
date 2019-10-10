@@ -12,6 +12,7 @@ metadata:
     chart: {{ template "traefikv2.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
+    {{ include "traefikv2.labels" . | indent 4 }}
 
 spec:
   accessModes:

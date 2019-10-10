@@ -1,14 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: {{ .Values.namespace }}
-  name: traefik
+  name: {{ include "traefikv2.fullname" . }}
   labels:
-  labels:
-    app: {{ template "traefikv2.name" . }}
-    chart: {{ template "traefikv2.chart" . }}
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+    {{ include "traefikv2.labels" . | indent 4 }}
   {{- with .Values.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -18,15 +13,13 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "traefikv2.name" . }}
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: {{ include "traefikv2.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "traefikv2.name" . }}
-        chart: {{ template "traefikv2.chart" . }}
-        release: {{ .Release.Name | quote }}
-        heritage: {{ .Release.Service | quote }}
+        app.kubernetes.io/name: {{ include "traefikv2.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "traefikv2.fullname" . }}
       containers:

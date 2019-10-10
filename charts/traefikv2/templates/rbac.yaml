@@ -2,6 +2,8 @@ kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "traefikv2.fullname" . }}
+  lablels:
+    {{ include "traefikv2.labels" . | indent 4 }}
 
 rules:
   - apiGroups:
@@ -66,12 +68,16 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: {{ template "traefikv2.fullname" . }}
+  lablels:
+    {{ include "traefikv2.labels" . | indent 4 }}
 
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "traefikv2.fullname" . }}
+  lablels:
+    {{ include "traefikv2.labels" . | indent 4 }}
 
 roleRef:
   apiGroup: rbac.authorization.k8s.io
