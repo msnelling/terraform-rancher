@@ -47,3 +47,21 @@ variable dns_update_secret {}
 # Cloudflare
 variable cloudflare_api_email {}
 variable cloudflare_api_key {}
+
+###############################################################################
+# Traefik
+variable traefik_dashboard {
+  type    = bool
+  default = false
+}
+
+###############################################################################
+# ACME
+variable acme_email {
+  type    = string
+  default = null
+}
+variable acme_staging_ca {
+  type    = bool
+  default = true
+}

@@ -31,5 +31,8 @@ data template_file rancher_cloud_config {
     dns_servers          = join(",", var.dns_servers)
     cloudflare_api_email = var.cloudflare_api_email
     cloudflare_api_key   = var.cloudflare_api_key
+    acme_ca_server       = "https://acme-${var.acme_staging_ca ? "staging-" : ""}v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    traefik_dashboard    = var.traefik_dashboard
   }
 }
