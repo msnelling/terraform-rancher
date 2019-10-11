@@ -43,32 +43,32 @@ variable k8s_cluster {
   default = [
     {
       name              = "k8s01"
-      cpu_cores         = 1
-      memory_mb         = 1500
-      disk_gb           = 8
+      cpu_cores         = 6
+      memory_mb         = 4096
+      disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.40/24"
       gateway_ipv4      = "10.1.1.1"
-      roles             = ["etcd", "controlplane"]
+      roles             = ["etcd", "controlplane", "worker"]
       labels            = {}
     },
     {
       name              = "k8s02"
       cpu_cores         = 6
-      memory_mb         = 2048
-      disk_gb           = 8
+      memory_mb         = 4096
+      disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.41/24"
       gateway_ipv4      = "10.1.1.1"
-      roles             = ["worker"]
+      roles             = ["etcd", "controlplane", "worker"]
       labels            = {}
     },
     {
       name              = "k8s03"
       cpu_cores         = 6
-      memory_mb         = 2048
-      disk_gb           = 8
+      memory_mb         = 4096
+      disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.42/24"
       gateway_ipv4      = "10.1.1.250"
-      roles             = ["worker"]
+      roles             = ["etcd", "controlplane", "worker"]
       labels = {
         gateway = "vpn"
       }
