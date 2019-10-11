@@ -9,7 +9,7 @@ metadata:
   labels:
 {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
-    "helm.sh/hook": crd-install
+    #"helm.sh/hook": crd-install
 
 spec:
   group: traefik.containo.us
@@ -35,7 +35,7 @@ metadata:
   labels:
 {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
-    "helm.sh/hook": crd-install
+    #"helm.sh/hook": crd-install
     
 spec:
   group: traefik.containo.us
@@ -58,7 +58,7 @@ metadata:
   labels:
 {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
-    "helm.sh/hook": crd-install
+    #"helm.sh/hook": crd-install
     
 spec:
   group: traefik.containo.us
@@ -81,7 +81,7 @@ metadata:
   labels:
 {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
-    "helm.sh/hook": crd-install
+    #"helm.sh/hook": crd-install
     
 spec:
   group: traefik.containo.us
