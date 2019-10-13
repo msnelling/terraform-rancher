@@ -27,4 +27,5 @@ acme:
 EOF
 
   depends_on = [rancher2_app.nfs_client_provisioner]
+  count = 0
 }
