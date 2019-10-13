@@ -4,8 +4,6 @@ metadata:
   name: ingressroutetcps.traefik.containo.us
   labels:
 {{ include "traefik.labels" . | indent 4 }}
-  annotations:
-    #"helm.sh/hook": crd-install
     
 spec:
   group: traefik.containo.us

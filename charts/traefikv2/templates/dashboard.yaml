@@ -38,6 +38,7 @@ metadata:
 {{ include "traefik.labels" . | indent 4 }}
   annotations:
     helm.sh/hook: "post-install"
+
 spec:
   redirectScheme:
     scheme: https
