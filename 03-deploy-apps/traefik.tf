@@ -5,10 +5,10 @@ resource rancher2_namespace traefik_ingress {
 
 resource rancher2_app traefik_ingress {
   catalog_name     = "my-catalog"
-  name             = "traefikv2"
+  name             = "traefik"
   project_id       = data.rancher2_project.system.id
   target_namespace = rancher2_namespace.traefik_ingress.name
-  template_name    = "traefikv2"
+  template_name    = "traefik"
   force_upgrade    = true
   values_yaml      = <<EOF
 dashboard:

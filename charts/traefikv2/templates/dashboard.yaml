@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "traefikv2.fullname" . }}-dashboard
+  name: {{ template "traefik.fullname" . }}-dashboard
   labels:
-{{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefik.labels" . | indent 4 }}
 
 spec:
   type: ClusterIP
@@ -13,29 +13,29 @@ spec:
       name: admin
       port: 8080
   selector:
-    app.kubernetes.io/name: {{ include "traefikv2.name" . }}
+    app.kubernetes.io/name: {{ include "traefik.name" . }}
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ template "traefikv2.fullname" . }}-dashboard-auth
+  name: {{ template "traefik.fullname" . }}-dashboard-auth
   labels:
-{{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefik.labels" . | indent 4 }}
   annotations:
     helm.sh/hook: "post-install"
 
 spec:
   basicAuth:
-    secret: {{ template "traefikv2.fullname" . }}-dashboard-htpasswd
+    secret: {{ template "traefik.fullname" . }}-dashboard-htpasswd
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
+  name: {{ template "traefik.fullname" . }}-dashboard-redirect-https
   labels:
-{{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefik.labels" . | indent 4 }}
   annotations:
     helm.sh/hook: "post-install"
 spec:
@@ -46,9 +46,9 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ template "traefikv2.fullname" . }}-dashboard
+  name: {{ template "traefik.fullname" . }}-dashboard
   labels:
-{{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefik.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
     helm.sh/hook: "post-install"
@@ -61,9 +61,9 @@ spec:
       kind: Rule
       priority: 1
       middlewares:
-        - name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
+        - name: {{ template "traefik.fullname" . }}-dashboard-redirect-https
       services:
-        - name: {{ template "traefikv2.fullname" . }}-dashboard
+        - name: {{ template "traefik.fullname" . }}-dashboard
           port: 8080
           scheme: http
 
@@ -71,9 +71,9 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ template "traefikv2.fullname" . }}-dashboard-tls
+  name: {{ template "traefik.fullname" . }}-dashboard-tls
   labels:
-{{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefik.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
     helm.sh/hook: "post-install"
@@ -88,9 +88,9 @@ spec:
       kind: Rule
       priority: 1
       middlewares:
-        - name: {{ template "traefikv2.fullname" . }}-dashboard-auth
+        - name: {{ template "traefik.fullname" . }}-dashboard-auth
       services:
-        - name: {{ template "traefikv2.fullname" . }}-dashboard
+        - name: {{ template "traefik.fullname" . }}-dashboard
           port: 8080
           scheme: http
 {{- end }}

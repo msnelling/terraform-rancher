@@ -9,7 +9,6 @@ resource rancher2_app consul {
   project_id       = data.rancher2_project.default.id
   target_namespace = rancher2_namespace.consul.name
   template_name    = "consul"
-  template_version = "3.8.1"
   values_yaml      = <<EOF
 StorageClass: ${var.nfs_storage_class}
 uiService:

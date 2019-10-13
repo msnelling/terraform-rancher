@@ -6,9 +6,9 @@ metadata:
   annotations:
   {{ toYaml .Values.acme.persistence.annotations | nindent 2 }}
 {{- end }}
-  name: {{ template "traefikv2.fullname" . }}-acme
+  name: {{ template "traefik.fullname" . }}-acme
   labels:
-{{ include "traefikv2.labels" . | indent 4 }}
+{{ include "traefik.labels" . | indent 4 }}
 
 spec:
   accessModes:
