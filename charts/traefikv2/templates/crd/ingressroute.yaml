@@ -4,6 +4,8 @@ metadata:
   name: ingressroutes.traefik.containo.us
   labels:
 {{ include "traefik.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": "pre-install"
 
 spec:
   group: traefik.containo.us
