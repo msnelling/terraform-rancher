@@ -22,6 +22,8 @@ metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-auth
   labels:
 {{ include "traefikv2.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: "post-install"
 
 spec:
   basicAuth:
@@ -34,7 +36,8 @@ metadata:
   name: {{ template "traefikv2.fullname" . }}-dashboard-redirect-https
   labels:
 {{ include "traefikv2.labels" . | indent 4 }}
-
+  annotations:
+    helm.sh/hook: "post-install"
 spec:
   redirectScheme:
     scheme: https
@@ -48,6 +51,7 @@ metadata:
 {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
+    helm.sh/hook: "post-install"
 
 spec:
   entryPoints:
@@ -72,6 +76,7 @@ metadata:
 {{ include "traefikv2.labels" . | indent 4 }}
   annotations:
     kubernetes.io/ingress.class: traefik
+    helm.sh/hook: "post-install"
 
 spec:
   entryPoints:
