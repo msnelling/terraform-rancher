@@ -44,6 +44,7 @@ variable k8s_cluster {
     {
       name              = "k8s01"
       cpu_cores         = 6
+      cpu_limit         = 500
       memory_mb         = 4096
       disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.40/24"
@@ -54,6 +55,7 @@ variable k8s_cluster {
     {
       name              = "k8s02"
       cpu_cores         = 6
+      cpu_limit         = 500
       memory_mb         = 4096
       disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.41/24"
@@ -64,6 +66,7 @@ variable k8s_cluster {
     {
       name              = "k8s03"
       cpu_cores         = 6
+      cpu_limit         = 500
       memory_mb         = 4096
       disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.42/24"

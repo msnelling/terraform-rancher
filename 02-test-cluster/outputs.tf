@@ -12,6 +12,6 @@ output k8s_api_endpoint {
 }
 
 output k8s_api_token {
-  value = yamldecode(rancher2_cluster.cluster.kube_config).users[0].user.token
+  value     = yamldecode(rancher2_cluster.cluster.kube_config).users[0].user.token
   sensitive = true
 }

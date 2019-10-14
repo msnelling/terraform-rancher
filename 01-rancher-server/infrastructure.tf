@@ -35,7 +35,7 @@ resource vsphere_virtual_machine rancher {
   }
 }
 
-resource "null_resource" "wait_for_rancher" {
+resource null_resource wait_for_rancher {
   provisioner "local-exec" {
     command = <<EOF
 while [ "$${subject}" != "*  subject: CN=$${RANCHER_FQDN}" ]; do

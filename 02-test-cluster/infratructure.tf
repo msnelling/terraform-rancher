@@ -1,10 +1,15 @@
+locals {
+
+}
+
 resource vsphere_virtual_machine k8s_node {
   count                 = length(var.k8s_cluster)
   name                  = var.k8s_cluster[count.index].name
   resource_pool_id      = data.vsphere_resource_pool.pool.id
   datastore_id          = data.vsphere_datastore.vm_datastore.id
-  num_cpus              = var.k8s_cluster[count.index].cpu_cores
-  num_cores_per_socket  = var.k8s_cluster[count.index].cpu_cores
+  num_cpus              = data.null_data_source.node_values[count.index].outputs["cpu_cores"]
+  num_cores_per_socket  = data.null_data_source.node_values[count.index].outputs["cpu_cores_per_socket"]
+  cpu_limit             = data.null_data_source.node_values[count.index].outputs["cpu_limit"]
   memory                = var.k8s_cluster[count.index].memory_mb
   guest_id              = "other4xLinux64Guest"
   alternate_guest_name  = "RancherOS"
@@ -62,7 +67,7 @@ EOF
 
     environment = {
       USER = "rancher"
-      IP   = data.null_data_source.values[count.index].outputs["address_ipv4"]
+      IP   = data.null_data_source.node_values[count.index].outputs["address_ipv4"]
       KEY  = "${path.root}/outputs/id_rsa"
       RET  = "1"
     }
@@ -82,13 +87,13 @@ resource null_resource add_to_cluster {
   provisioner remote-exec {
     connection {
       type        = "ssh"
-      host        = data.null_data_source.values[count.index].outputs["address_ipv4"]
+      host        = data.null_data_source.node_values[count.index].outputs["address_ipv4"]
       user        = "rancher"
       private_key = tls_private_key.ssh.private_key_pem
     }
 
     inline = [
-      "${data.null_data_source.values[count.index].outputs["node_command"]} ${data.null_data_source.values[count.index].outputs["role_params"]} ${data.null_data_source.values[count.index].outputs["label_params"]}"
+      "${data.null_data_source.node_values[count.index].outputs["node_command"]} ${data.null_data_source.node_values[count.index].outputs["role_params"]} ${data.null_data_source.node_values[count.index].outputs["label_params"]}"
     ]
   }
 

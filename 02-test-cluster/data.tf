@@ -9,14 +9,17 @@ data terraform_remote_state rancher {
   }
 }
 
-data null_data_source values {
+data null_data_source node_values {
   count = length(var.k8s_cluster)
 
   inputs = {
-    node_command = rancher2_cluster.cluster.cluster_registration_token[0].node_command
-    address_ipv4 = split("/", var.k8s_cluster[count.index].address_cidr_ipv4)[0]
-    role_params  = join(" ", formatlist("--%s ", var.k8s_cluster[count.index].roles))
-    label_params = join(" ", formatlist("--label %s=%s ", keys(var.k8s_cluster[count.index].labels), values(var.k8s_cluster[count.index].labels)))
+    cpu_cores            = contains(keys(var.k8s_cluster[count.index]), "cpu_cores") ? var.k8s_cluster[count.index].cpu_cores : 1
+    cpu_cores_per_socket = contains(keys(var.k8s_cluster[count.index]), "cpu_cores_per_socket") ? var.k8s_cluster[count.index].cpu_cores_per_socket : 1
+    cpu_limit            = contains(keys(var.k8s_cluster[count.index]), "cpu_limit") ? var.k8s_cluster[count.index].cpu_limit : -1
+    node_command         = rancher2_cluster.cluster.cluster_registration_token[0].node_command
+    address_ipv4         = split("/", var.k8s_cluster[count.index].address_cidr_ipv4)[0]
+    role_params          = join(" ", formatlist("--%s ", var.k8s_cluster[count.index].roles))
+    label_params         = join(" ", formatlist("--label %s=%s ", keys(var.k8s_cluster[count.index].labels), values(var.k8s_cluster[count.index].labels)))
   }
 }
 
