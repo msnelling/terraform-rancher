@@ -1,9 +1,10 @@
 resource rancher2_bootstrap admin {
   provider = "rancher2.bootstrap"
 
-  password   = var.rancher_admin_password
-  telemetry  = true
-  depends_on = [null_resource.wait_for_rancher]
+  #current_password = var.rancher_admin_password
+  password         = var.rancher_admin_password
+  telemetry        = true
+  depends_on       = [null_resource.wait_for_rancher]
 }
 
 resource rancher2_cloud_credential vsphere_homelab {

@@ -23,6 +23,7 @@ data template_file rancher_cloud_config {
   template = file("${path.module}/templates/cloud_config.yml.tpl")
 
   vars = {
+    rancher_version_tag  = var.rancher_version_tag
     rancher_hostname     = var.rancher_hostname
     rancher_domain       = var.rancher_domain
     nfs_server_ipv4      = var.nfs_server_ipv4

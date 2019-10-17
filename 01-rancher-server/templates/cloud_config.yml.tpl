@@ -45,7 +45,7 @@ write_files:
         services:
           rancher-server:
             hostname: rancher
-            image: rancher/rancher:v2.3.0
+            image: rancher/rancher:${rancher_version_tag}
             command:
               - --no-cacerts
             volumes:
