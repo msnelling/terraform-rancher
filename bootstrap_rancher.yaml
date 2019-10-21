@@ -1,0 +1,13 @@
+- name: Bootstrap Rancher server and cluster
+  hosts: all
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Provision Rancher server 
+      terraform:
+        project_path: 01-rancher-server/
+        state: "{{ state }}"
+    - name: Provision cluster
+      terraform:
+        project_path: 02-test-cluster/
+        state: "{{ state }}"
