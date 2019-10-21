@@ -1,7 +1,7 @@
 resource rancher2_bootstrap admin {
   provider = "rancher2.bootstrap"
 
-  #current_password = var.rancher_admin_password
+  current_password = var.rancher_admin_password
   password         = var.rancher_admin_password
   telemetry        = true
   depends_on       = [null_resource.wait_for_rancher]

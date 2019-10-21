@@ -1,6 +1,8 @@
 resource "rancher2_catalog" "certmanager" {
-  name = "cert-manager"
-  url  = "https://charts.jetstack.io"
+  name       = "cert-manager"
+  url        = "https://charts.jetstack.io"
+  scope      = "cluster"
+  cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
 }
 
 resource rancher2_namespace certmanager {

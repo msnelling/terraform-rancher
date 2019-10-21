@@ -1,3 +1,4 @@
+/*
 resource rancher2_namespace consul {
   name       = "consul"
   project_id = data.rancher2_project.default.id
@@ -17,3 +18,4 @@ EOF
 
   depends_on = [rancher2_app.nfs_client_provisioner]
 }
+*/

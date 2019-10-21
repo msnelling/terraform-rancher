@@ -6,8 +6,18 @@
     - name: Provision Rancher server 
       terraform:
         project_path: 01-rancher-server/
-        state: "{{ state }}"
+        state: present
+      tags:
+        - rancher
     - name: Provision cluster
       terraform:
         project_path: 02-test-cluster/
-        state: "{{ state }}"
+        state: present
+      tags:
+        - cluster
+    - name: Basic deployment
+      terraform:
+        project_path: 03-deploy-apps/
+        state: present
+      tags:
+        - apps
