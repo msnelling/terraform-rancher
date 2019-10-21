@@ -1,22 +1,24 @@
 data terraform_remote_state rancher {
-  backend = "remote"
-
+  #  backend = "remote"
+  backend = "local"
   config = {
-    organization = "xmple"
-    workspaces = {
-      name = "rancher"
-    }
+    #    organization = "xmple"
+    #    workspaces = {
+    #      name = "rancher"
+    #    }
+    path = "${path.module}/../01-rancher-server/terraform.tfstate"
   }
 }
 
 data terraform_remote_state cluster {
-  backend = "remote"
-
+  #  backend = "remote"
+  backend = "local"
   config = {
-    organization = "xmple"
-    workspaces = {
-      name = "k8s-test"
-    }
+    #    organization = "xmple"
+    #    workspaces = {
+    #      name = "k8s"
+    #    }
+    path = "${path.module}/../02-test-cluster/terraform.tfstate"
   }
 }
 
@@ -30,6 +32,7 @@ data rancher2_project default {
   name       = "Default"
 }
 
+/*
 data external catalog_refresh {
   program = [
     "curl",
@@ -38,4 +41,7 @@ data external catalog_refresh {
     "-X", "POST",
     "${data.terraform_remote_state.rancher.outputs.api_url}/v3/catalogs/${rancher2_catalog.local.name}?action=refresh"
   ]
+
+  depends_on = [rancher2_catalog.local]
 }
+*/

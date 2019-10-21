@@ -3,6 +3,7 @@ resource rancher2_cluster cluster {
 
   rke_config {
     authentication {
+      //sans = concat(formatlist("%s.${var.k8s_domain}", ))
       sans = [
         "${var.k8s_cluster[0].name}.${var.k8s_domain}",
         split("/", var.k8s_cluster[0].address_cidr_ipv4)[0],

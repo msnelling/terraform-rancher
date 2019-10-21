@@ -1,3 +1,4 @@
+/*
 resource rancher2_namespace traefik_ingress {
   name       = "traefik-ingress"
   project_id = data.rancher2_project.system.id
@@ -27,5 +28,5 @@ acme:
 EOF
 
   depends_on = [rancher2_app.nfs_client_provisioner]
-  count = 0
 }
+*/

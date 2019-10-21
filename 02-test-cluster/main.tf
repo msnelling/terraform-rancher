@@ -1,10 +1,9 @@
-terraform {
+/*terraform {
   backend "remote" {
     hostname     = "app.terraform.io"
     organization = "xmple"
-
     workspaces {
-      name = "k8s-test"
+      name = "k8s"
     }
   }
-}
+}*/

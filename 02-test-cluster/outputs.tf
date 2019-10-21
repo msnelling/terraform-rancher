@@ -7,6 +7,10 @@ output cluster_id {
   value = rancher2_cluster.cluster.id
 }
 
+output cluster_name {
+  value = rancher2_cluster.cluster.name
+}
+
 output k8s_api_endpoint {
   value = yamldecode(rancher2_cluster.cluster.kube_config).clusters[0].cluster.server
 }
