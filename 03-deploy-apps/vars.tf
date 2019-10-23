@@ -4,6 +4,7 @@ variable nfs_storage_class {
 variable nfs_server {}
 variable nfs_path {}
 
+variable acme_email {}
 variable cloudflare_api_email {}
 variable cloudflare_api_key {}
 

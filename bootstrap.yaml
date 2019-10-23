@@ -7,12 +7,14 @@
       terraform:
         project_path: 01-rancher-server/
         state: present
+      register: tf_rancher
       tags:
         - rancher
     - name: Provision cluster
       terraform:
         project_path: 02-test-cluster/
         state: present
+      register: tf_cluster
       tags:
         - cluster
     - name: Basic deployment
@@ -21,3 +23,9 @@
         state: present
       tags:
         - apps
+    - import_role: 
+        name: cert-manager
+      environment:
+        K8S_AUTH_KUBECONFIG: "{{ playbook_dir }}/02-test-cluster/outputs/kubeconfig"
+      tags:
+        - cert-manager

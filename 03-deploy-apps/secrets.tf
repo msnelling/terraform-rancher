@@ -3,17 +3,14 @@ locals {
   consul_password  = bcrypt(var.admin_password, 11)
 }
 
-/*
 resource rancher2_secret cloudflare_api {
-  name         = "cloudflare-api"
+  name         = "cloudflare-api-key"
   project_id   = data.rancher2_project.system.id
-  namespace_id = rancher2_namespace.traefik_ingress.id
+  namespace_id = "cert-manager"
   data = {
-    email = base64encode(var.cloudflare_api_email)
-    key   = base64encode(var.cloudflare_api_key)
+    api-key = base64encode(var.cloudflare_api_key)
   }
 }
-*/
 
 /*
 resource rancher2_secret traefik_admin_auth {

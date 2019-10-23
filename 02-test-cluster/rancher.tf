@@ -91,3 +91,9 @@ resource rancher2_node_pool minion {
   worker           = true
 }
 */
+
+resource local_file kube_config {
+  sensitive_content = rancher2_cluster.cluster.kube_config
+  filename          = "${path.module}/outputs/kubeconfig"
+  file_permission   = "0600"
+}

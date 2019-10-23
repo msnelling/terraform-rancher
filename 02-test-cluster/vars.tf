@@ -42,8 +42,8 @@ variable k8s_domain {}
 variable k8s_cluster {
   default = [
     {
-      name              = "k8s01"
-      cpu_cores         = 6
+      name      = "k8s01"
+      cpu_cores = 6
       #cpu_limit         = 1024
       memory_mb         = 4096
       disk_gb           = 16
@@ -53,8 +53,8 @@ variable k8s_cluster {
       labels            = {}
     },
     {
-      name              = "k8s02"
-      cpu_cores         = 6
+      name      = "k8s02"
+      cpu_cores = 6
       #cpu_limit         = 1024
       memory_mb         = 4096
       disk_gb           = 16
@@ -64,8 +64,8 @@ variable k8s_cluster {
       labels            = {}
     },
     {
-      name              = "k8s03"
-      cpu_cores         = 6
+      name      = "k8s03"
+      cpu_cores = 6
       #cpu_limit         = 1024
       memory_mb         = 4096
       disk_gb           = 16

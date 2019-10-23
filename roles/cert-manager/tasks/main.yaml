@@ -1,0 +1,17 @@
+- name: Install required modules
+  pip:
+    name: openshift>=0.6
+    state: latest
+
+- name: Download CRD manifest
+  get_url:
+    url: https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml
+    dest: /tmp/00-crds.yaml
+    force: true
+  register: crd
+
+- name: Deploy CRD manifest
+#  k8s:
+#    src: "{{ crd.dest }}"
+#    state: present
+  command: kubectl --kubeconfig {{ playbook_dir }}/02-test-cluster/outputs/kubeconfig apply -f {{ crd.dest }}

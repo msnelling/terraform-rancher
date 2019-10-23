@@ -45,3 +45,26 @@ data external catalog_refresh {
   depends_on = [rancher2_catalog.local]
 }
 */
+
+
+data template_file cert_manager_staging_issuer {
+  template = file("${path.module}/templates/cloudflare_issuer.yaml.tpl")
+
+  vars = {
+    issuer_name          = "letsencrypt-staging"
+    acme_ca_server       = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    cloudflare_api_email = var.cloudflare_api_email
+  }
+}
+
+data template_file cert_manager_production_issuer {
+  template = file("${path.module}/templates/cloudflare_issuer.yaml.tpl")
+
+  vars = {
+    issuer_name          = "letsencrypt-production"
+    acme_ca_server       = "https://acme-v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    cloudflare_api_email = var.cloudflare_api_email
+  }
+}
