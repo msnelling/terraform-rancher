@@ -4,17 +4,6 @@ resource rancher2_namespace cert_manager {
   project_id  = data.rancher2_project.system.id
 }
 
-/* Not sure if this is even needed
-resource null_resource cert_manager_namespace_annotation {
-  provisioner "local-exec" {
-    command = "kubectl label namespace ${rancher2_namespace.cert_manager.name} certmanager.k8s.io/disable-validation=true"
-    environment = {
-      KUBECONFIG = local_file.kube_config.filename
-    }
-  }
-}
-*/
-
 resource null_resource cert_manager_crds {
   provisioner "local-exec" {
     command = "kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml"

@@ -2,6 +2,7 @@
   hosts: all
   connection: local
   gather_facts: false
+
   tasks:
     - name: Provision Rancher server 
       terraform:
@@ -10,6 +11,7 @@
       register: tf_rancher
       tags:
         - rancher
+
     - name: Provision cluster
       terraform:
         project_path: 02-test-cluster/
@@ -17,12 +19,14 @@
       register: tf_cluster
       tags:
         - cluster
+
     - name: Basic deployment
       terraform:
         project_path: 03-deploy-apps/
         state: present
       tags:
         - apps
+
     - import_role: 
         name: cert-manager
       environment:

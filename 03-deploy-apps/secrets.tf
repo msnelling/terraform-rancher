@@ -12,6 +12,13 @@ resource rancher2_secret cloudflare_api {
   }
 }
 
+resource rancher2_certificate traefik_tls {
+  certs      = base64encode(acme_certificate.traefik_tls.certificate_pem)
+  key        = base64encode(acme_certificate.traefik_tls.private_key_pem)
+  name       = "xmple-io-tls"
+  project_id = data.rancher2_project.system.id
+}
+
 /*
 resource rancher2_secret traefik_admin_auth {
   name       = "traefik-admin-htpasswd"

@@ -7,3 +7,7 @@ provider kubernetes {
   host  = data.terraform_remote_state.cluster.k8s_api_endpoint
   token = data.terraform_remote_state.cluster.k8s_api_token
 }
+
+provider acme {
+  server_url = "https://acme-staging-v02.api.letsencrypt.org/directory"
+}

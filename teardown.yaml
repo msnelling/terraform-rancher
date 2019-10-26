@@ -2,6 +2,7 @@
   hosts: all
   connection: local
   gather_facts: false
+
   tasks:
     - name: Basic deployment
       terraform:
@@ -9,12 +10,14 @@
         state: absent
       tags:
         - apps
+
     - name: Teardown cluster
       terraform:
         project_path: 02-test-cluster/
         state: absent
       tags:
         - cluster
+        
     - name: Teardown Rancher server
       terraform:
         project_path: 01-rancher-server/
