@@ -101,6 +101,12 @@ metadata:
     kubernetes.io/ingress.class: traefik
 
 spec:
+  {{- if .Values.dashboard.ingressLegacy.tls.enabled }}
+  tls:
+  - hosts:
+      - {{ .Values.dashboard.hostname }}
+    secretName: {{ .Values.dashboard.ingressLegacy.certificateSecret }}
+  {{- end }}
   rules:
     - host: {{ .Values.dashboard.hostname }}
       http:

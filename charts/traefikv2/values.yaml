@@ -11,6 +11,10 @@ dashboard:
     admin:$2y$11$u6LG0nADSjTivpcxvoQpzupgQSpeSPVL8exFEzcawSfnMEG68K5AO
   ingressRoute:
     enabled: false
+  ingressLegacy:
+    tls:
+      enable: true
+      certificateSecret: traefik-dashboard-tls
 
 acme:
   enabled: true
