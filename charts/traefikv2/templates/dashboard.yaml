@@ -95,8 +95,10 @@ kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
   name: {{ template "traefik.fullname" . }}-dashboard
-  labels:
+  labels: 
 {{ include "traefik.labels" . | indent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: traefik
 
 spec:
   rules:
