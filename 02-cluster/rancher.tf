@@ -23,7 +23,10 @@ resource rancher2_cluster cluster {
     }
 
     ingress {
-      provider = "none"
+      provider = var.k8s_ingress_provider
+      extra_args = {
+        default-ssl-certificate = "ingress-nginx/ingress-default-cert"
+      }
     }
 
     # Rapid detection of down node

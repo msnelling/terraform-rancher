@@ -39,6 +39,9 @@ variable dns_update_secret {}
 # Kubernetes Cluster
 variable k8s_name {}
 variable k8s_domain {}
+variable k8s_ingress_provider {
+  default = "nginx"
+}
 variable k8s_cluster {
   default = [
     {

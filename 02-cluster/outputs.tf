@@ -15,3 +15,7 @@ output k8s_api_token {
   value     = yamldecode(rancher2_cluster.cluster.kube_config).users[0].user.token
   sensitive = true
 }
+
+output ingress_type {
+  value = var.k8s_ingress_provider
+}
