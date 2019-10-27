@@ -1,32 +1,45 @@
-/*
+resource rancher2_catalog traefik {
+  name        = "traefik"
+  url         = "https://github.com/msnelling/terraform-rancher.git"
+  description = "Temporary catalog hosting a Traefik v2.0 chart"
+}
+
 resource rancher2_namespace traefik_ingress {
   name       = "traefik-ingress"
   project_id = data.rancher2_project.system.id
 }
 
+/*
+resource kubernetes_config_map traefik {
+  metadata {
+    name      = "traefik-config"
+    namespace = rancher2_namespace.traefik_ingress.name
+  }
+
+  data = {
+    "traefik.yaml" = data.template_file.traefik_config.rendered
+  }
+}
+*/
+
 resource rancher2_app traefik_ingress {
-  catalog_name     = "my-catalog"
+  catalog_name     = rancher2_catalog.traefik.name
   name             = "traefik"
   project_id       = data.rancher2_project.system.id
   target_namespace = rancher2_namespace.traefik_ingress.name
   template_name    = "traefik"
   force_upgrade    = true
-  values_yaml      = <<EOF
-dashboard:
-  enabled: true
-  hostname: ${var.traefik_dashboard_hostname}
-  htpasswd: |
-    ${var.admin_username}:${local.traefik_password}
-acme: 
-  dnsProvider: 
-    cloudflare: 
-      CLOUDFLARE_API_KEY: ${var.cloudflare_api_key}
-      CLOUDFLARE_EMAIL: ${var.cloudflare_api_email}
-    name: cloudflare
-  persistence: 
-    storageClass: nfs-client
-EOF
+  answers = {
+    "dashboard.enabled"                             = true
+    "dashboard.hostname"                            = var.traefik_dashboard_hostname
+    "dashboard.htpasswd"                            = "${var.admin_username}:${local.traefik_password}"
+    "dashboard.ingressLegacy.tls.enabled"           = true
+    "dashboard.ingressLegacy.tls.certificateSecret" = rancher2_certificate.traefik_tls.name
+    "acme.persistence.enabled"                      = false
+  }
 
-  depends_on = [rancher2_app.nfs_client_provisioner]
+  depends_on = [
+    rancher2_app.nfs_client_provisioner,
+    data.external.catalog_refresh,
+  ]
 }
-*/

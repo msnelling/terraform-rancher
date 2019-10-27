@@ -4,8 +4,8 @@ provider rancher2 {
 }
 
 provider kubernetes {
-  host  = data.terraform_remote_state.cluster.k8s_api_endpoint
-  token = data.terraform_remote_state.cluster.k8s_api_token
+  host  = data.terraform_remote_state.cluster.outputs.k8s_api_endpoint
+  token = data.terraform_remote_state.cluster.outputs.k8s_api_token
 }
 
 provider acme {
