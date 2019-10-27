@@ -1,15 +1,9 @@
-variable nfs_storage_class {
-  default = "nfs-client"
-}
-variable nfs_server {}
-variable nfs_path {}
-
 variable acme_email {}
 variable cloudflare_api_email {}
 variable cloudflare_api_key {}
 
+variable traefik_default_cert_hostname {}
 variable traefik_dashboard_hostname {}
-variable consul_dashboard_hostname {}
 
 variable admin_username {}
 variable admin_password {}

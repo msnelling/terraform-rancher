@@ -11,7 +11,7 @@ spec:
     solvers:
       - dns01:
           cloudflare:
-            email: mark@bakedbeans.com
+            email: ${cloudflare_api_email}
             apiKeySecretRef:
                 name: cloudflare-api-key
                 key: api-key

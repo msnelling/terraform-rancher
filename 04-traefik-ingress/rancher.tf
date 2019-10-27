@@ -32,14 +32,13 @@ resource rancher2_app traefik_ingress {
   answers = {
     "dashboard.enabled"                             = true
     "dashboard.hostname"                            = var.traefik_dashboard_hostname
-    "dashboard.htpasswd"                            = "${var.admin_username}:${local.traefik_password}"
+    "dashboard.htpasswd"                            = "${var.admin_username}:${bcrypt(var.admin_password)}"
     "dashboard.ingressLegacy.tls.enabled"           = true
     "dashboard.ingressLegacy.tls.certificateSecret" = rancher2_certificate.traefik_tls.name
     "acme.persistence.enabled"                      = false
   }
 
   depends_on = [
-    rancher2_app.nfs_client_provisioner,
     data.external.catalog_refresh,
   ]
 }
