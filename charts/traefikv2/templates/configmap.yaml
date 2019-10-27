@@ -11,10 +11,15 @@ data:
       sendAnonymousUsage: true
     api:
       insecure: true
+      {{- if .Values.dashboard.enabled }}
       dashboard: true
+      {{- end }}
     ping: {} # Enable with defaults
     metrics:
       prometheus: {} # Enable with defaults
+    #  influxDB:
+    #    address: localhost:8089
+    #    protocol: udp
     log:
       level: INFO
     accessLog: {} # Enable with defaults
@@ -27,6 +32,9 @@ data:
       insecure: true
     providers:
       kubernetesCRD:
+        ingressClass: traefik
+        namespaces: [] # All namespaces
+      kubernetesIngress:
         ingressClass: traefik
         namespaces: [] # All namespaces
     certificatesResolvers:
@@ -47,3 +55,7 @@ data:
               {{- toYaml . | nindent 14 }}
             {{- end }}
           {{- end }}
+    tls:
+      options:
+        default:
+          minVersion: VersionTLS12
