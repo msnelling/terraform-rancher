@@ -1,7 +1,36 @@
+data template_file cert_manager_staging_issuer {
+  template = file("${path.module}/templates/cloudflare_issuer.yaml.tpl")
+  vars = {
+    issuer_name          = "letsencrypt-staging"
+    acme_ca_server       = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    cloudflare_api_email = var.cloudflare_api_email
+  }
+}
+
+data template_file cert_manager_production_issuer {
+  template = file("${path.module}/templates/cloudflare_issuer.yaml.tpl")
+  vars = {
+    issuer_name          = "letsencrypt-production"
+    acme_ca_server       = "https://acme-v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    cloudflare_api_email = var.cloudflare_api_email
+  }
+}
+
 resource rancher2_namespace cert_manager {
   name        = "cert-manager"
   description = "Namespace for cert-manager app components"
   project_id  = data.rancher2_project.system.id
+}
+
+resource rancher2_secret cloudflare_api {
+  name         = "cloudflare-api-key"
+  project_id   = data.rancher2_project.system.id
+  namespace_id = "cert-manager"
+  data = {
+    api-key = base64encode(var.cloudflare_api_key)
+  }
 }
 
 resource null_resource cert_manager_crds {
