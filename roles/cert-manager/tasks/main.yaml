@@ -5,14 +5,14 @@
 
 - name: Deploy cert-manager
   k8s:
-    namespace: cert-manager
+    namespace: "{{ cert_mananger_namespace }}"
     state: present
     definition: "{{ item }}"
   loop: "{{ lookup('url', 'https://github.com/jetstack/cert-manager/releases/download/v{{ cert_mananger_version }}/cert-manager.yaml', split_lines=False) | from_yaml_all | select('ne', None) | list }}"
 
 - name: Deploy Cloudflare API secret
   k8s:
-    namespace: cert-manager
+    namespace: "{{ cert_mananger_namespace }}"
     state: present
     definition: |-
       apiVersion: v1
@@ -25,7 +25,7 @@
 
 - name: Deploy staging issuer
   k8s:
-    namespace: cert-manager
+    namespace: "{{ cert_mananger_namespace }}"
     state: present
     definition: |-
       apiVersion: cert-manager.io/v1alpha2
@@ -35,7 +35,7 @@
       spec:
         acme:
           email: "{{ acme_account_email }}"
-          server: https://acme-staging-v02.api.letsencrypt.org/directory
+          server: "{{ acme_ca_server_staging }}"
           privateKeySecretRef:
             name: staging-issuer-account-key
           solvers:
@@ -48,7 +48,7 @@
 
 - name: Deploy production issuer
   k8s:
-    namespace: cert-manager
+    namespace: "{{ cert_mananger_namespace }}"
     state: present
     definition: |-
       apiVersion: cert-manager.io/v1alpha2
@@ -58,7 +58,7 @@
       spec:
         acme:
           email: "{{ acme_account_email }}"
-          server: https://acme-v02.api.letsencrypt.org/directory
+          server: "{{ acme_ca_server_production }}"
           privateKeySecretRef:
             name: production-issuer-account-key
           solvers:
