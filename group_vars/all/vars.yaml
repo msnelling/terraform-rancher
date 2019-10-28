@@ -1,0 +1,3 @@
+acme_account_email: "{{ vault_acme_account_email }}"
+cloudflare_api_email: "{{ vault_cloudflare_api_email }}"
+cloudflare_api_key: "{{ vault_cloudflare_api_key }}"

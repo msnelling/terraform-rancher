@@ -14,7 +14,7 @@
 
     - name: Provision cluster
       terraform:
-        project_path: 02-test-cluster/
+        project_path: 02-cluster/
         state: present
       register: tf_cluster
       tags:
@@ -22,14 +22,23 @@
 
     - name: Basic deployment
       terraform:
-        project_path: 03-deploy-apps/
+        project_path: 03-cluster-base/
         state: present
       tags:
-        - apps
+        - base
 
     - import_role: 
         name: cert-manager
       environment:
-        K8S_AUTH_KUBECONFIG: "{{ playbook_dir }}/02-test-cluster/outputs/kubeconfig"
+        K8S_AUTH_KUBECONFIG: "{{ playbook_dir }}/02-cluster/outputs/kubeconfig"
+      vars:
+        cert_mananger_version: '0.11.0'
       tags:
         - cert-manager
+
+    - name: Ingress configuration
+      terraform:
+        project_path: 04-cluster-ingress/
+        state: present
+      tags:
+        - ingress

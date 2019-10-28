@@ -4,6 +4,13 @@
   gather_facts: false
 
   tasks:
+    - name: Ingress configuration
+      terraform:
+        project_path: 04-cluster-ingress/
+        state: absent
+      tags:
+        - ingress
+
     - name: Basic deployment
       terraform:
         project_path: 03-deploy-apps/

@@ -3,15 +3,68 @@
     name: openshift>=0.6
     state: latest
 
-- name: Download CRD manifest
-  get_url:
-    url: https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml
-    dest: /tmp/00-crds.yaml
-    force: true
-  register: crd
+- name: Deploy cert-manager
+  k8s:
+    namespace: cert-manager
+    state: present
+    definition: "{{ item }}"
+  loop: "{{ lookup('url', 'https://github.com/jetstack/cert-manager/releases/download/v{{ cert_mananger_version }}/cert-manager.yaml', split_lines=False) | from_yaml_all | select('ne', None) | list }}"
 
-- name: Deploy CRD manifest
-#  k8s:
-#    src: "{{ crd.dest }}"
-#    state: present
-  command: kubectl --kubeconfig {{ playbook_dir }}/02-test-cluster/outputs/kubeconfig apply -f {{ crd.dest }}
+- name: Deploy Cloudflare API secret
+  k8s:
+    namespace: cert-manager
+    state: present
+    definition: |-
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: cloudflare-api-key
+      type: Opaque
+      data:
+        api-key: "{{ cloudflare_api_key | b64encode }}"
+
+- name: Deploy staging issuer
+  k8s:
+    namespace: cert-manager
+    state: present
+    definition: |-
+      apiVersion: cert-manager.io/v1alpha2
+      kind: ClusterIssuer
+      metadata:
+        name: letsencrypt-staging
+      spec:
+        acme:
+          email: "{{ acme_account_email }}"
+          server: https://acme-staging-v02.api.letsencrypt.org/directory
+          privateKeySecretRef:
+            name: staging-issuer-account-key
+          solvers:
+            - dns01:
+                cloudflare:
+                  email: "{{ cloudflare_api_email }}"
+                  apiKeySecretRef:
+                      name: cloudflare-api-key
+                      key: api-key
+
+- name: Deploy production issuer
+  k8s:
+    namespace: cert-manager
+    state: present
+    definition: |-
+      apiVersion: cert-manager.io/v1alpha2
+      kind: ClusterIssuer
+      metadata:
+        name: letsencrypt-production
+      spec:
+        acme:
+          email: "{{ acme_account_email }}"
+          server: https://acme-v02.api.letsencrypt.org/directory
+          privateKeySecretRef:
+            name: production-issuer-account-key
+          solvers:
+            - dns01:
+                cloudflare:
+                  email: "{{ cloudflare_api_email }}"
+                  apiKeySecretRef:
+                      name: cloudflare-api-key
+                      key: api-key
