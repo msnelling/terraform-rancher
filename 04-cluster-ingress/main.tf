@@ -3,7 +3,7 @@
     #hostname     = "app.terraform.io"
     organization = "xmple"
     workspaces {
-      name = "k8s-traefik"
+      name = "k8s-ingress"
     }
   }
 }*/
