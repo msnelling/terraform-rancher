@@ -16,5 +16,4 @@ ingress:
       - hass.k8s.xmple.io
       secretName: hass-tls
 persistence:
-  size: 1Gi
-  storageClass: nfs-client  
+  existingClaim: ${pvc}
