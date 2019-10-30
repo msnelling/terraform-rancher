@@ -20,4 +20,4 @@ persistence:
   downloads:
     existingClaim: ${pvc_downloads}
   tv:
-    existingClaim: ${pvc_tv}
+    existingClaim: ${pvc_media}
