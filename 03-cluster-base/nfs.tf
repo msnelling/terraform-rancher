@@ -12,7 +12,7 @@ resource rancher2_app nfs_client_provisioner {
   template_name    = "nfs-client-provisioner"
   answers = {
     "nfs.server"                 = "${var.nfs_server}"
-    "nfs.path"                   = "${var.nfs_path}"
+    "nfs.path"                   = "${var.hass_nfs_path}"
     "storageClass.name"          = "${var.nfs_storage_class}"
     "storageClass.reclaimPolicy" = "Retain"
   }

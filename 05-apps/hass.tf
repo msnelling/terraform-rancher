@@ -15,8 +15,8 @@ resource kubernetes_persistent_volume home_assistant {
     access_modes = ["ReadWriteOnce"]
     persistent_volume_source {
       nfs {
-        path   = "${var.nfs_path}/home-assistant"
         server = var.nfs_server
+        path   = var.hass_nfs_path
       }
     }
   }
