@@ -40,3 +40,10 @@
         state: present
       tags:
         - ingress
+
+    - name: Install apps
+      terraform:
+        project_path: 05-apps/
+        state: present
+      tags:
+        - apps
