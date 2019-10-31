@@ -4,7 +4,7 @@ resource rancher2_namespace sonarr {
   project_id  = data.rancher2_project.default.id
 }
 
-resource kubernetes_persistent_volume sonarr_config {
+resource kubernetes_persistent_volume sonarr {
   count = length(var.sonarr_nfs)
   metadata {
     name = values(var.sonarr_nfs)[count.index].name
@@ -24,7 +24,7 @@ resource kubernetes_persistent_volume sonarr_config {
   }
 }
 
-resource kubernetes_persistent_volume_claim sonarr_config {
+resource kubernetes_persistent_volume_claim sonarr {
   count = length(var.sonarr_nfs)
   metadata {
     name      = values(var.sonarr_nfs)[count.index].name
@@ -37,7 +37,7 @@ resource kubernetes_persistent_volume_claim sonarr_config {
         storage = values(var.sonarr_nfs)[count.index].capacity
       }
     }
-    volume_name = kubernetes_persistent_volume.sonarr_config[count.index].metadata.0.name
+    volume_name = kubernetes_persistent_volume.sonarr[count.index].metadata.0.name
   }
 }
 
@@ -48,13 +48,6 @@ data template_file sonarr_values {
     pvc_downloads = var.sonarr_nfs.downloads.name
     pvc_media = var.sonarr_nfs.media.name
   }
-}
-
-resource rancher2_catalog bilimek {
-  name       = "bilimek"
-  url        = "https://billimek.com/billimek-charts/"
-  scope      = "cluster"
-  cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
 }
 
 resource rancher2_app sonarr {

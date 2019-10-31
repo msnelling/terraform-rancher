@@ -25,3 +25,23 @@ variable sonarr_nfs {
     }
   }
 }
+
+variable radarr_nfs {
+  default = {
+    config = {
+      name     = "radarr-config"
+      nfs_path = "/mnt/tank/rancher/pvs/radarr-config"
+      capacity = "1Gi"
+    },
+    downloads = {
+      name     = "radarr-downloads"
+      nfs_path = "/mnt/tank/media/download"
+      capacity = "10Gi"
+    },
+    media = {
+      name     = "radarr-movies"
+      nfs_path = "/mnt/tank/media/Video/Movies"
+      capacity = "10Gi"
+    }
+  }
+}
