@@ -1,6 +1,6 @@
 image: 
-  pullPolicy: Always
   tag: latest
+  pullPolicy: Always
 hostNetwork: true
 ingress: 
   enabled: true

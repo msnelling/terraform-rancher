@@ -1,4 +1,5 @@
-image: 
+image:
+  tag: amd64-latest
   pullPolicy: Always
 timezone: Europe/London
 ingress: 
