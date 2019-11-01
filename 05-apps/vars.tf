@@ -45,3 +45,24 @@ variable radarr_nfs {
     }
   }
 }
+
+variable nzbget_node_selector {
+  default = {
+    gateway = "vpn",
+  }
+}
+
+variable nzbget_nfs {
+  default = {
+    config = {
+      name     = "nzbget-config"
+      nfs_path = "/mnt/tank/rancher/pvs/nzbget-config"
+      capacity = "1Gi"
+    },
+    downloads = {
+      name     = "nzbget-downloads"
+      nfs_path = "/mnt/tank/media/download/NZBGet"
+      capacity = "10Gi"
+    }
+  }
+}
