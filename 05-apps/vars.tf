@@ -1,3 +1,11 @@
+variable process_uid {
+  default = 911
+}
+
+variable process_gid {
+  default = 2001
+}
+
 variable nfs_server {
   default = "10.1.90.2"
 }

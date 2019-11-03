@@ -1,6 +1,8 @@
 image:
   tag: amd64-latest
   pullPolicy: Always
+puid: ${process_uid}
+pgid: ${process_gid}
 timezone: Europe/London
 ingress: 
   enabled: "true"

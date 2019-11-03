@@ -13,7 +13,7 @@ resource kubernetes_persistent_volume sonarr {
     capacity = {
       storage = values(var.sonarr_nfs)[count.index].capacity
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes                     = ["ReadWriteOnce"]
     persistent_volume_reclaim_policy = "Retain"
     persistent_volume_source {
       nfs {
@@ -44,9 +44,11 @@ resource kubernetes_persistent_volume_claim sonarr {
 data template_file sonarr_values {
   template = file("${path.module}/templates/sonarr_values.yaml.tpl")
   vars = {
-    pvc_config = var.sonarr_nfs.config.name
+    process_uid   = var.process_uid
+    process_gid   = var.process_gid
+    pvc_config    = var.sonarr_nfs.config.name
     pvc_downloads = var.sonarr_nfs.downloads.name
-    pvc_media = var.sonarr_nfs.media.name
+    pvc_media     = var.sonarr_nfs.media.name
   }
 }
 

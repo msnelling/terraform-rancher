@@ -13,7 +13,7 @@ resource kubernetes_persistent_volume nzbget {
     capacity = {
       storage = values(var.nzbget_nfs)[count.index].capacity
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes                     = ["ReadWriteOnce"]
     persistent_volume_reclaim_policy = "Retain"
     persistent_volume_source {
       nfs {
@@ -44,7 +44,9 @@ resource kubernetes_persistent_volume_claim nzbget {
 data template_file nzbget_values {
   template = file("${path.module}/templates/nzbget_values.yaml.tpl")
   vars = {
-    pvc_config = var.nzbget_nfs.config.name
+    process_uid   = var.process_uid
+    process_gid   = var.process_gid
+    pvc_config    = var.nzbget_nfs.config.name
     pvc_downloads = var.nzbget_nfs.downloads.name
     node_selector = yamlencode(var.nzbget_node_selector)
   }
