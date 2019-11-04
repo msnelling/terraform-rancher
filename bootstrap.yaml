@@ -45,5 +45,9 @@
       terraform:
         project_path: 05-apps/
         state: present
+        backend_config:
+          hostname: app.terraform.io
+          organization: xmple
+          workspaces: [ {name = "k8s-apps"} ]
       tags:
         - apps

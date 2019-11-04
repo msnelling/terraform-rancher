@@ -5,14 +5,14 @@
 
 - name: Deploy cert-manager
   k8s:
-    namespace: "{{ cert_mananger_namespace }}"
+    namespace: "{{ cert_manager_namespace }}"
     state: present
     definition: "{{ item }}"
   loop: "{{ lookup('url', 'https://github.com/jetstack/cert-manager/releases/download/v{{ cert_mananger_version }}/cert-manager.yaml', split_lines=False) | from_yaml_all | select('ne', None) | list }}"
 
 - name: Deploy Cloudflare API secret
   k8s:
-    namespace: "{{ cert_mananger_namespace }}"
+    namespace: "{{ cert_manager_namespace }}"
     state: present
     definition: |-
       apiVersion: v1
@@ -25,7 +25,7 @@
 
 - name: Deploy staging issuer
   k8s:
-    namespace: "{{ cert_mananger_namespace }}"
+    namespace: "{{ cert_manager_namespace }}"
     state: present
     definition: |-
       apiVersion: cert-manager.io/v1alpha2
@@ -48,7 +48,7 @@
 
 - name: Deploy production issuer
   k8s:
-    namespace: "{{ cert_mananger_namespace }}"
+    namespace: "{{ cert_manager_namespace }}"
     state: present
     definition: |-
       apiVersion: cert-manager.io/v1alpha2

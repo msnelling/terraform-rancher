@@ -1,13 +1,15 @@
 data terraform_remote_state rancher {
-  #  backend = "remote"
-  backend = "local"
+  backend = "remote"
   config = {
-    #    organization = "xmple"
-    #    workspaces = {
-    #      name = "rancher"
-    #    }
-    path = "${path.module}/../01-rancher-server/terraform.tfstate"
+    organization = "xmple"
+    workspaces = {
+      name = "rancher"
+    }
   }
+#  backend = "local"
+#  config = {
+#    path    = "${path.module}/../01-rancher-server/terraform.tfstate"
+#  }
 }
 
 data null_data_source node_values {

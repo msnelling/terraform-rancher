@@ -62,9 +62,11 @@ variable k8s_cluster {
       memory_mb         = 4096
       disk_gb           = 16
       address_cidr_ipv4 = "10.1.1.41/24"
-      gateway_ipv4      = "10.1.1.1"
+      gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
-      labels            = {}
+      labels = {
+        gateway = "vpn"
+      }
     },
     {
       name      = "k8s03"
