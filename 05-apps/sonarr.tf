@@ -49,6 +49,7 @@ data template_file sonarr_values {
     pvc_config    = var.sonarr_nfs.config.name
     pvc_downloads = var.sonarr_nfs.downloads.name
     pvc_media     = var.sonarr_nfs.media.name
+    node_selector = yamlencode(var.vpn_node_selector)
   }
 }
 

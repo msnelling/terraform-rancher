@@ -49,6 +49,7 @@ data template_file radarr_values {
     pvc_config    = var.radarr_nfs.config.name
     pvc_downloads = var.radarr_nfs.downloads.name
     pvc_media     = var.radarr_nfs.media.name
+    node_selector = yamlencode(var.vpn_node_selector)
   }
 }
 

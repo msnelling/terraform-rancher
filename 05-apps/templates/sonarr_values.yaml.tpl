@@ -24,3 +24,5 @@ persistence:
     existingClaim: ${pvc_downloads}
   tv:
     existingClaim: ${pvc_media}
+nodeSelector:
+  ${node_selector}

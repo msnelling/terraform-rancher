@@ -48,7 +48,7 @@ data template_file nzbget_values {
     process_gid   = var.process_gid
     pvc_config    = var.nzbget_nfs.config.name
     pvc_downloads = var.nzbget_nfs.downloads.name
-    node_selector = yamlencode(var.nzbget_node_selector)
+    node_selector = yamlencode(var.vpn_node_selector)
   }
 }
 

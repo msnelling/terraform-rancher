@@ -54,7 +54,7 @@ variable radarr_nfs {
   }
 }
 
-variable nzbget_node_selector {
+variable vpn_node_selector {
   default = {
     gateway = "vpn",
   }
