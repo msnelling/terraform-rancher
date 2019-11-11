@@ -10,6 +10,12 @@ variable nfs_server {
   default = "10.1.90.2"
 }
 
+variable vpn_node_selector {
+  default = {
+    gateway = "vpn",
+  }
+}
+
 variable hass_nfs_path {
   default = "/mnt/tank/rancher/pvs/home-assistant"
 }
@@ -54,12 +60,6 @@ variable radarr_nfs {
   }
 }
 
-variable vpn_node_selector {
-  default = {
-    gateway = "vpn",
-  }
-}
-
 variable nzbget_nfs {
   default = {
     config = {
@@ -70,6 +70,21 @@ variable nzbget_nfs {
     downloads = {
       name     = "nzbget-downloads"
       nfs_path = "/mnt/tank/media/download/NZBGet"
+      capacity = "10Gi"
+    }
+  }
+}
+
+variable rtorrent_nfs {
+  default = {
+    config = {
+      name     = "rtorrent-config"
+      nfs_path = "/mnt/tank/rancher/pvs/rtorrent-config"
+      capacity = "1Gi"
+    },
+    data = {
+      name     = "rtorrent-data"
+      nfs_path = "/mnt/tank/media/download/rTorrent"
       capacity = "10Gi"
     }
   }

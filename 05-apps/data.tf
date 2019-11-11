@@ -6,10 +6,10 @@ data terraform_remote_state rancher {
       name = "rancher"
     }
   }
-#  backend = "local"
-#  config = {
-#    path    = "${path.module}/../01-rancher-server/terraform.tfstate"
-#  }
+  #  backend = "local"
+  #  config = {
+  #    path    = "${path.module}/../01-rancher-server/terraform.tfstate"
+  #  }
 }
 
 data terraform_remote_state cluster {
@@ -20,10 +20,10 @@ data terraform_remote_state cluster {
       name = "k8s"
     }
   }
-#  backend = "local"
-#  config = {
-#    path    = "${path.module}/../02-cluster/terraform.tfstate"
-#  }
+  #  backend = "local"
+  #  config = {
+  #    path    = "${path.module}/../02-cluster/terraform.tfstate"
+  #  }
 }
 
 data rancher2_project system {
