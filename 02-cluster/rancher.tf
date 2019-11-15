@@ -33,6 +33,22 @@ resource rancher2_cluster cluster {
 
     # Rapid detection of down node
     services {
+      etcd {
+        backup_config {
+          enabled        = true
+          interval_hours = 12
+          retention      = 6
+          s3_backup_config {
+            endpoint    = var.rancher_etcd_backup_s3_endpoint
+            region      = var.rancher_etcd_backup_s3_region
+            folder      = var.rancher_etcd_backup_s3_folder
+            access_key  = var.rancher_etcd_backup_s3_access_key
+            secret_key  = var.rancher_etcd_backup_s3_secret_key
+            bucket_name = var.rancher_etcd_backup_s3_bucket
+            custom_ca   = filebase64("${path.module}/files/s3_root_ca.pem")
+          }
+        }
+      }
       kubelet {
         extra_args = {
           node-status-update-frequency : "5s"

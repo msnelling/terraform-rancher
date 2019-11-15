@@ -24,6 +24,16 @@ variable docker_registry {}
 variable rancher_iso_path {
   default = "Kits/ISO/rancheros-vmware.iso"
 }
+variable rancher_etcd_backup_s3_endpoint {}
+variable rancher_etcd_backup_s3_region {
+  default = ""
+}
+variable rancher_etcd_backup_s3_bucket {}
+variable rancher_etcd_backup_s3_folder {
+  default = "/"
+}
+variable rancher_etcd_backup_s3_access_key {}
+variable rancher_etcd_backup_s3_secret_key {}
 
 ###############################################################################
 # DNS
