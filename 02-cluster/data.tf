@@ -26,9 +26,9 @@ data null_data_source node_values {
   }
 }
 
-data template_file cloud_config {
+data template_file cloud_config_rancheros {
   count    = length(var.k8s_cluster)
-  template = file("${path.module}/templates/cloud_config.yml.tpl")
+  template = file("${path.module}/templates/cloud_config_rancheros.yaml")
 
   vars = {
     ssh_key           = tls_private_key.ssh.public_key_openssh
