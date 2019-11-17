@@ -46,6 +46,7 @@ data template_file rtorrent_values {
   vars = {
     process_uid   = var.process_uid
     process_gid   = var.process_gid
+    hostname      = "${var.rtorrent_hostname}.${var.dns_domain}"
     pvc_config    = var.rtorrent_nfs.config.name
     pvc_data      = var.rtorrent_nfs.data.name
     node_selector = yamlencode(var.vpn_node_selector)
@@ -59,4 +60,11 @@ resource rancher2_app rtorrent {
   target_namespace = rancher2_namespace.rtorrent.name
   template_name    = "rtorrent-flood"
   values_yaml      = base64encode(data.template_file.rtorrent_values.rendered)
+}
+
+resource dns_cname_record rtorrent {
+  zone  = "${var.dns_domain}."
+  name  = var.rtorrent_hostname
+  cname = var.dns_ingress_a_record
+  ttl   = 60
 }

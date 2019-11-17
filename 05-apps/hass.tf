@@ -41,6 +41,7 @@ resource kubernetes_persistent_volume_claim home_assistant {
 data template_file home_assistant_values {
   template = file("${path.module}/templates/hass_values.yaml.tpl")
   vars = {
+    hostname      = "${var.hass_hostname}.${var.dns_domain}"
     pvc = kubernetes_persistent_volume.home_assistant.metadata.0.name
   }
 }
@@ -52,4 +53,11 @@ resource rancher2_app home_assistant {
   target_namespace = rancher2_namespace.home_assistant.name
   template_name    = "home-assistant"
   values_yaml      = base64encode(data.template_file.home_assistant_values.rendered)
+}
+
+resource dns_cname_record hass {
+  zone  = "${var.dns_domain}."
+  name  = var.hass_hostname
+  cname = var.dns_ingress_a_record
+  ttl   = 60
 }

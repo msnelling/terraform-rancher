@@ -8,12 +8,10 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
   hosts:
-    - hass.xmple.io
-    - hass.k8s.xmple.io
+    - ${hostname}
   tls:
     - hosts:
-      - hass.xmple.io
-      - hass.k8s.xmple.io
+      - ${hostname}
       secretName: hass-tls
 persistence:
   existingClaim: ${pvc}

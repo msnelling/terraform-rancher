@@ -46,6 +46,7 @@ data template_file nzbget_values {
   vars = {
     process_uid   = var.process_uid
     process_gid   = var.process_gid
+    hostname      = "${var.nzbget_hostname}.${var.dns_domain}"
     pvc_config    = var.nzbget_nfs.config.name
     pvc_downloads = var.nzbget_nfs.downloads.name
     node_selector = yamlencode(var.vpn_node_selector)
@@ -59,4 +60,11 @@ resource rancher2_app nzbget {
   target_namespace = rancher2_namespace.nzbget.name
   template_name    = "nzbget"
   values_yaml      = base64encode(data.template_file.nzbget_values.rendered)
+}
+
+resource dns_cname_record nzbget {
+  zone  = "${var.dns_domain}."
+  name  = var.nzbget_hostname
+  cname = var.dns_ingress_a_record
+  ttl   = 60
 }

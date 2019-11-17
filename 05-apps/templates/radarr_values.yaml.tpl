@@ -10,12 +10,10 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
   hosts:
-    - radarr.xmple.io
-    - radarr.k8s.xmple.io
+    - ${hostname}
   tls:
     - hosts:
-      - radarr.xmple.io
-      - radarr.k8s.xmple.io
+      - ${hostname}
       secretName: radarr-tls
 persistence: 
   config: 

@@ -46,6 +46,7 @@ data template_file radarr_values {
   vars = {
     process_uid   = var.process_uid
     process_gid   = var.process_gid
+    hostname      = "${var.radarr_hostname}.${var.dns_domain}"
     pvc_config    = var.radarr_nfs.config.name
     pvc_downloads = var.radarr_nfs.downloads.name
     pvc_media     = var.radarr_nfs.media.name
@@ -60,4 +61,11 @@ resource rancher2_app radarr {
   target_namespace = rancher2_namespace.radarr.name
   template_name    = "radarr"
   values_yaml      = base64encode(data.template_file.radarr_values.rendered)
+}
+
+resource dns_cname_record radarr {
+  zone  = "${var.dns_domain}."
+  name  = var.radarr_hostname
+  cname = var.dns_ingress_a_record
+  ttl   = 60
 }

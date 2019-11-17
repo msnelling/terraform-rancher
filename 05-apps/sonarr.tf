@@ -46,6 +46,7 @@ data template_file sonarr_values {
   vars = {
     process_uid   = var.process_uid
     process_gid   = var.process_gid
+    hostname      = "${var.sonarr_hostname}.${var.dns_domain}"
     pvc_config    = var.sonarr_nfs.config.name
     pvc_downloads = var.sonarr_nfs.downloads.name
     pvc_media     = var.sonarr_nfs.media.name
@@ -60,4 +61,11 @@ resource rancher2_app sonarr {
   target_namespace = rancher2_namespace.sonarr.name
   template_name    = "sonarr"
   values_yaml      = base64encode(data.template_file.sonarr_values.rendered)
+}
+
+resource dns_cname_record sonarr {
+  zone  = "${var.dns_domain}."
+  name  = var.sonarr_hostname
+  cname = var.dns_ingress_a_record
+  ttl   = 60
 }

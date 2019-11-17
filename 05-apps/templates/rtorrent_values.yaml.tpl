@@ -15,10 +15,10 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
   hosts:
-    - rtorrent.k8s.xmple.io
+    - ${hostname}
   tls:
     - hosts:
-      - rtorrent.k8s.xmple.io
+      - ${hostname}
       secretName: rtorrent-tls
 persistence: 
   config: 

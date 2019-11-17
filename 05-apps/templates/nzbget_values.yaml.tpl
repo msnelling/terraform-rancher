@@ -10,10 +10,10 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
   hosts:
-    - nzbget.k8s.xmple.io
+    - ${hostname}
   tls:
     - hosts:
-      - nzbget.k8s.xmple.io
+      - ${hostname}
       secretName: sonarr-tls
 persistence: 
   config: 
