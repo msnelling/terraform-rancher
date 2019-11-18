@@ -12,6 +12,10 @@ data terraform_remote_state rancher {
   #  }
 }
 
+data github_user cluster_admin {
+  username = var.github_username
+}
+
 data null_data_source node_values {
   count = length(var.k8s_cluster)
 
@@ -31,7 +35,8 @@ data template_file cloud_config_rancheros {
   template = file("${path.module}/templates/cloud_config_rancheros.yaml")
 
   vars = {
-    ssh_key           = tls_private_key.ssh.public_key_openssh
+    rancher_ssh_key   = tls_private_key.ssh.public_key_openssh
+    extra_ssh_keys    = join(",", data.github_user.cluster_admin.ssh_keys)
     hostname          = "${var.k8s_cluster[count.index].name}.${var.k8s_domain}"
     docker_registry   = var.docker_registry
     dns_servers       = join(",", var.dns_servers)
