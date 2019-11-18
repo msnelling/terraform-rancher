@@ -16,6 +16,10 @@ variable vsphere_vm_datastore {}
 variable vsphere_iso_datastore {}
 
 ###############################################################################
+# GitHub
+variable github_username {}
+
+###############################################################################
 # Docker
 variable docker_registry {}
 

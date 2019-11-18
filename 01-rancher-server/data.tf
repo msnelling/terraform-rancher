@@ -19,10 +19,15 @@ data vsphere_network vm {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data github_user cluster_admin {
+  username = var.github_username
+}
+
 data template_file rancher_cloud_config {
-  template = file("${path.module}/templates/cloud_config.yml.tpl")
+  template = file("${path.module}/templates/cloud_config.yaml")
 
   vars = {
+    extra_ssh_keys       = join(",", data.github_user.cluster_admin.ssh_keys)
     rancher_version_tag  = var.rancher_version_tag
     rancher_hostname     = var.rancher_hostname
     rancher_domain       = var.rancher_domain

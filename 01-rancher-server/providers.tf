@@ -5,6 +5,11 @@ provider vsphere {
   allow_unverified_ssl = true
 }
 
+provider github {
+  individual = true
+  anonymous  = true
+}
+
 provider dns {
   update {
     server        = var.dns_update_server

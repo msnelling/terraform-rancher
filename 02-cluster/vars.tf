@@ -16,6 +16,10 @@ variable vsphere_vm_datastore {}
 variable vsphere_iso_datastore {}
 
 ###############################################################################
+# GitHub
+variable github_username {}
+
+###############################################################################
 # Docker
 variable docker_registry {}
 
@@ -30,7 +34,7 @@ variable rancher_etcd_backup_s3_region {
 }
 variable rancher_etcd_backup_s3_bucket {}
 variable rancher_etcd_backup_s3_folder {
-  default = "/"
+  default = ""
 }
 variable rancher_etcd_backup_s3_access_key {}
 variable rancher_etcd_backup_s3_secret_key {}
@@ -53,25 +57,34 @@ variable k8s_ingress_provider {
   default = "nginx"
 }
 variable k8s_cluster {
+  description = "List of VM specifications"
+  type = list(object({
+    name              = string       # VM name
+    cpu_cores         = number       # VM number of cores
+    memory_mb         = number       # VM memory in MB
+    disk_gb           = number       # VM disk capacity in GB
+    address_cidr_ipv4 = string       # e.g "10.1.1.41/24"
+    gateway_ipv4      = string       # e.g. "10.1.1.1"
+    roles             = list(string) # e.g. ["etcd", "controlplane", "worker"]
+    labels            = map(string)  # e.g. {gateway = "vpn"}
+  }))
   default = [
     {
-      name      = "k8s01"
-      cpu_cores = 6
-      #cpu_limit         = 1024
+      name              = "k8s01"
+      cpu_cores         = 6
       memory_mb         = 4096
       disk_gb           = 16
-      address_cidr_ipv4 = "10.1.1.40/24"
+      address_cidr_ipv4 = "10.1.1.41/24"
       gateway_ipv4      = "10.1.1.1"
       roles             = ["etcd", "controlplane", "worker"]
       labels            = {}
     },
     {
-      name      = "k8s02"
-      cpu_cores = 6
-      #cpu_limit         = 1024
+      name              = "k8s02"
+      cpu_cores         = 6
       memory_mb         = 4096
       disk_gb           = 16
-      address_cidr_ipv4 = "10.1.1.41/24"
+      address_cidr_ipv4 = "10.1.1.42/24"
       gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
       labels = {
@@ -79,12 +92,11 @@ variable k8s_cluster {
       }
     },
     {
-      name      = "k8s03"
-      cpu_cores = 6
-      #cpu_limit         = 1024
+      name              = "k8s03"
+      cpu_cores         = 6
       memory_mb         = 4096
       disk_gb           = 16
-      address_cidr_ipv4 = "10.1.1.42/24"
+      address_cidr_ipv4 = "10.1.1.43/24"
       gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
       labels = {

@@ -1,7 +1,3 @@
-locals {
-
-}
-
 resource vsphere_virtual_machine k8s_node {
   count                 = length(var.k8s_cluster)
   name                  = var.k8s_cluster[count.index].name
@@ -57,11 +53,11 @@ resource null_resource wait_for_docker {
   provisioner local-exec {
     command = <<EOF
 while [ "$${RET}" -gt 0 ]; do
-    ssh -q -o StrictHostKeyChecking=no -i $${KEY} $${USER}@$${IP} 'docker ps 2>&1 >/dev/null'
-    RET=$?
-    if [ "$${RET}" -gt 0 ]; then
-        sleep 10
-    fi
+  ssh -q -o StrictHostKeyChecking=no -i $${KEY} $${USER}@$${IP} 'docker ps 2>&1 >/dev/null'
+  RET=$?
+  if [ "$${RET}" -gt 0 ]; then
+    sleep 10
+  fi
 done
 EOF
 

@@ -4,14 +4,6 @@ resource rancher2_cluster cluster {
   rke_config {
     kubernetes_version = "v1.16.2-rancher1-1"
 
-    authentication {
-      //sans = concat(formatlist("%s.${var.k8s_domain}", ))
-      sans = [
-        "${var.k8s_cluster[0].name}.${var.k8s_domain}",
-        split("/", var.k8s_cluster[0].address_cidr_ipv4)[0],
-      ]
-    }
-
     network {
       plugin = "canal"
       canal_network_provider {
@@ -31,24 +23,22 @@ resource rancher2_cluster cluster {
       }
     }
 
-    # Rapid detection of down node
     services {
       etcd {
         backup_config {
-          enabled        = true
-          interval_hours = 12
-          retention      = 6
           s3_backup_config {
             endpoint    = var.rancher_etcd_backup_s3_endpoint
             region      = var.rancher_etcd_backup_s3_region
+            bucket_name = var.rancher_etcd_backup_s3_bucket
             folder      = var.rancher_etcd_backup_s3_folder
             access_key  = var.rancher_etcd_backup_s3_access_key
             secret_key  = var.rancher_etcd_backup_s3_secret_key
-            bucket_name = var.rancher_etcd_backup_s3_bucket
             custom_ca   = filebase64("${path.module}/files/s3_root_ca.pem")
           }
         }
       }
+
+      # BEGIN Rapid detection of down node
       kubelet {
         extra_args = {
           node-status-update-frequency : "5s"
@@ -61,57 +51,10 @@ resource rancher2_cluster cluster {
           pod-eviction-timeout : "30s"
         }
       }
+      # END Rapid detection of down node
     }
-
-    /*cloud_provider {
-      name = "vsphere"
-      vsphere_cloud_provider {
-        virtual_center {
-          datacenters = var.vsphere_datacenter
-          name        = var.vsphere_server
-          user        = var.vsphere_username
-          password    = var.vsphere_password
-        }
-        workspace {
-          datacenter        = var.vsphere_datacenter
-          folder            = "/"
-          default_datastore = ""
-          server            = var.vsphere_server
-        }
-        network {
-          public_network = var.vsphere_vm_network
-        }
-        global {
-          insecure_flag = true
-        }
-      }
-    }*/
   }
 }
-
-/*
-resource rancher2_node_pool master {
-  cluster_id       = rancher2_cluster.cluster.id
-  name             = "master"
-  hostname_prefix  = "test-master-"
-  node_template_id = rancher2_node_template.small.id
-  quantity         = 1
-  control_plane    = true
-  etcd             = true
-  worker           = true
-}
-
-resource rancher2_node_pool minion {
-  cluster_id       = rancher2_cluster.cluster.id
-  name             = "minion"
-  hostname_prefix  = "test-minion-"
-  node_template_id = rancher2_node_template.medium.id
-  quantity         = 1
-  control_plane    = false
-  etcd             = false
-  worker           = true
-}
-*/
 
 resource local_file kube_config {
   sensitive_content = rancher2_cluster.cluster.kube_config
