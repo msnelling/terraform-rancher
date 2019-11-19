@@ -134,3 +134,24 @@ variable rtorrent_nfs {
     }
   }
 }
+
+###############################################################################
+# qBittorrent
+variable qbittorrent_hostname {
+  default = "qbittorrent"
+}
+
+variable qbittorrent_nfs {
+  default = {
+    config = {
+      name     = "qbittorrent-config"
+      nfs_path = "/mnt/tank/rancher/pvs/qbittorrent-config"
+      capacity = "1Gi"
+    },
+    data = {
+      name     = "qbittorrent-data"
+      nfs_path = "/mnt/tank/media/download/qBittorrent"
+      capacity = "10Gi"
+    }
+  }
+}
