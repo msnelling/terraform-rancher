@@ -55,7 +55,7 @@ data template_file nzbget_values {
 
 resource rancher2_app nzbget {
   name             = "nzbget"
-  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.bilimek.name}"
+  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.custom.name}"
   project_id       = data.rancher2_project.default.id
   target_namespace = rancher2_namespace.nzbget.name
   template_name    = "nzbget"
