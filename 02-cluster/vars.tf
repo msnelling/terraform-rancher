@@ -54,7 +54,7 @@ variable k8s_domain {}
 variable k8s_ingress_provider {
   default = "nginx"
 }
-variable k8s_cluster {
+variable cluster {
   description = "List of VM specifications"
   type = list(object({
     name              = string       # VM name

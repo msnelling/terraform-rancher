@@ -1,8 +1,8 @@
 resource dns_a_record_set node {
-  count = length(var.k8s_cluster)
+  count = length(var.cluster)
 
   zone      = "${var.k8s_domain}."
-  name      = var.k8s_cluster[count.index].name
+  name      = var.cluster[count.index].name
   addresses = [data.null_data_source.node_values[count.index].outputs["address_ipv4"]]
   ttl       = 60
 }

@@ -1,6 +1,6 @@
-resource vsphere_virtual_machine k8s_node {
-  count            = length(var.k8s_cluster)
-  name             = var.k8s_cluster[count.index].name
+resource vsphere_virtual_machine node {
+  count            = length(var.cluster)
+  name             = var.cluster[count.index].name
   resource_pool_id = data.vsphere_resource_pool.pool.id
   datastore_id     = data.vsphere_datastore.vm_datastore.id
   folder           = data.terraform_remote_state.rancher.outputs.rancher_folder
@@ -8,7 +8,7 @@ resource vsphere_virtual_machine k8s_node {
   num_cpus              = data.null_data_source.node_values[count.index].outputs["cpu_cores"]
   num_cores_per_socket  = data.null_data_source.node_values[count.index].outputs["cpu_cores_per_socket"]
   cpu_limit             = data.null_data_source.node_values[count.index].outputs["cpu_limit"]
-  memory                = var.k8s_cluster[count.index].memory_mb
+  memory                = var.cluster[count.index].memory_mb
   guest_id              = "other4xLinux64Guest"
   alternate_guest_name  = "RancherOS"
   firmware              = "bios"
@@ -33,7 +33,7 @@ resource vsphere_virtual_machine k8s_node {
 
   disk {
     label            = "os_disk"
-    size             = var.k8s_cluster[count.index].disk_gb
+    size             = var.cluster[count.index].disk_gb
     path             = "OS.vmdk"
     thin_provisioned = true
     eagerly_scrub    = false
@@ -43,10 +43,10 @@ resource vsphere_virtual_machine k8s_node {
 }
 
 resource null_resource wait_for_docker {
-  count = length(var.k8s_cluster)
+  count = length(var.cluster)
 
   triggers = {
-    node_instance_id = vsphere_virtual_machine.k8s_node[count.index].id
+    node_instance_id = vsphere_virtual_machine.node[count.index].id
   }
 
   provisioner local-exec {
@@ -72,10 +72,10 @@ EOF
 }
 
 resource null_resource add_to_cluster {
-  count = length(var.k8s_cluster)
+  count = length(var.cluster)
 
   triggers = {
-    node_instance_id = vsphere_virtual_machine.k8s_node[count.index].id
+    node_instance_id = vsphere_virtual_machine.node[count.index].id
     cluster_token    = rancher2_cluster.cluster.cluster_registration_token[0].token
   }
 
