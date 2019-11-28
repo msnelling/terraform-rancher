@@ -2,7 +2,7 @@ resource rancher2_cluster cluster {
   name = var.k8s_name
 
   rke_config {
-    kubernetes_version = "v1.16.2-rancher1-1"
+    kubernetes_version = "v1.16.3-rancher1-1"
 
     network {
       plugin = "canal"

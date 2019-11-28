@@ -7,8 +7,12 @@ output token_key {
   sensitive = true
 }
 
-output rancher_tag {
-  value = vsphere_tag.rancher.id
+output vm_tag_catagory_id {
+  value = vsphere_tag_category.rancher.id
+}
+
+output vm_tag_rancher {
+  value = vsphere_tag.rancher.name
 }
 
 output rancher_folder {

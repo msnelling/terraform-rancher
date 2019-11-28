@@ -1,8 +1,10 @@
 resource vsphere_virtual_machine k8s_node {
-  count                 = length(var.k8s_cluster)
-  name                  = var.k8s_cluster[count.index].name
-  resource_pool_id      = data.vsphere_resource_pool.pool.id
-  datastore_id          = data.vsphere_datastore.vm_datastore.id
+  count            = length(var.k8s_cluster)
+  name             = var.k8s_cluster[count.index].name
+  resource_pool_id = data.vsphere_resource_pool.pool.id
+  datastore_id     = data.vsphere_datastore.vm_datastore.id
+  folder           = data.terraform_remote_state.rancher.outputs.rancher_folder
+
   num_cpus              = data.null_data_source.node_values[count.index].outputs["cpu_cores"]
   num_cores_per_socket  = data.null_data_source.node_values[count.index].outputs["cpu_cores_per_socket"]
   cpu_limit             = data.null_data_source.node_values[count.index].outputs["cpu_limit"]
@@ -29,11 +31,6 @@ resource vsphere_virtual_machine k8s_node {
     adapter_type = "vmxnet3"
   }
 
-  network_interface {
-    network_id   = data.vsphere_network.aux.id
-    adapter_type = "vmxnet3"
-  }
-
   disk {
     label            = "os_disk"
     size             = var.k8s_cluster[count.index].disk_gb
@@ -41,6 +38,8 @@ resource vsphere_virtual_machine k8s_node {
     thin_provisioned = true
     eagerly_scrub    = false
   }
+
+  tags = [data.vsphere_tag.rancher.id]
 }
 
 resource null_resource wait_for_docker {

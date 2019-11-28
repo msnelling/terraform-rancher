@@ -45,3 +45,8 @@ data template_file cloud_config_rancheros {
     gateway_ipv4      = var.k8s_cluster[count.index].gateway_ipv4
   }
 }
+
+data vsphere_tag rancher {
+  name        = data.terraform_remote_state.rancher.outputs.vm_tag_rancher
+  category_id = data.terraform_remote_state.rancher.outputs.vm_tag_catagory_id
+}

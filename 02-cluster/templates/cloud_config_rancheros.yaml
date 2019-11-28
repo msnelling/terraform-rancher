@@ -48,6 +48,3 @@ write_files:
               address: ${address_cidr_ipv4}
               gateway: ${gateway_ipv4}
               mtu: 1500
-            eth1:
-              dhcp: true
-              mtu: 9000

@@ -6,11 +6,9 @@ variable vsphere_password {}
 variable vsphere_datacenter {
   default = "ha-datacenter"
 }
+variable vsphere_pool {}
 variable vsphere_vm_network {
   default = "VM Network"
-}
-variable vsphere_aux_network {
-  default = "Storage Network"
 }
 variable vsphere_vm_datastore {}
 variable vsphere_iso_datastore {}
