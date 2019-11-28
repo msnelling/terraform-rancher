@@ -6,17 +6,15 @@ variable process_gid {
   default = 2001
 }
 
-###############################################################################
-# NFS
-variable nfs_server {
-  default = "10.1.90.2"
-}
-
 variable vpn_node_selector {
   default = {
     gateway = "vpn",
   }
 }
+
+###############################################################################
+# NFS
+variable nfs_server {}
 
 ###############################################################################
 # DNS
@@ -109,27 +107,6 @@ variable nzbget_nfs {
     downloads = {
       name     = "nzbget-downloads"
       nfs_path = "/mnt/tank/media/download/NZBGet"
-      capacity = "10Gi"
-    }
-  }
-}
-
-###############################################################################
-# rTorrent/Flood
-variable rtorrent_hostname {
-  default = "rtorrent"
-}
-
-variable rtorrent_nfs {
-  default = {
-    config = {
-      name     = "rtorrent-config"
-      nfs_path = "/mnt/tank/rancher/pvs/rtorrent-config"
-      capacity = "1Gi"
-    },
-    data = {
-      name     = "rtorrent-data"
-      nfs_path = "/mnt/tank/media/download/rTorrent"
       capacity = "10Gi"
     }
   }
