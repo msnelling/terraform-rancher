@@ -55,3 +55,21 @@ resource rancher2_node_template medium {
 
   engine_registry_mirror = ["https://${var.docker_registry}"]
 }
+
+resource rancher2_node_template large {
+  name                = "6vCPU-4GiRAM-32GiSSD"
+  cloud_credential_id = rancher2_cloud_credential.vsphere_homelab.id
+
+  vsphere_config {
+    cpu_count   = 6
+    memory_size = 4096
+    disk_size   = 32767
+    cloudinit   = "https://pastebin.com/raw/ZYK9whBe"
+    cfgparam    = ["disk.enableUUID=TRUE"]
+    datastore   = var.vsphere_vm_datastore
+    network     = [var.vsphere_vm_network]
+    folder      = vsphere_folder.folder.path
+  }
+
+  engine_registry_mirror = ["https://${var.docker_registry}"]
+}

@@ -71,7 +71,7 @@ variable k8s_cluster {
       name              = "k8s01"
       cpu_cores         = 6
       memory_mb         = 4096
-      disk_gb           = 16
+      disk_gb           = 32
       address_cidr_ipv4 = "10.1.1.41/24"
       gateway_ipv4      = "10.1.1.1"
       roles             = ["etcd", "controlplane", "worker"]
@@ -81,7 +81,7 @@ variable k8s_cluster {
       name              = "k8s02"
       cpu_cores         = 6
       memory_mb         = 4096
-      disk_gb           = 16
+      disk_gb           = 32
       address_cidr_ipv4 = "10.1.1.42/24"
       gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
@@ -93,7 +93,7 @@ variable k8s_cluster {
       name              = "k8s03"
       cpu_cores         = 6
       memory_mb         = 4096
-      disk_gb           = 16
+      disk_gb           = 32
       address_cidr_ipv4 = "10.1.1.43/24"
       gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
