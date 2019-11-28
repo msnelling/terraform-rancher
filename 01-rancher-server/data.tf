@@ -12,7 +12,10 @@ data vsphere_datastore iso_datastore {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data vsphere_resource_pool pool {}
+data vsphere_resource_pool pool {
+  name          = var.vsphere_pool
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
 
 data vsphere_network vm {
   name          = var.vsphere_vm_network

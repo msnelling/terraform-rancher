@@ -9,6 +9,10 @@ variable vsphere_password {}
 variable vsphere_datacenter {
   default = "ha-datacenter"
 }
+variable vsphere_pool {}
+variable vsphere_vm_folder {
+  default = "Kubernetes"
+}
 variable vsphere_vm_network {
   default = "VM Network"
 }
@@ -26,7 +30,7 @@ variable docker_registry {}
 ###############################################################################
 # Rancher Server
 variable rancher_version_tag {
-  default = "v2.3.2"
+  default = "v2.3.3"
 }
 variable rancher_hostname {}
 variable rancher_domain {}

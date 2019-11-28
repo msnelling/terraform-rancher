@@ -21,8 +21,8 @@ write_files:
 %{ endfor ~}  
       hostname: ${rancher_hostname}.${rancher_domain}
       mounts:
-        - ["${nfs_server_ipv4}:${nfs_mount}/server", "/mnt/rancher", "nfs4", ""]
-        - ["${nfs_server_ipv4}:${nfs_mount}/acme", "/mnt/acme", "nfs4", ""]
+        #- ["${nfs_server_ipv4}:${nfs_mount}/server", "/mnt/rancher", "nfs4", ""]
+        #- ["${nfs_server_ipv4}:${nfs_mount}/acme", "/mnt/acme", "nfs4", ""]
       rancher:
         bootstrap_docker:
           registry_mirror: "https://${docker_registry}"
@@ -51,7 +51,8 @@ write_files:
             command:
               - --no-cacerts
             volumes:
-              - /mnt/rancher:/var/lib/rancher:rw
+              #- /mnt/rancher:/var/lib/rancher:rw
+              #- /mnt/acme:/acme:rw
             restart: unless-stopped
             labels:
               traefik.enable: "true"

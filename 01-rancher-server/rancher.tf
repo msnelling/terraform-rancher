@@ -1,8 +1,8 @@
 resource rancher2_bootstrap admin {
-  provider = "rancher2.bootstrap"
+  provider = rancher2.bootstrap
 
   # BEGIN Comment out this line if starting from scratch
-  current_password = var.rancher_admin_password
+  #current_password = var.rancher_admin_password
   # END
 
   password   = var.rancher_admin_password
@@ -23,6 +23,7 @@ resource rancher2_cloud_credential vsphere_homelab {
 resource rancher2_node_template small {
   name                = "1vCPU-2GiRAM-8GiSSD"
   cloud_credential_id = rancher2_cloud_credential.vsphere_homelab.id
+
   vsphere_config {
     cpu_count   = 1
     memory_size = 2048
@@ -30,14 +31,17 @@ resource rancher2_node_template small {
     cloudinit   = "https://pastebin.com/raw/ZYK9whBe"
     cfgparam    = ["disk.enableUUID=TRUE"]
     datastore   = var.vsphere_vm_datastore
-    network     = [var.vsphere_vm_network, "Storage Network"]
+    network     = [var.vsphere_vm_network]
+    folder      = vsphere_folder.folder.path
   }
+
   engine_registry_mirror = ["https://${var.docker_registry}"]
 }
 
 resource rancher2_node_template medium {
   name                = "2vCPU-4GiRAM-16GiSSD"
   cloud_credential_id = rancher2_cloud_credential.vsphere_homelab.id
+
   vsphere_config {
     cpu_count   = 2
     memory_size = 4096
@@ -45,7 +49,9 @@ resource rancher2_node_template medium {
     cloudinit   = "https://pastebin.com/raw/ZYK9whBe"
     cfgparam    = ["disk.enableUUID=TRUE"]
     datastore   = var.vsphere_vm_datastore
-    network     = [var.vsphere_vm_network, "Storage Network"]
+    network     = [var.vsphere_vm_network]
+    folder      = vsphere_folder.folder.path
   }
+
   engine_registry_mirror = ["https://${var.docker_registry}"]
 }
