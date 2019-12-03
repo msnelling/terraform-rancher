@@ -6,3 +6,12 @@ provider rancher2 {
 provider acme {
   server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }
+
+provider dns {
+  update {
+    server        = var.dns_update_server
+    key_name      = var.dns_update_key
+    key_algorithm = var.dns_update_algorithm
+    key_secret    = var.dns_update_secret
+  }
+}

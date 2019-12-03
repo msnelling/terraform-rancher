@@ -21,8 +21,8 @@ module traefik {
 */
 
 module nginx {
-  source = "./nginx"
-  project_id     = data.rancher2_project.system.id
+  source          = "./nginx"
+  project_id      = data.rancher2_project.system.id
   certificate_pem = base64encode(acme_certificate.ingress_tls.certificate_pem)
   private_key_pem = base64encode(acme_certificate.ingress_tls.private_key_pem)
 }

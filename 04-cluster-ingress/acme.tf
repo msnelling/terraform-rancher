@@ -9,8 +9,8 @@ resource acme_registration reg {
 
 resource acme_certificate ingress_tls {
   account_key_pem           = acme_registration.reg.account_key_pem
-  common_name               = var.default_ingress_hostname
-  subject_alternative_names = ["*.${var.default_ingress_hostname}"]
+  common_name               = var.ingress_domain
+  subject_alternative_names = ["*.${var.ingress_domain}"]
   recursive_nameservers     = ["1.1.1.1:53", "1.0.0.1:53"]
 
   dns_challenge {
