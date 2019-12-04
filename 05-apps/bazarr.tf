@@ -48,6 +48,8 @@ data template_file bazarr_values {
     process_gid   = var.process_gid
     hostname      = "${var.bazarr_hostname}.${var.dns_domain}"
     pvc_config    = var.bazarr_nfs.config.name
+    pvc_tv        = var.bazarr_nfs.tv.name
+    pvc_movies    = var.bazarr_nfs.movies.name
     node_selector = yamlencode(var.vpn_node_selector)
   }
 }

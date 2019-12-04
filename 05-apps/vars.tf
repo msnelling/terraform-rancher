@@ -83,7 +83,7 @@ variable radarr_nfs {
       nfs_path = "/mnt/tank/media/download"
       capacity = "10Gi"
     },
-    media = {
+    movies = {
       name     = "radarr-movies"
       nfs_path = "/mnt/tank/media/Video/Movies"
       capacity = "10Gi"
@@ -103,6 +103,16 @@ variable bazarr_nfs {
       name     = "bazarr-config"
       nfs_path = "/mnt/tank/rancher/pvs/bazarr-config"
       capacity = "1Gi"
+    },
+    tv = {
+      name     = "bazarr-tv"
+      nfs_path = "/mnt/tank/media/TV Shows"
+      capacity = "10Gi"
+    },
+    movies = {
+      name     = "bazarr-movies"
+      nfs_path = "/mnt/tank/media/Video/Movies"
+      capacity = "10Gi"
     }
   }
 }

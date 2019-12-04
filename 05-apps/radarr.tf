@@ -49,7 +49,7 @@ data template_file radarr_values {
     hostname      = "${var.radarr_hostname}.${var.dns_domain}"
     pvc_config    = var.radarr_nfs.config.name
     pvc_downloads = var.radarr_nfs.downloads.name
-    pvc_media     = var.radarr_nfs.media.name
+    pvc_movies     = var.radarr_nfs.movies.name
     node_selector = yamlencode(var.vpn_node_selector)
   }
 }

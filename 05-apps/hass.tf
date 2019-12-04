@@ -41,8 +41,8 @@ resource kubernetes_persistent_volume_claim home_assistant {
 data template_file home_assistant_values {
   template = file("${path.module}/templates/hass_values.yaml.tpl")
   vars = {
-    hostname      = "${var.hass_hostname}.${var.dns_domain}"
-    pvc = kubernetes_persistent_volume.home_assistant.metadata.0.name
+    hostname = "${var.hass_hostname}.${var.dns_domain}"
+    pvc      = kubernetes_persistent_volume.home_assistant.metadata.0.name
   }
 }
 

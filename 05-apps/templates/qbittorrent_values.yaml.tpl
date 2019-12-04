@@ -1,9 +1,10 @@
-timezone: Europe/London
-uid: ${process_uid}
-gid: ${process_gid}
 image:
-  tag: latest
+  tag: amd64-latest
   pullPolicy: Always
+timezone: Europe/London
+puid: ${process_uid}
+pgid: ${process_gid}
+umask: "0077"
 ingress: 
   enabled: "true"
   annotations:

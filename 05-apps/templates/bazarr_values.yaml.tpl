@@ -15,9 +15,13 @@ ingress:
   tls:
     - hosts:
       - ${hostname}
-      secretName: sonarr-tls
+      secretName: bazarr-tls
 persistence: 
   config: 
     existingClaim: ${pvc_config}
+  tv:
+    existingClaim: ${pvc_tv}
+  movies:
+    existingClaim: ${pvc_movies}
 nodeSelector:
   ${node_selector}
