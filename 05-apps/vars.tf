@@ -92,6 +92,22 @@ variable radarr_nfs {
 }
 
 ###############################################################################
+# Bazarr
+variable bazarr_hostname {
+  default = "bazarr"
+}
+
+variable bazarr_nfs {
+  default = {
+    config = {
+      name     = "bazarr-config"
+      nfs_path = "/mnt/tank/rancher/pvs/bazarr-config"
+      capacity = "1Gi"
+    }
+  }
+}
+
+###############################################################################
 # NZBGet
 variable nzbget_hostname {
   default = "nzbget"
