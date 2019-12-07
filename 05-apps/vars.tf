@@ -158,3 +158,9 @@ variable qbittorrent_nfs {
     }
   }
 }
+
+###############################################################################
+# Loki
+variable loki_hostname {
+  default = "loki"
+}
