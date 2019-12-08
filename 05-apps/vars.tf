@@ -164,3 +164,6 @@ variable qbittorrent_nfs {
 variable loki_hostname {
   default = "loki"
 }
+variable loki_domain {
+  default = "k8s.xmple.io"
+}

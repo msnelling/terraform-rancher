@@ -14,7 +14,7 @@ resource rancher2_catalog loki {
 data template_file loki_values {
   template = file("${path.module}/templates/loki_values.yaml.tpl")
   vars = {
-    hostname = var.loki_hostname
+    hostname = "${var.loki_hostname}.${var.loki_domain}"
   }
 }
 
@@ -25,4 +25,11 @@ resource rancher2_app loki {
   target_namespace = rancher2_namespace.loki.name
   template_name    = "loki-stack"
   values_yaml      = base64encode(data.template_file.loki_values.rendered)
+}
+
+resource dns_cname_record loki {
+  zone  = "${var.loki_domain}."
+  name  = var.loki_hostname
+  cname = var.dns_ingress_a_record
+  ttl   = 60
 }
