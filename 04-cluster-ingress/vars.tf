@@ -5,6 +5,9 @@ variable ingress_hostname {
 
 ###############################################################################
 # ACME
+variable acme_server_url {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}
 variable acme_email {}
 
 ###############################################################################
