@@ -11,6 +11,7 @@ mesh:
     tag: latest
     pullPolicy: Always
 tracing:
+  deploy: false
   jaeger:
     enabled: false
 metrics:
