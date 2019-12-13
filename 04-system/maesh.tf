@@ -52,6 +52,7 @@ resource kubernetes_ingress jaeger {
   metadata {
     name      = "jaeger"
     namespace = rancher2_namespace.maesh.name
+
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt-production"
       "kubernetes.io/ingress.class"    = "nginx"
@@ -61,6 +62,7 @@ resource kubernetes_ingress jaeger {
   spec {
     rule {
       host = "${var.jaeger_hostname}.${var.jaeger_domain}"
+
       http {
         path {
           backend {
