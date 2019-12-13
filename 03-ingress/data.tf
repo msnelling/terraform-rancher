@@ -26,6 +26,16 @@ data terraform_remote_state cluster {
   #  }
 }
 
+data terraform_remote_state ingress {
+  backend = "remote"
+  config = {
+    organization = "xmple"
+    workspaces = {
+      name = "k8s-ingress"
+    }
+  }
+}
+
 data rancher2_project system {
   cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
   name       = "System"
