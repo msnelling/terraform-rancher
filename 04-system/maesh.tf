@@ -27,6 +27,7 @@ resource rancher2_app maesh {
   values_yaml      = base64encode(data.template_file.maesh_values.rendered)
 }
 
+/*
 resource kubernetes_service jaeger {
   metadata {
     name      = "jaeger-ui"
@@ -87,3 +88,4 @@ resource dns_cname_record maesh {
   cname = "${data.terraform_remote_state.ingress.outputs.ingress_fqdn}."
   ttl   = 60
 }
+*/

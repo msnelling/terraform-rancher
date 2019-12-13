@@ -12,7 +12,7 @@ mesh:
     pullPolicy: Always
 tracing:
   jaeger:
-    enabled: true
+    enabled: false
 metrics:
   deploy: false
 smi:
