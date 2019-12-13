@@ -20,13 +20,6 @@
       tags:
         - cluster
 
-    - name: Basic deployment
-      terraform:
-        project_path: 03-cluster-base/
-        state: present
-      tags:
-        - base
-
     - import_role: 
         name: cert-manager
       environment:
@@ -36,18 +29,32 @@
 
     - name: Ingress configuration
       terraform:
-        project_path: 04-cluster-ingress/
+        project_path: 03-ingress/
         state: present
       tags:
         - ingress
 
-    - name: Install apps
+    - name: System apps
+      terraform:
+        project_path: 04-system/
+        state: present
+      tags:
+        - system
+
+    - name: Monitoring
+      terraform:
+        project_path: 05-monitoring/
+        state: present
+      tags:
+        - monitor
+
+    - name: User apps
       terraform:
         project_path: 05-apps/
         state: present
-        backend_config:
-          hostname: app.terraform.io
-          organization: xmple
-          workspaces: [ {name = "k8s-apps"} ]
+        #backend_config:
+        #  hostname: app.terraform.io
+        #  organization: xmple
+        #  workspaces: [ {name = "k8s-apps"} ]
       tags:
         - apps

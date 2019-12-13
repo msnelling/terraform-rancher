@@ -2,7 +2,7 @@ terraform {
   backend "remote" {
     organization = "xmple"
     workspaces {
-      name = "k8s-base"
+      name = "k8s-system"
     }
   }
 }

@@ -24,16 +24,24 @@ resource tfe_workspace k8s {
   queue_all_runs        = false
 }
 
-resource tfe_workspace k8s_base {
-  name                  = "k8s-base"
+resource tfe_workspace k8s_ingress {
+  name                  = "k8s-ingress"
   organization          = tfe_organization.myorg.name
   file_triggers_enabled = false
   operations            = false
   queue_all_runs        = false
 }
 
-resource tfe_workspace k8s_ingress {
-  name                  = "k8s-ingress"
+resource tfe_workspace k8s_system {
+  name                  = "k8s-system"
+  organization          = tfe_organization.myorg.name
+  file_triggers_enabled = false
+  operations            = false
+  queue_all_runs        = false
+}
+
+resource tfe_workspace k8s_monitoring {
+  name                  = "k8s-monitoring"
   organization          = tfe_organization.myorg.name
   file_triggers_enabled = false
   operations            = false
