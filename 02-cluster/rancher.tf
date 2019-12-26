@@ -26,6 +26,7 @@ resource rancher2_cluster cluster {
     services {
       etcd {
         backup_config {
+          /*
           s3_backup_config {
             endpoint    = var.rancher_etcd_backup_s3_endpoint
             region      = var.rancher_etcd_backup_s3_region
@@ -35,6 +36,7 @@ resource rancher2_cluster cluster {
             secret_key  = var.rancher_etcd_backup_s3_secret_key
             custom_ca   = filebase64("${path.module}/files/s3_root_ca.pem")
           }
+          */
         }
       }
 
