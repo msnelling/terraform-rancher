@@ -3,6 +3,11 @@ provider rancher2 {
   token_key = data.terraform_remote_state.rancher.outputs.token_key
 }
 
+provider kubernetes {
+  host  = data.terraform_remote_state.cluster.outputs.k8s_api_endpoint
+  token = data.terraform_remote_state.cluster.outputs.k8s_api_token
+}
+
 provider acme {
   server_url = var.acme_server_url
 }
