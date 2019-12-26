@@ -11,7 +11,7 @@ variable vsphere_vm_network {
   default = "VM Network"
 }
 variable vsphere_vm_datastore {}
-variable vsphere_iso_datastore {}
+variable vsphere_vm_template {}
 
 ###############################################################################
 # GitHub
@@ -60,7 +60,7 @@ variable cluster {
     name              = string       # VM name
     cpu_cores         = number       # VM number of cores
     memory_mb         = number       # VM memory in MB
-    disk_gb           = number       # VM disk capacity in GB
+    longhorn_disk_gb  = number       # VM disk capacity in GB
     address_cidr_ipv4 = string       # e.g "10.1.1.41/24"
     gateway_ipv4      = string       # e.g. "10.1.1.1"
     roles             = list(string) # e.g. ["etcd", "controlplane", "worker"]
@@ -71,7 +71,7 @@ variable cluster {
       name              = "k8s01"
       cpu_cores         = 6
       memory_mb         = 4096
-      disk_gb           = 32
+      longhorn_disk_gb  = 32
       address_cidr_ipv4 = "10.1.1.41/24"
       gateway_ipv4      = "10.1.1.1"
       roles             = ["etcd", "controlplane", "worker"]
@@ -81,7 +81,7 @@ variable cluster {
       name              = "k8s02"
       cpu_cores         = 6
       memory_mb         = 4096
-      disk_gb           = 32
+      longhorn_disk_gb  = 32
       address_cidr_ipv4 = "10.1.1.42/24"
       gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
@@ -93,7 +93,7 @@ variable cluster {
       name              = "k8s03"
       cpu_cores         = 6
       memory_mb         = 4096
-      disk_gb           = 32
+      longhorn_disk_gb  = 32
       address_cidr_ipv4 = "10.1.1.43/24"
       gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]

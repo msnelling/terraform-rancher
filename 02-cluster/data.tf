@@ -30,20 +30,34 @@ data null_data_source node_values {
   }
 }
 
-data template_file cloud_config_rancheros {
+data template_file cloud_config_metadata_ubuntu {
   count    = length(var.cluster)
-  template = file("${path.module}/templates/cloud_config_rancheros.yaml")
+  template = file("${path.module}/templates/cloud_init_metadata_ubuntu.yaml")
 
   vars = {
-    rancher_ssh_key   = tls_private_key.ssh.public_key_openssh
-    extra_ssh_keys    = join(",", data.github_user.cluster_admin.ssh_keys)
-    hostname          = "${var.cluster[count.index].name}.${var.k8s_domain}"
-    docker_registry   = var.docker_registry
-    dns_servers       = join(",", var.dns_servers)
-    dns_domain        = var.k8s_domain
     address_cidr_ipv4 = var.cluster[count.index].address_cidr_ipv4
     gateway_ipv4      = var.cluster[count.index].gateway_ipv4
+    dns_servers       = join(",", var.dns_servers)
+    dns_domain        = var.k8s_domain
   }
+}
+
+data template_file cloud_config_userdata_ubuntu {
+  count    = length(var.cluster)
+  template = file("${path.module}/templates/cloud_init_userdata_ubuntu.yaml")
+
+  vars = {
+    rancher_ssh_key = tls_private_key.ssh.public_key_openssh
+    extra_ssh_keys  = join(",", data.github_user.cluster_admin.ssh_keys)
+    hostname        = "${var.cluster[count.index].name}.${var.k8s_domain}"
+    docker_registry = var.docker_registry
+    dns_domain      = var.k8s_domain
+  }
+}
+
+data vsphere_virtual_machine template {
+  name          = "Templates/Ubuntu 19.10 K8s Node"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data vsphere_tag rancher {

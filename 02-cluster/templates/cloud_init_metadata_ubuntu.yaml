@@ -1,0 +1,17 @@
+network:
+  version: 2
+  ethernets:
+    ens192:
+      dhcp4: no
+      dhcp6: no
+      accept-ra: false
+      addresses:
+        - ${address_cidr_ipv4}
+      gateway4: ${gateway_ipv4}
+      nameservers:
+        addresses:
+%{ for address in split(",", dns_servers) ~}
+          - ${address}
+%{ endfor ~}
+        search:
+          - ${dns_domain}

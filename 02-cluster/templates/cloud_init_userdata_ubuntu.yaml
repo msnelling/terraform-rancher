@@ -1,0 +1,99 @@
+#cloud-config
+hostname: ${hostname}.${dns_domain}
+
+# Users and groups
+groups:
+  - docker
+users:
+  - default
+  - name: sysadmin
+    ssh_authorized_keys:
+%{ for ssh_key in split(",", extra_ssh_keys) ~}
+      - ${ssh_key}
+%{ endfor ~}  
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo, docker
+    shell: /bin/bash
+  - name: rancher
+    ssh_authorized_keys:
+      - ${rancher_ssh_key}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: docker
+    create_groups: false
+    no_user_group: true
+
+# Seeding entropy
+random_seed:
+  file: /dev/urandom
+  command: ["pollinate", "-r", "-s", "https://entropy.ubuntu.com"]
+  command_required: true
+
+# Install packages
+apt:
+  sources:
+    docker:
+      arches: amd64
+      source: "deb https://download.docker.com/linux/ubuntu disco stable"
+      keyserver: "hkp://keyserver.ubuntu.com:80"
+      keyid: 0EBFCD88
+package_upgrade: true
+packages:
+  - docker-ce
+
+# Write docker config
+write_files:
+  - content: |
+      {
+        "registry-mirrors": ["https://${docker_registry}"],
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }
+    path: /etc/docker/daemon.json
+    permissions: '0644'
+
+# Setup disks
+disk_setup:
+  /dev/sdb:
+    table_type: gpt
+    layout: true
+    overwrite: false
+fs_setup:
+  - label: longhorn_data
+    device: /dev/sdb1
+    filesystem: ext4
+    overwrite: false
+mounts:
+  - [/dev/sdb1, /var/lib/rancher/longhorn, ext4, 'defaults,discard,nofail', '0', '2']
+
+runcmd:
+  # Upgrade all packages
+  - apt update
+  - apt dist-upgrade -y
+  - apt autoremove -y
+  - apt clean
+  # Enable iSCSI
+  - systemctl enable iscsid
+  # Disable swap
+  - swapoff --all
+  - sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
+  # Allow bridge traffic to traverse
+  - sysctl net.bridge.bridge-nf-call-iptables=1
+  - sysctl net.bridge.bridge-nf-call-ip6tables=1
+  # tmp file settings
+  - sed -i "s/D \/tmp 1777 root root -/#D \/tmp 1777 root root -/g" /usr/lib/tmpfiles.d/tmp.conf
+  # Disable SSH password authentication
+  - sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
+  # Reset machine id
+  - echo -n > /etc/machine-id
+  # Apply netplan
+  #- netplan generate
+  #- netplan apply
+
+final_message: "The system is prepped, after $UPTIME seconds"
+power_state:
+  timeout: 30
+  mode: reboot
