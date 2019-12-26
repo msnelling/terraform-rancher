@@ -1,3 +1,13 @@
+resource vsphere_virtual_disk docker_data {
+  count              = length(var.cluster)
+  size               = 5
+  vmdk_path          = "${var.k8s_name}/docker${count.index}.vmdk"
+  datacenter         = data.vsphere_datacenter.dc.name
+  datastore          = data.vsphere_datastore.vm_datastore.name
+  create_directories = true
+  type               = "thin"
+}
+
 resource vsphere_virtual_disk longhorn_data {
   count              = length(var.cluster)
   size               = var.cluster[count.index].longhorn_disk_gb
@@ -48,11 +58,19 @@ resource vsphere_virtual_machine node {
   }
 
   disk {
+    label        = "docker"
+    path         = vsphere_virtual_disk.docker_data[count.index].vmdk_path
+    attach       = true
+    datastore_id = data.vsphere_datastore.vm_datastore.id
+    unit_number  = 1
+  }
+
+  disk {
     label        = "longhorn"
     path         = vsphere_virtual_disk.longhorn_data[count.index].vmdk_path
     attach       = true
     datastore_id = data.vsphere_datastore.vm_datastore.id
-    unit_number  = 1
+    unit_number  = 2
   }
 
   clone {
