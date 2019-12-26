@@ -56,7 +56,7 @@ data template_file cloud_config_userdata_ubuntu {
 }
 
 data vsphere_virtual_machine template {
-  name          = "Templates/Ubuntu 19.10 K8s Node"
+  name          = var.vsphere_vm_template
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 

@@ -33,7 +33,7 @@ apt:
   sources:
     docker:
       arches: amd64
-      source: "deb https://download.docker.com/linux/ubuntu disco stable"
+      source: "deb https://download.docker.com/linux/ubuntu bionic stable"
       keyserver: "hkp://keyserver.ubuntu.com:80"
       keyid: 0EBFCD88
 package_upgrade: true
@@ -61,13 +61,22 @@ disk_setup:
     table_type: gpt
     layout: true
     overwrite: false
+  /dev/sdc:
+    table_type: gpt
+    layout: true
+    overwrite: false
 fs_setup:
-  - label: longhorn_data
+  - label: docker_data
     device: /dev/sdb1
+    filesystem: ext4
+    overwrite: true
+  - label: longhorn_data
+    device: /dev/sdc1
     filesystem: ext4
     overwrite: false
 mounts:
-  - [/dev/sdb1, /var/lib/rancher/longhorn, ext4, 'defaults,discard,nofail', '0', '2']
+  - [/dev/sdb1, /var/lib/docker, ext4, 'defaults,discard,nofail', '0', '2']
+  - [/dev/sdc1, /var/lib/rancher/longhorn, ext4, 'defaults,discard,nofail', '0', '2']
 
 runcmd:
   # Upgrade all packages
@@ -89,9 +98,6 @@ runcmd:
   - sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
   # Reset machine id
   - echo -n > /etc/machine-id
-  # Apply netplan
-  #- netplan generate
-  #- netplan apply
 
 final_message: "The system is prepped, after $UPTIME seconds"
 power_state:

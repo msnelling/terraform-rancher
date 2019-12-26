@@ -7,7 +7,7 @@ resource rancher2_cluster cluster {
     network {
       plugin = "canal"
       canal_network_provider {
-        iface = "eth0"
+        iface = "ens192"
       }
     }
 
