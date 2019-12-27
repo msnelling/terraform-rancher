@@ -1,6 +1,6 @@
 resource rancher2_namespace nfs_client_provisioner {
   name        = "nfs-client-provisioner"
-  description = "Namespace for nfs-client-provisioner app components"
+  description = "Namespace for NFS client provisioner"
   project_id  = data.rancher2_project.system.id
 }
 

@@ -1,6 +1,6 @@
 resource rancher2_namespace maesh {
   name        = "maesh"
-  description = "Namespace for Maesh app components"
+  description = "Namespace for Maesh networking"
   project_id  = data.rancher2_project.system.id
 }
 

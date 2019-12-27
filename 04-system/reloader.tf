@@ -1,6 +1,6 @@
 resource rancher2_namespace reloader {
   name        = "reloader"
-  description = "Namespace for Reloader app components"
+  description = "Namespace for Reloader app"
   project_id  = data.rancher2_project.system.id
 }
 
