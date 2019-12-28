@@ -12,9 +12,21 @@ variable vpn_node_selector {
   }
 }
 
+variable certificate_issuer {
+  default = "letsencrypt-staging"
+}
+
 ###############################################################################
 # NFS
 variable nfs_server {}
+
+
+###############################################################################
+# iSCSI
+variable iscsi_iqn_base {
+  default = "iqn.2005-10.org.freenas.ctl"
+}
+variable iscsi_target {}
 
 ###############################################################################
 # DNS
@@ -45,13 +57,18 @@ variable sonarr_hostname {
   default = "sonarr"
 }
 
-variable sonarr_nfs {
+variable sonarr_iscsi {
   default = {
     config = {
       name     = "sonarr-config"
-      nfs_path = "/mnt/tank/rancher/pvs/sonarr-config"
+      lun      = "0"
       capacity = "1Gi"
-    },
+    }
+  }
+}
+
+variable sonarr_nfs {
+  default = {
     downloads = {
       name     = "sonarr-downloads"
       nfs_path = "/mnt/tank/media/download"
@@ -71,13 +88,18 @@ variable radarr_hostname {
   default = "radarr"
 }
 
-variable radarr_nfs {
+variable radarr_iscsi {
   default = {
     config = {
       name     = "radarr-config"
-      nfs_path = "/mnt/tank/rancher/pvs/radarr-config"
+      lun      = "0"
       capacity = "1Gi"
-    },
+    }
+  }
+}
+
+variable radarr_nfs {
+  default = {
     downloads = {
       name     = "radarr-downloads"
       nfs_path = "/mnt/tank/media/download"
@@ -97,13 +119,18 @@ variable bazarr_hostname {
   default = "bazarr"
 }
 
-variable bazarr_nfs {
+variable bazarr_iscsi {
   default = {
     config = {
       name     = "bazarr-config"
-      nfs_path = "/mnt/tank/rancher/pvs/bazarr-config"
+      lun      = "0"
       capacity = "1Gi"
-    },
+    }
+  }
+}
+
+variable bazarr_nfs {
+  default = {
     tv = {
       name     = "bazarr-tv"
       nfs_path = "/mnt/tank/media/TV Shows"

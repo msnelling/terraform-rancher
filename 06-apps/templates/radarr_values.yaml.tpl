@@ -8,7 +8,7 @@ umask: "0077"
 ingress: 
   enabled: "true"
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    cert-manager.io/cluster-issuer: ${certificate_issuer}
     kubernetes.io/ingress.class: nginx
   hosts:
     - ${hostname}

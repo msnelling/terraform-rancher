@@ -26,3 +26,17 @@ resource rancher2_app longhorn {
     "defaultSettings.backupTargetCredentialSecret" = rancher2_secret.backup.name
   }
 }
+
+resource kubernetes_storage_class longhorn_fast {
+  metadata {
+    name = "longhorn-fast"
+  }
+  storage_provisioner = "driver.longhorn.io"
+  reclaim_policy      = "Retain"
+  parameters = {
+    numberOfReplicas = "3"
+    //staleReplicaTimeout = "480" // 8 hours in minutes
+    diskSelector = "ssd,nvme"
+    //nodeSelector = "storage,fast"
+  }
+}
