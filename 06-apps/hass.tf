@@ -1,10 +1,10 @@
-resource rancher2_namespace home_assistant {
+resource rancher2_namespace hass {
   name        = "home-assistant"
   description = "Namespace for home-assistant app components"
   project_id  = data.rancher2_project.default.id
 }
 
-resource kubernetes_persistent_volume home_assistant_nfs {
+resource kubernetes_persistent_volume hass_nfs {
   metadata {
     name = "home-assistant"
   }
@@ -23,20 +23,20 @@ resource kubernetes_persistent_volume home_assistant_nfs {
   }
 }
 
-resource kubernetes_persistent_volume_claim home_assistant_nfs {
+resource kubernetes_persistent_volume_claim hass_nfs {
   metadata {
     name      = "home-assistant"
-    namespace = rancher2_namespace.home_assistant.name
+    namespace = rancher2_namespace.hass.name
   }
   spec {
-    storage_class_name = kubernetes_persistent_volume.home_assistant_nfs.spec[0].storage_class_name
+    storage_class_name = kubernetes_persistent_volume.hass_nfs.spec[0].storage_class_name
     access_modes = ["ReadWriteOnce"]
     resources {
       requests = {
         storage = "1Gi"
       }
     }
-    volume_name = kubernetes_persistent_volume.home_assistant_nfs.metadata.0.name
+    volume_name = kubernetes_persistent_volume.hass_nfs.metadata.0.name
   }
 }
 
@@ -45,16 +45,16 @@ data template_file home_assistant_values {
   vars = {
     certificate_issuer = var.certificate_issuer
     hostname           = "${var.hass_hostname}.${var.dns_domain}"
-    pvc                = kubernetes_persistent_volume.home_assistant_nfs.metadata.0.name
+    pvc                = kubernetes_persistent_volume.hass_nfs.metadata.0.name
   }
 }
 
-resource rancher2_app home_assistant {
+resource rancher2_app hass {
   name             = "home-assistant"
   template_name    = "home-assistant"
   catalog_name     = "helm"
   project_id       = data.rancher2_project.default.id
-  target_namespace = rancher2_namespace.home_assistant.name
+  target_namespace = rancher2_namespace.hass.name
   values_yaml      = base64encode(data.template_file.home_assistant_values.rendered)
 
   depends_on = [
