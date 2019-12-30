@@ -47,8 +47,9 @@ data template_file cloud_config_userdata_ubuntu {
   template = file("${path.module}/templates/cloud_init_userdata_ubuntu.yaml")
 
   vars = {
+    admin_user      = var.admin_user
+    admin_ssh_keys  = join(",", data.github_user.cluster_admin.ssh_keys)
     rancher_ssh_key = tls_private_key.ssh.public_key_openssh
-    extra_ssh_keys  = join(",", data.github_user.cluster_admin.ssh_keys)
     hostname        = "${var.cluster[count.index].name}.${var.k8s_domain}"
     docker_registry = var.docker_registry
     dns_domain      = var.k8s_domain

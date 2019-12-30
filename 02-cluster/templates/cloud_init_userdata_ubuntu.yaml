@@ -6,9 +6,9 @@ groups:
   - docker
 users:
   - default
-  - name: sysadmin
+  - name: ${admin_user}
     ssh_authorized_keys:
-%{ for ssh_key in split(",", extra_ssh_keys) ~}
+%{ for ssh_key in split(",", admin_ssh_keys) ~}
       - ${ssh_key}
 %{ endfor ~}  
     sudo: ALL=(ALL) NOPASSWD:ALL
@@ -32,7 +32,7 @@ random_seed:
 apt:
   sources:
     docker:
-      arches: amd64
+      arches: [amd64]
       source: "deb https://download.docker.com/linux/ubuntu bionic stable"
       keyserver: "hkp://keyserver.ubuntu.com:80"
       keyid: 0EBFCD88
@@ -75,8 +75,8 @@ fs_setup:
     filesystem: ext4
     overwrite: false
 mounts:
-  - [/dev/sdb1, /var/lib/docker, ext4, 'defaults,discard,nofail', '0', '2']
-  - [/dev/sdc1, /var/lib/rancher/longhorn, ext4, 'defaults,discard,nofail', '0', '2']
+  - [/dev/sdb1, /var/lib/docker,            ext4, 'defaults', '0', '2']
+  - [/dev/sdc1, /var/lib/rancher/longhorn,  ext4, 'defaults', '0', '2']
 
 runcmd:
   # Upgrade all packages

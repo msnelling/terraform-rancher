@@ -14,7 +14,8 @@ variable vsphere_vm_datastore {}
 variable vsphere_vm_template {}
 
 ###############################################################################
-# GitHub
+# Admin user
+variable admin_user {}
 variable github_username {}
 
 ###############################################################################
