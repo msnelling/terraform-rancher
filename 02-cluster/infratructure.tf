@@ -1,6 +1,6 @@
 resource vsphere_virtual_disk docker_data {
   count              = length(var.cluster)
-  size               = 10
+  size               = 16
   vmdk_path          = "${var.k8s_name}/docker${count.index}.vmdk"
   datacenter         = data.vsphere_datacenter.dc.name
   datastore          = data.vsphere_datastore.vm_datastore.name

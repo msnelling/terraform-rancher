@@ -57,11 +57,11 @@ resource rancher2_node_template medium {
 }
 
 resource rancher2_node_template large {
-  name                = "6vCPU-4GiRAM-32GiSSD"
+  name                = "4vCPU-4GiRAM-32GiSSD"
   cloud_credential_id = rancher2_cloud_credential.vsphere_homelab.id
 
   vsphere_config {
-    cpu_count   = 6
+    cpu_count   = 4
     memory_size = 4096
     disk_size   = 32767
     cloudinit   = "https://pastebin.com/raw/ZYK9whBe"
