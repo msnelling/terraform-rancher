@@ -2,8 +2,12 @@ output default_storage_class {
   value = "longhorn"
 }
 
-output fast_storage_class {
-  value = kubernetes_storage_class.longhorn_fast.metadata[0].name
+output nvme_storage_class {
+  value = kubernetes_storage_class.longhorn_nvme.metadata[0].name
+}
+
+output ssd_storage_class {
+  value = kubernetes_storage_class.longhorn_ssd.metadata[0].name
 }
 
 output nfs_storage_class {

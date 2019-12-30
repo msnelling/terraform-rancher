@@ -19,10 +19,10 @@ data template_file loki_values {
 
 resource rancher2_app loki {
   name             = "loki-stack"
+  template_name    = "loki-stack"
   catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.loki.name}"
   project_id       = rancher2_project.monitoring.id
   target_namespace = rancher2_namespace.loki.name
-  template_name    = "loki-stack"
   values_yaml      = base64encode(data.template_file.loki_values.rendered)
 }
 

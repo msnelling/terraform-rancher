@@ -27,16 +27,26 @@ resource rancher2_app longhorn {
   }
 }
 
-resource kubernetes_storage_class longhorn_fast {
+resource kubernetes_storage_class longhorn_ssd {
   metadata {
-    name = "longhorn-fast"
+    name = "longhorn-ssd"
   }
   storage_provisioner = "driver.longhorn.io"
   reclaim_policy      = "Retain"
   parameters = {
     numberOfReplicas = "3"
-    //staleReplicaTimeout = "480" // 8 hours in minutes
-    diskSelector = "ssd,nvme"
-    //nodeSelector = "storage,fast"
+    diskSelector = "ssd"
+  }
+}
+
+resource kubernetes_storage_class longhorn_nvme {
+  metadata {
+    name = "longhorn-nvme"
+  }
+  storage_provisioner = "driver.longhorn.io"
+  reclaim_policy      = "Retain"
+  parameters = {
+    numberOfReplicas = "3"
+    diskSelector = "nvme"
   }
 }

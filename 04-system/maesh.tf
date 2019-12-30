@@ -20,10 +20,10 @@ data template_file maesh_values {
 
 resource rancher2_app maesh {
   name             = "maesh"
+  template_name    = "maesh"
   catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.maesh.name}"
   project_id       = data.rancher2_project.system.id
   target_namespace = rancher2_namespace.maesh.name
-  template_name    = "maesh"
   values_yaml      = base64encode(data.template_file.maesh_values.rendered)
 }
 
