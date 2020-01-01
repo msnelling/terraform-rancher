@@ -104,3 +104,27 @@ variable cluster {
     }
   ]
 }
+variable notifier_smtp_recipient {
+  type = string
+}
+variable notifier_smtp_host {
+  type = string
+}
+variable notifier_smtp_port {
+  type    = number
+  default = 587
+}
+variable notifier_smtp_tls {
+  type    = bool
+  default = true
+}
+variable notifier_smtp_sender {
+  type    = string
+  default = "k8s@xmple.io"
+}
+variable notifier_smtp_username {
+  type = string
+}
+variable notifier_smtp_password {
+  type = string
+}

@@ -63,3 +63,17 @@ resource local_file kube_config {
   filename          = "${path.module}/outputs/kubeconfig"
   file_permission   = "0600"
 }
+
+resource rancher2_notifier email {
+  name       = "SMTP"
+  cluster_id = rancher2_cluster.cluster.id
+  smtp_config {
+    default_recipient = var.notifier_smtp_recipient
+    host              = var.notifier_smtp_host
+    port              = var.notifier_smtp_port
+    tls               = var.notifier_smtp_tls
+    sender            = var.notifier_smtp_sender
+    username          = var.notifier_smtp_username
+    password          = var.notifier_smtp_password
+  }
+}
