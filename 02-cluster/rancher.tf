@@ -4,6 +4,34 @@ resource rancher2_cluster cluster {
   rke_config {
     kubernetes_version = "v1.16.3-rancher1-1"
 
+    cloud_provider {
+      name = "vsphere"
+      vsphere_cloud_provider {
+        global {
+          insecure_flag = true
+        }
+        virtual_center {
+          datacenters   = var.vsphere_datacenter
+          name          = var.vsphere_server
+          port          = "443"
+          user          = var.vsphere_username
+          password      = var.vsphere_password
+        }
+        workspace {
+          datacenter        = var.vsphere_datacenter
+          server            = var.vsphere_server
+          folder            = data.terraform_remote_state.rancher.outputs.rancher_folder
+          default_datastore = var.vsphere_vm_datastore
+        }
+        disk {
+          scsi_controller_type = data.vsphere_virtual_machine.template.scsi_type
+        }
+        network {
+          public_network = var.vsphere_vm_network
+        }
+      }
+    }
+
     network {
       plugin = "canal"
       canal_network_provider {

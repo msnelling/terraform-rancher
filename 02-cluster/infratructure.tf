@@ -37,7 +37,13 @@ resource vsphere_virtual_machine node {
   force_power_off       = true
   shutdown_wait_timeout = 1
 
+  clone {
+    template_uuid = data.vsphere_virtual_machine.template.id
+    //linked_clone  = true
+  }
+
   extra_config = {
+    "disk.enableUUID"             = "TRUE"
     "guestinfo.metadata"          = base64encode(data.template_file.cloud_config_metadata_ubuntu[count.index].rendered)
     "guestinfo.metadata.encoding" = "base64"
     "guestinfo.userdata"          = base64encode(data.template_file.cloud_config_userdata_ubuntu[count.index].rendered)
@@ -71,11 +77,6 @@ resource vsphere_virtual_machine node {
     attach       = true
     datastore_id = data.vsphere_datastore.vm_datastore.id
     unit_number  = 2
-  }
-
-  clone {
-    template_uuid = data.vsphere_virtual_machine.template.id
-    //linked_clone  = true
   }
 
   tags = [data.vsphere_tag.rancher.id]
