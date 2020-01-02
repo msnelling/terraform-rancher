@@ -30,9 +30,10 @@ resource vsphere_virtual_machine node {
   cpu_limit            = data.null_data_source.node_values[count.index].outputs["cpu_limit"]
   memory               = var.cluster[count.index].memory_mb
 
-  guest_id  = data.vsphere_virtual_machine.template.guest_id
-  firmware  = data.vsphere_virtual_machine.template.firmware
-  scsi_type = data.vsphere_virtual_machine.template.scsi_type
+  guest_id         = data.vsphere_virtual_machine.template.guest_id
+  firmware         = data.vsphere_virtual_machine.template.firmware
+  scsi_type        = data.vsphere_virtual_machine.template.scsi_type
+  enable_disk_uuid = true
 
   force_power_off       = true
   shutdown_wait_timeout = 1
@@ -43,7 +44,7 @@ resource vsphere_virtual_machine node {
   }
 
   extra_config = {
-    "disk.enableUUID"             = "TRUE"
+    "disk.enableUUID"             = "TRUE" // is this still needed? see enable_disk_uuid=true above
     "guestinfo.metadata"          = base64encode(data.template_file.cloud_config_metadata_ubuntu[count.index].rendered)
     "guestinfo.metadata.encoding" = "base64"
     "guestinfo.userdata"          = base64encode(data.template_file.cloud_config_userdata_ubuntu[count.index].rendered)

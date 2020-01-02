@@ -11,11 +11,11 @@ resource rancher2_cluster cluster {
           insecure_flag = true
         }
         virtual_center {
-          datacenters   = var.vsphere_datacenter
-          name          = var.vsphere_server
-          port          = "443"
-          user          = var.vsphere_username
-          password      = var.vsphere_password
+          datacenters = var.vsphere_datacenter
+          name        = var.vsphere_server
+          port        = "443"
+          user        = var.vsphere_username
+          password    = var.vsphere_password
         }
         workspace {
           datacenter        = var.vsphere_datacenter
@@ -104,4 +104,9 @@ resource rancher2_notifier email {
     username          = var.notifier_smtp_username
     password          = var.notifier_smtp_password
   }
+}
+
+locals {
+  k8s_api_endpoint = yamldecode(rancher2_cluster.cluster.kube_config).clusters[0].cluster.server
+  k8s_api_token    = yamldecode(rancher2_cluster.cluster.kube_config).users[0].user.token
 }

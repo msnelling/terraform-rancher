@@ -17,6 +17,11 @@ provider rancher2 {
   token_key = data.terraform_remote_state.rancher.outputs.token_key
 }
 
+provider kubernetes {
+  host  = local.k8s_api_endpoint
+  token = local.k8s_api_token
+}
+
 provider vsphere {
   vsphere_server       = var.vsphere_server
   user                 = var.vsphere_username

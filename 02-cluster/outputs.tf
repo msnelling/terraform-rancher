@@ -8,11 +8,11 @@ output cluster_id {
 }
 
 output k8s_api_endpoint {
-  value = yamldecode(rancher2_cluster.cluster.kube_config).clusters[0].cluster.server
+  value = local.k8s_api_endpoint
 }
 
 output k8s_api_token {
-  value     = yamldecode(rancher2_cluster.cluster.kube_config).users[0].user.token
+  value     = local.k8s_api_token
   sensitive = true
 }
 
