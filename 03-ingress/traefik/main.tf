@@ -2,41 +2,23 @@ resource rancher2_catalog traefik {
   name        = "traefik"
   scope       = "cluster"
   cluster_id  = var.cluster_id
-  url         = "https://github.com/msnelling/terraform-rancher.git"
-  description = "Temporary catalog hosting a Traefik v2.0 chart"
+  url         = "https://github.com/containous/traefik-helm-chart"
 }
 
-resource rancher2_namespace traefik_ingress {
-  name       = "traefik-ingress"
+resource rancher2_namespace traefik {
+  name       = "traefik"
   project_id = var.project_id
 }
 
-/*
-resource kubernetes_config_map traefik {
-  metadata {
-    name      = "traefik-config"
-    namespace = rancher2_namespace.traefik_ingress.name
-  }
-
-  data = {
-    "traefik.yaml" = data.template_file.traefik_config.rendered
-  }
+data template_file traefik_values {
+  template = file("${path.module}/templates/traefik_values.yaml.tpl")
 }
-*/
 
-resource rancher2_app traefik_ingress {
-  catalog_name     = "${var.cluster_id}:${rancher2_catalog.traefik.name}"
+resource rancher2_app traefik {
   name             = "traefik"
-  project_id       = var.project_id
-  target_namespace = rancher2_namespace.traefik_ingress.name
   template_name    = "traefik"
-  force_upgrade    = true
-  answers = {
-    "dashboard.enabled"                             = true
-    "dashboard.hostname"                            = var.admin_hostname
-    "dashboard.htpasswd"                            = "${var.admin_username}:${bcrypt(var.admin_password)}"
-    "dashboard.ingressLegacy.tls.enabled"           = true
-    "dashboard.ingressLegacy.tls.certificateSecret" = rancher2_certificate.ingress_tls.name
-    "acme.persistence.enabled"                      = false
-  }
+  catalog_name     = "${var.cluster_id}:${rancher2_catalog.traefik.name}"
+  project_id       = var.project_id
+  target_namespace = rancher2_namespace.traefik.name
+  values_yaml      = base64encode(data.template_file.traefik_values.rendered)
 }

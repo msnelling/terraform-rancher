@@ -16,12 +16,6 @@ variable cloudflare_api_email {}
 variable cloudflare_api_key {}
 
 ###############################################################################
-# Traefik
-variable traefik_admin_hostname {}
-variable traefik_admin_username {}
-variable traefik_admin_password {}
-
-###############################################################################
 # Metal-LB
 variable metallb_image_tag {
   default = "v0.8.3"
