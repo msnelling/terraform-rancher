@@ -12,6 +12,12 @@ variable vpn_node_selector {
   }
 }
 
+###############################################################################
+# Ingress
+variable ingress_class {
+  default = "traefik"
+}
+
 variable certificate_issuer {
   default = "letsencrypt-staging"
 }
@@ -19,7 +25,6 @@ variable certificate_issuer {
 ###############################################################################
 # NFS
 variable nfs_server {}
-
 
 ###############################################################################
 # iSCSI
@@ -38,7 +43,7 @@ variable dns_update_key {}
 variable dns_update_algorithm {}
 variable dns_update_secret {}
 variable dns_ingress_a_record {
-  default = "ingress.k8s.xmple.io."
+  default = "traefik.k8s.xmple.io."
 }
 
 ###############################################################################

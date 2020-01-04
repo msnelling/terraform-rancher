@@ -43,6 +43,7 @@ resource kubernetes_persistent_volume_claim hass_nfs {
 data template_file home_assistant_values {
   template = file("${path.module}/templates/hass_values.yaml.tpl")
   vars = {
+    ingress_class      = var.ingress_class
     certificate_issuer = var.certificate_issuer
     hostname           = "${var.hass_hostname}.${var.dns_domain}"
     pvc                = kubernetes_persistent_volume.hass_nfs.metadata.0.name

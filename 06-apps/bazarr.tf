@@ -89,6 +89,7 @@ data template_file bazarr_values {
   vars = {
     process_uid        = var.process_uid
     process_gid        = var.process_gid
+    ingress_class      = var.ingress_class
     certificate_issuer = var.certificate_issuer
     hostname           = "${var.bazarr_hostname}.${var.dns_domain}"
     pvc_config         = var.bazarr_iscsi.config.name

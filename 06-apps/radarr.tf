@@ -89,6 +89,7 @@ data template_file radarr_values {
   vars = {
     process_uid        = var.process_uid
     process_gid        = var.process_gid
+    ingress_class      = var.ingress_class
     certificate_issuer = var.certificate_issuer
     hostname           = "${var.radarr_hostname}.${var.dns_domain}"
     pvc_config         = var.radarr_iscsi.config.name

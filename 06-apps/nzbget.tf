@@ -48,6 +48,7 @@ data template_file nzbget_values {
   vars = {
     process_uid        = var.process_uid
     process_gid        = var.process_gid
+    ingress_class      = var.ingress_class
     certificate_issuer = var.certificate_issuer
     hostname           = "${var.nzbget_hostname}.${var.dns_domain}"
     pvc_config         = var.nzbget_nfs.config.name
