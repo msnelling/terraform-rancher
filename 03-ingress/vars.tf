@@ -1,6 +1,9 @@
 variable ingress_domain {}
-variable nginx_ingress_hostname {
+variable builtin_ingress_hostname {
   default = "ingress"
+}
+variable nginxinc_ingress_hostname {
+  default = "nginxinc"
 }
 variable traefik_ingress_hostname {
   default = "traefik"

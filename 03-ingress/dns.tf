@@ -1,7 +1,14 @@
-resource dns_a_record_set nginx_ingress {
+resource dns_a_record_set builtin_ingress {
   zone      = "${var.ingress_domain}."
-  name      = var.nginx_ingress_hostname
-  addresses = kubernetes_service.nginx_ingress.load_balancer_ingress.*.ip
+  name      = var.builtin_ingress_hostname
+  addresses = kubernetes_service.builtin_ingress.load_balancer_ingress.*.ip
+  ttl       = 60
+}
+
+resource dns_a_record_set nginxinc_ingress {
+  zone      = "${var.ingress_domain}."
+  name      = var.nginxinc_ingress_hostname
+  addresses = data.kubernetes_service.nginxinc.load_balancer_ingress.*.ip
   ttl       = 60
 }
 

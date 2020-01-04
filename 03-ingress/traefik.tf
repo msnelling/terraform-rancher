@@ -28,4 +28,6 @@ data kubernetes_service traefik {
     name = "traefik"
     namespace = rancher2_namespace.traefik.name
   }
+
+  depends_on = [rancher2_app.traefik]
 }
