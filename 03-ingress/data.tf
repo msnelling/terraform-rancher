@@ -6,10 +6,6 @@ data terraform_remote_state rancher {
       name = "rancher"
     }
   }
-  #  backend = "local"
-  #  config = {
-  #    path    = "${path.module}/../01-rancher/terraform.tfstate"
-  #  }
 }
 
 data terraform_remote_state cluster {
