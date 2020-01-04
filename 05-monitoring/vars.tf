@@ -19,3 +19,6 @@ variable loki_hostname {
 variable loki_domain {
   default = "k8s.xmple.io"
 }
+variable ingress_class {
+  default = "traefik"
+}

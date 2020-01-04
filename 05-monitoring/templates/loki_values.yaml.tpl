@@ -7,7 +7,7 @@ grafana:
     enabled: true
     annotations:
       #cert-manager.io/cluster-issuer: letsencrypt-production
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: ${ingress_class}
     hosts:
       - ${hostname}
     tls:

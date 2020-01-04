@@ -13,6 +13,7 @@ resource rancher2_catalog loki {
 data template_file loki_values {
   template = file("${path.module}/templates/loki_values.yaml.tpl")
   vars = {
+    ingress_class = var.ingress_class
     hostname = "${var.loki_hostname}.${var.loki_domain}"
   }
 }
