@@ -43,3 +43,10 @@ resource kubernetes_service builtin_ingress {
     external_traffic_policy = "Local"
   }
 }
+
+resource dns_a_record_set builtin_ingress {
+  zone      = "${var.ingress_domain}."
+  name      = var.builtin_ingress_hostname
+  addresses = kubernetes_service.builtin_ingress.load_balancer_ingress.*.ip
+  ttl       = 60
+}

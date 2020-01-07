@@ -42,3 +42,10 @@ resource rancher2_certificate nginxinc_tls {
   certs        = base64encode(acme_certificate.ingress_tls.certificate_pem)
   key          = base64encode(tls_private_key.ingress_tls.private_key_pem)
 }
+
+resource dns_a_record_set nginxinc_ingress {
+  zone      = "${var.ingress_domain}."
+  name      = var.nginxinc_ingress_hostname
+  addresses = data.kubernetes_service.nginxinc.load_balancer_ingress.*.ip
+  ttl       = 60
+}

@@ -31,3 +31,10 @@ data kubernetes_service traefik {
 
   depends_on = [rancher2_app.traefik]
 }
+
+resource dns_a_record_set traefik_ingress {
+  zone      = "${var.ingress_domain}."
+  name      = var.traefik_ingress_hostname
+  addresses = data.kubernetes_service.traefik.load_balancer_ingress.*.ip
+  ttl       = 60
+}
