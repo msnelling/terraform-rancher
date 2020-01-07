@@ -1,5 +1,5 @@
 - name: Bootstrap Rancher server and cluster
-  hosts: all
+  hosts: localhost
   connection: local
   gather_facts: false
 

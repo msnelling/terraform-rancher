@@ -7,7 +7,7 @@ spec:
     email: ${acme_email}
     server: ${acme_ca_server}
     privateKeySecretRef:
-      name: staging-issuer-account-key
+      name: ${issuer_name}-account-key
     solvers:
       - dns01:
           cloudflare:

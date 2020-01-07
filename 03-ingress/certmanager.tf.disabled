@@ -1,0 +1,73 @@
+data helm_repository jetstack {
+  name = "jetstack"
+  url  = "https://charts.jetstack.io"
+}
+
+data template_file cert_manager_staging_issuer {
+  template = file("${path.module}/templates/cloudflare_issuer.yaml.tpl")
+  vars = {
+    issuer_name          = "letsencrypt-staging"
+    acme_ca_server       = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    cloudflare_api_email = var.cloudflare_api_email
+  }
+}
+
+data template_file cert_manager_production_issuer {
+  template = file("${path.module}/templates/cloudflare_issuer.yaml.tpl")
+  vars = {
+    issuer_name          = "letsencrypt-production"
+    acme_ca_server       = "https://acme-v02.api.letsencrypt.org/directory"
+    acme_email           = var.acme_email
+    cloudflare_api_email = var.cloudflare_api_email
+  }
+}
+
+resource rancher2_namespace cert_manager {
+  name        = "cert-manager"
+  description = "Namespace for cert-manager app components"
+  project_id  = data.rancher2_project.system.id
+}
+
+resource rancher2_secret cloudflare_api {
+  name         = "cloudflare-api-key"
+  project_id   = data.rancher2_project.system.id
+  namespace_id = rancher2_namespace.cert_manager.id
+  data = {
+    api-key = base64encode(var.cloudflare_api_key)
+  }
+}
+
+/*
+resource rancher2_app cert_manager {
+  name             = "cert-manager"
+  catalog_name     = "cert-manager"
+  project_id       = data.rancher2_project.system.id
+  target_namespace = rancher2_namespace.cert_manager.name
+  template_name    = "cert-manager"
+  answers = {
+    "image.pullPolicy" = "Always"
+    "extraArgs"        = "–dns01-recursive-nameservers=1.1.1.1:53,1.0.0.1:53"
+  }
+  depends_on = [null_resource.cert_manager_crds]
+}
+*/
+
+resource helm_release cert_manager {
+  name       = "cert-manager"
+  chart      = "cert-manager"
+  namespace = rancher2_namespace.cert_manager.name
+
+  repository = data.helm_repository.jetstack.metadata[0].name
+  version    = var.cert_manager_version
+
+  set {
+    name  = "image.pullPolicy"
+    value = "Always"
+  }
+
+  set {
+    name  = "extraArgs"
+    value = "–-dns01-recursive-nameservers=1.1.1.1:53,1.0.0.1:53"
+  }
+}

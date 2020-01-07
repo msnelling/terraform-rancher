@@ -17,6 +17,12 @@ variable acme_server_url {
 variable acme_email {}
 
 ###############################################################################
+# Cert-Manager
+variable cert_manager_version {
+  default = "0.12"
+}
+
+###############################################################################
 # Cloudflare
 variable cloudflare_api_email {}
 variable cloudflare_api_key {}

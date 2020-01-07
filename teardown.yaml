@@ -1,33 +1,40 @@
 - name: Teardown everything
-  hosts: all
+  hosts: localhost
   connection: local
   gather_facts: false
 
   tasks:
-    - name: Ingress configuration
+    - name: App deployment
       terraform:
-        project_path: 04-cluster-ingress/
-        state: absent
-      tags:
-        - ingress
-
-    - name: Basic deployment
-      terraform:
-        project_path: 03-deploy-apps/
+        project_path: 06-apps/
         state: absent
       tags:
         - apps
 
+    - name: System configuration
+      terraform:
+        project_path: 04-system/
+        state: absent
+      tags:
+        - ingress
+
+    - name: Ingress configuration
+      terraform:
+        project_path: 03-ingress/
+        state: absent
+      tags:
+        - ingress
+        
     - name: Teardown cluster
       terraform:
-        project_path: 02-test-cluster/
+        project_path: 02-cluster/
         state: absent
       tags:
         - cluster
         
     - name: Teardown Rancher server
       terraform:
-        project_path: 01-rancher-server/
+        project_path: 01-rancher/
         state: absent
       tags:
         - rancher

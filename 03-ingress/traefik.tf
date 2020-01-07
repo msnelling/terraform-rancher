@@ -1,8 +1,8 @@
 resource rancher2_catalog traefik {
-  name        = "traefik"
-  scope       = "cluster"
-  cluster_id  = data.terraform_remote_state.cluster.outputs.cluster_id
-  url         = "https://github.com/containous/traefik-helm-chart"
+  name       = "traefik"
+  scope      = "cluster"
+  cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
+  url        = "https://github.com/containous/traefik-helm-chart"
 }
 
 resource rancher2_namespace traefik {
@@ -25,7 +25,7 @@ resource rancher2_app traefik {
 
 data kubernetes_service traefik {
   metadata {
-    name = "traefik"
+    name      = "traefik"
     namespace = rancher2_namespace.traefik.name
   }
 
