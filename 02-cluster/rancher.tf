@@ -1,8 +1,9 @@
 resource rancher2_cluster cluster {
-  name = var.k8s_name
+  name                      = var.k8s_name
+  enable_cluster_monitoring = true
 
   rke_config {
-    kubernetes_version = "v1.16.3-rancher1-1"
+    kubernetes_version = var.k8s_version
 
     cloud_provider {
       name = "vsphere"
@@ -86,8 +87,12 @@ resource rancher2_cluster cluster {
   }
 }
 
+resource rancher2_cluster_sync cluster {
+  cluster_id =  rancher2_cluster.cluster.id
+}
+
 resource local_file kube_config {
-  sensitive_content = rancher2_cluster.cluster.kube_config
+  sensitive_content = rancher2_cluster_sync.cluster.kube_config
   filename          = "${path.module}/outputs/kubeconfig"
   file_permission   = "0600"
 }
@@ -106,7 +111,18 @@ resource rancher2_notifier email {
   }
 }
 
+resource rancher2_auth_config_freeipa freeipa {
+  servers                            = ["ipa1.xmple.io"]
+  service_account_distinguished_name = "uid=rancher,cn=sysaccounts,cn=etc,dc=xmple,dc=io"
+  service_account_password           = "HcUDe7QxDi4WpPBtRZRTrikR"
+  user_search_base                   = "cn=users,cn=accounts,dc=xmple,dc=io"
+  group_search_base                  = "cn=groups,cn=accounts,dc=xmple,dc=io"
+  port                               = 636
+  tls                                = true
+  certificate                        = filebase64("${path.module}/files/freeipa_root_ca.pem")
+}
+
 locals {
-  k8s_api_endpoint = yamldecode(rancher2_cluster.cluster.kube_config).clusters[0].cluster.server
-  k8s_api_token    = yamldecode(rancher2_cluster.cluster.kube_config).users[0].user.token
+  k8s_api_endpoint = yamldecode(rancher2_cluster_sync.cluster.kube_config).clusters[0].cluster.server
+  k8s_api_token    = yamldecode(rancher2_cluster_sync.cluster.kube_config).users[0].user.token
 }

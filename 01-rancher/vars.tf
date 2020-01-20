@@ -30,7 +30,7 @@ variable docker_registry {}
 ###############################################################################
 # Rancher Server
 variable rancher_version_tag {
-  default = "v2.3.3"
+  default = "v2.3.4"
 }
 variable rancher_hostname {}
 variable rancher_domain {}

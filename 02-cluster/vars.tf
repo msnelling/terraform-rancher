@@ -52,6 +52,9 @@ variable dns_update_secret {}
 # Kubernetes Cluster
 variable k8s_name {}
 variable k8s_domain {}
+variable k8s_version {
+  default = "v1.17.0-rancher1-2"
+}
 variable k8s_ingress_provider {
   default = "nginx"
 }

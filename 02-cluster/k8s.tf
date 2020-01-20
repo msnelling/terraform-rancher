@@ -9,6 +9,8 @@ resource kubernetes_storage_class vsphere_nvme_ephemeral {
     datastore  = var.vsphere_vm_datastore
     fsType     = "ext4"
   }
+
+  depends_on = [rancher2_cluster_sync.cluster]
 }
 
 resource kubernetes_storage_class vsphere_nvme_persistent {
@@ -22,4 +24,6 @@ resource kubernetes_storage_class vsphere_nvme_persistent {
     datastore  = var.vsphere_vm_datastore
     fsType     = "ext4"
   }
+
+  depends_on = [rancher2_cluster_sync.cluster]
 }
