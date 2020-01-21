@@ -83,4 +83,6 @@ resource rancher2_auth_config_freeipa freeipa {
   port                               = 636
   tls                                = true
   certificate                        = filebase64("${path.module}/files/freeipa_root_ca.pem")
+  access_mode                        = "restricted"
+  allowed_principal_ids              = ["freeipa_group://${var.freeipa_restricted_group}"]
 }

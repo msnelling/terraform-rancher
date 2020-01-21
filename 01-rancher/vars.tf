@@ -94,3 +94,6 @@ variable freeipa_user_search_base {
 variable freeipa_group_search_base {
   type = string
 }
+variable freeipa_restricted_group {
+  type = string
+}
