@@ -22,7 +22,7 @@ write_files:
       hostname: ${rancher_hostname}.${rancher_domain}
       mounts:
         - ["${nfs_server_ipv4}:${nfs_mount}/server", "/mnt/rancher", "nfs4", ""]
-        - ["${nfs_server_ipv4}:${nfs_mount}/acme", "/mnt/acme", "nfs4", ""]
+        - ["${nfs_server_ipv4}:${nfs_mount}/acme",   "/mnt/acme",    "nfs4", ""]
       rancher:
         bootstrap_docker:
           registry_mirror: "https://${docker_registry}"

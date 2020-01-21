@@ -88,7 +88,7 @@ resource rancher2_cluster cluster {
 }
 
 resource rancher2_cluster_sync cluster {
-  cluster_id =  rancher2_cluster.cluster.id
+  cluster_id = rancher2_cluster.cluster.id
 }
 
 resource local_file kube_config {
@@ -109,17 +109,6 @@ resource rancher2_notifier email {
     username          = var.notifier_smtp_username
     password          = var.notifier_smtp_password
   }
-}
-
-resource rancher2_auth_config_freeipa freeipa {
-  servers                            = ["ipa1.xmple.io"]
-  service_account_distinguished_name = "uid=rancher,cn=sysaccounts,cn=etc,dc=xmple,dc=io"
-  service_account_password           = "HcUDe7QxDi4WpPBtRZRTrikR"
-  user_search_base                   = "cn=users,cn=accounts,dc=xmple,dc=io"
-  group_search_base                  = "cn=groups,cn=accounts,dc=xmple,dc=io"
-  port                               = 636
-  tls                                = true
-  certificate                        = filebase64("${path.module}/files/freeipa_root_ca.pem")
 }
 
 locals {

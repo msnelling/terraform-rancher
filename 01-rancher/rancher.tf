@@ -73,3 +73,14 @@ resource rancher2_node_template large {
 
   engine_registry_mirror = ["https://${var.docker_registry}"]
 }
+
+resource rancher2_auth_config_freeipa freeipa {
+  servers                            = var.freeipa_servers
+  service_account_distinguished_name = var.freeipa_dn
+  service_account_password           = var.freeipa_password
+  user_search_base                   = var.freeipa_user_search_base
+  group_search_base                  = var.freeipa_group_search_base
+  port                               = 636
+  tls                                = true
+  certificate                        = filebase64("${path.module}/files/freeipa_root_ca.pem")
+}

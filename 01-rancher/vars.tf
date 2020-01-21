@@ -76,3 +76,21 @@ variable acme_staging_ca {
   type    = bool
   default = true
 }
+
+###############################################################################
+# FreeIPA
+variable freeipa_servers {
+  type = list
+}
+variable freeipa_dn {
+  type = string
+}
+variable freeipa_password {
+  type = string
+}
+variable freeipa_user_search_base {
+  type = string
+}
+variable freeipa_group_search_base {
+  type = string
+}
