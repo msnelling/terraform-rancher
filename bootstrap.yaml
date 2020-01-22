@@ -8,7 +8,6 @@
       terraform:
         project_path: 01-rancher-server/
         state: present
-      register: tf_rancher
       tags:
         - rancher
 
@@ -16,7 +15,6 @@
       terraform:
         project_path: 02-cluster/
         state: present
-      register: tf_cluster
       tags:
         - cluster
 

@@ -11,12 +11,19 @@
       tags:
         - apps
 
+    - name: Monitoring
+      terraform:
+        project_path: 05-monitoring/
+        state: absent
+      tags:
+        - monitor
+  
     - name: System configuration
       terraform:
         project_path: 04-system/
         state: absent
       tags:
-        - ingress
+        - system
 
     - name: Ingress configuration
       terraform:

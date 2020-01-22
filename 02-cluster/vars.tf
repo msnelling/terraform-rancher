@@ -49,6 +49,12 @@ variable dns_update_algorithm {}
 variable dns_update_secret {}
 
 ###############################################################################
+# Addons
+variable cert_manager_version {
+  default = "v0.13.0"
+}
+
+###############################################################################
 # Kubernetes Cluster
 variable k8s_name {}
 variable k8s_domain {}
