@@ -47,16 +47,6 @@ variable dns_ingress_a_record {
 }
 
 ###############################################################################
-# Home Assistant
-variable hass_hostname {
-  default = "hass"
-}
-
-variable hass_nfs_path {
-  default = "/mnt/tank/rancher/pvs/home-assistant"
-}
-
-###############################################################################
 # Sonarr
 variable sonarr_hostname {
   default = "sonarr"
