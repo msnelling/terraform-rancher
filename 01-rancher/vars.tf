@@ -14,7 +14,7 @@ variable vsphere_vm_folder {
   default = "Kubernetes"
 }
 variable vsphere_vm_network {
-  default = "VM Network"
+  default = "DPortGroup"
 }
 variable vsphere_vm_datastore {}
 variable vsphere_iso_datastore {}
@@ -30,7 +30,7 @@ variable docker_registry {}
 ###############################################################################
 # Rancher Server
 variable rancher_version_tag {
-  default = "v2.3.4"
+  default = "v2.4.2"
 }
 variable rancher_hostname {}
 variable rancher_domain {}
