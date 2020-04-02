@@ -1,16 +1,15 @@
 image:
-  tag: v2.1
+  tag: v2.2
   pullPolicy: Always
 logs:
-  loglevel: INFO
-#dashboard:
-#  ingressRoute: true
+  loglevel: ERROR
 additionalArguments:
+  - --log
+  - --log.level=INFO
   - --accesslog
-#  - --providers.kubernetescrd.ingressclass=traefik
-#  - --providers.kubernetescrd.namespaces=[]
-  - --providers.kubernetesingress
+  - --providers.kubernetesIngress=true
   - --providers.kubernetesingress.ingressclass=traefik
-#ports:
-#  traefik:
-#    expose: true
+  - --entryPoints.websecure.http.tls=true
+ports:
+  traefik:
+    expose: true
