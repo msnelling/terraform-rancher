@@ -44,10 +44,22 @@ resource vsphere_virtual_machine node {
   }
 
   extra_config = {
-    "disk.enableUUID"             = "TRUE" // is this still needed? see enable_disk_uuid=true above
-    "guestinfo.metadata"          = base64encode(data.template_file.cloud_config_metadata_ubuntu[count.index].rendered)
+    "disk.enableUUID" = "TRUE" // is this still needed? see enable_disk_uuid=true above
+    "guestinfo.metadata" = base64encode(templatefile("${path.module}/templates/cloud_init_metadata_ubuntu.yaml", {
+      address_cidr_ipv4 = var.cluster[count.index].address_cidr_ipv4
+      gateway_ipv4      = var.cluster[count.index].gateway_ipv4
+      dns_servers       = join(",", var.dns_servers)
+      dns_domain        = var.k8s_domain
+    }))
     "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata"          = base64encode(data.template_file.cloud_config_userdata_ubuntu[count.index].rendered)
+    "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/cloud_init_userdata_ubuntu.yaml", {
+      admin_user      = var.admin_user
+      admin_ssh_keys  = join(",", data.github_user.cluster_admin.ssh_keys)
+      rancher_ssh_key = tls_private_key.ssh.public_key_openssh
+      hostname        = "${var.cluster[count.index].name}.${var.k8s_domain}"
+      docker_registry = var.docker_registry
+      dns_domain      = var.k8s_domain
+    }))
     "guestinfo.userdata.encoding" = "base64"
   }
 

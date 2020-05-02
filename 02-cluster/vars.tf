@@ -4,11 +4,11 @@ variable vsphere_server {}
 variable vsphere_username {}
 variable vsphere_password {}
 variable vsphere_datacenter {
-  default = "ha-datacenter"
+  default = "Datacenter"
 }
 variable vsphere_pool {}
 variable vsphere_vm_network {
-  default = "VM Network"
+  default = "DPortGroup"
 }
 variable vsphere_vm_datastore {}
 variable vsphere_vm_template {}
@@ -79,7 +79,7 @@ variable cluster {
   default = [
     {
       name              = "k8s01"
-      cpu_cores         = 6
+      cpu_cores         = 4
       memory_mb         = 4096
       longhorn_disk_gb  = 32
       address_cidr_ipv4 = "10.1.1.41/24"
@@ -89,7 +89,7 @@ variable cluster {
     },
     {
       name              = "k8s02"
-      cpu_cores         = 6
+      cpu_cores         = 4
       memory_mb         = 4096
       longhorn_disk_gb  = 32
       address_cidr_ipv4 = "10.1.1.42/24"
@@ -101,7 +101,7 @@ variable cluster {
     },
     {
       name              = "k8s03"
-      cpu_cores         = 6
+      cpu_cores         = 4
       memory_mb         = 4096
       longhorn_disk_gb  = 32
       address_cidr_ipv4 = "10.1.1.43/24"

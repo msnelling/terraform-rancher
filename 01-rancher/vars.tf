@@ -7,11 +7,11 @@ variable vsphere_port {
 variable vsphere_username {}
 variable vsphere_password {}
 variable vsphere_datacenter {
-  default = "ha-datacenter"
+  default = "Datacenter"
 }
 variable vsphere_pool {}
 variable vsphere_vm_folder {
-  default = "Kubernetes"
+  default = "Rancher"
 }
 variable vsphere_vm_network {
   default = "DPortGroup"

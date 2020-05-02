@@ -35,8 +35,22 @@ resource vsphere_virtual_machine rancher {
   scsi_type            = "pvscsi"
 
   extra_config = {
-    "guestinfo.cloud-init.config.data"   = base64encode(data.template_file.rancher_cloud_config.rendered)
     "guestinfo.cloud-init.data.encoding" = "base64"
+    "guestinfo.cloud-init.config.data" = base64encode(templatefile("${path.module}/templates/cloud_config.yaml", {
+      extra_ssh_keys       = join(",", data.github_user.cluster_admin.ssh_keys)
+      rancher_version_tag  = var.rancher_version_tag
+      rancher_hostname     = var.rancher_hostname
+      rancher_domain       = var.rancher_domain
+      nfs_server_ipv4      = var.nfs_server_ipv4
+      nfs_mount            = var.nfs_mount
+      docker_registry      = var.docker_registry
+      dns_servers          = join(",", var.dns_servers)
+      cloudflare_api_email = var.cloudflare_api_email
+      cloudflare_api_key   = var.cloudflare_api_key
+      acme_ca_server       = "https://acme-${var.acme_staging_ca ? "staging-" : ""}v02.api.letsencrypt.org/directory"
+      acme_email           = var.acme_email
+      traefik_dashboard    = var.traefik_dashboard
+    }))
   }
 
   cdrom {
