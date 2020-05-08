@@ -12,18 +12,13 @@ resource rancher2_namespace traefik {
   project_id = data.rancher2_project.system.id
 }
 
-data template_file traefik_values {
-  template = file("${path.module}/templates/traefik_values.yaml.tpl")
-}
-
 resource rancher2_app traefik {
   name             = "traefik"
   template_name    = "traefik"
-  template_version = var.traefik_chart_version
   catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.traefik.name}"
   project_id       = data.rancher2_project.system.id
   target_namespace = rancher2_namespace.traefik.name
-  values_yaml      = base64encode(data.template_file.traefik_values.rendered)
+  values_yaml      = base64encode(templatefile("${path.module}/templates/traefik_values.yaml.tpl", {}))
 }
 
 data kubernetes_service traefik {
