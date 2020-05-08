@@ -1,5 +1,6 @@
 #cloud-config
-hostname: ${hostname}.${dns_domain}
+hostname: ${hostname}
+fqdn: ${hostname}.${dns_domain}
 
 # Users and groups
 groups:
@@ -22,23 +23,28 @@ users:
     create_groups: false
     no_user_group: true
 
+# SSH config
+ssh_pwauth: no
+
 # Seeding entropy
 random_seed:
   file: /dev/urandom
   command: ["pollinate", "-r", "-s", "https://entropy.ubuntu.com"]
   command_required: true
 
+# NTP
+ntp:
+  servers:
+    - 0.uk.pool.ntp.org
+    - 1.uk.pool.ntp.org
+    - 2.uk.pool.ntp.org
+    - 3.uk.pool.ntp.org
+
 # Install packages
-apt:
-  sources:
-    docker:
-      arches: [amd64]
-      source: "deb https://download.docker.com/linux/ubuntu bionic stable"
-      keyserver: "hkp://keyserver.ubuntu.com:80"
-      keyid: 0EBFCD88
-package_upgrade: true
 packages:
-  - docker-ce
+  - docker.io
+package_update: true
+package_upgrade: true
 
 # Write docker config
 write_files:
@@ -65,6 +71,8 @@ disk_setup:
     table_type: gpt
     layout: true
     overwrite: false
+
+# Setup filesystems
 fs_setup:
   - label: docker_data
     device: /dev/sdb1
@@ -74,14 +82,14 @@ fs_setup:
     device: /dev/sdc1
     filesystem: ext4
     overwrite: false
+
+# Mounts
 mounts:
   - [/dev/sdb1, /var/lib/docker,            ext4, 'defaults', '0', '2']
   - [/dev/sdc1, /var/lib/rancher/longhorn,  ext4, 'defaults', '0', '2']
 
 runcmd:
-  # Upgrade all packages
-  - apt update
-  - apt dist-upgrade -y
+  # Cleanup old packages
   - apt autoremove -y
   - apt clean
   # Enable iSCSI
@@ -90,16 +98,17 @@ runcmd:
   - swapoff --all
   - sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
   # Allow bridge traffic to traverse
-  - sysctl net.bridge.bridge-nf-call-iptables=1
-  - sysctl net.bridge.bridge-nf-call-ip6tables=1
+  - sysctl -w net.bridge.bridge-nf-call-iptables=1
+  - sysctl -w net.bridge.bridge-nf-call-ip6tables=1
   # tmp file settings
   - sed -i "s/D \/tmp 1777 root root -/#D \/tmp 1777 root root -/g" /usr/lib/tmpfiles.d/tmp.conf
   # Disable SSH password authentication
-  - sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
-  # Reset machine id
-  - echo -n > /etc/machine-id
+  #- sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
 
 final_message: "The system is prepped, after $UPTIME seconds"
 power_state:
+  delay: now
   timeout: 30
   mode: reboot
+  message: Rebooting the OS
+  condition: if [ -e /var/run/reboot-required ]; then exit 0; else exit 1; fi

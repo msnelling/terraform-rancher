@@ -3,6 +3,6 @@ resource dns_a_record_set node {
 
   zone      = "${var.k8s_domain}."
   name      = var.cluster[count.index].name
-  addresses = [data.null_data_source.node_values[count.index].outputs["address_ipv4"]]
+  addresses = [vsphere_virtual_machine.node[count.index].default_ip_address]
   ttl       = 60
 }

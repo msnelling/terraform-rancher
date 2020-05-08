@@ -5,8 +5,9 @@ resource rancher2_cluster cluster {
   rke_config {
     kubernetes_version = var.k8s_version
     addons_include = [
-      #"https://raw.githubusercontent.com/jetstack/cert-manager/v${var.cert_manager_version}/deploy/manifests/00-crds.yaml",
       "https://github.com/jetstack/cert-manager/releases/download/v${var.cert_manager_version}/cert-manager.yaml",
+      "https://raw.githubusercontent.com/metallb/metallb/v${var.metallb_version}/manifests/namespace.yaml",
+      "https://raw.githubusercontent.com/metallb/metallb/v${var.metallb_version}/manifests/metallb.yaml",
     ]
 
     cloud_provider {
@@ -28,20 +29,19 @@ resource rancher2_cluster cluster {
           folder            = data.terraform_remote_state.rancher.outputs.rancher_folder
           default_datastore = var.vsphere_vm_datastore
         }
+        /*
         disk {
           scsi_controller_type = data.vsphere_virtual_machine.template.scsi_type
         }
         network {
           public_network = var.vsphere_vm_network
         }
+        */
       }
     }
 
     network {
       plugin = "canal"
-      canal_network_provider {
-        iface = "ens192"
-      }
     }
 
     dns {
@@ -50,10 +50,7 @@ resource rancher2_cluster cluster {
     }
 
     ingress {
-      provider = var.k8s_ingress_provider
-      extra_args = {
-        default-ssl-certificate = "ingress-nginx/ingress-default-cert"
-      }
+      provider = "none"
     }
 
     services {

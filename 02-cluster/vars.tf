@@ -51,7 +51,10 @@ variable dns_update_secret {}
 ###############################################################################
 # Addons
 variable cert_manager_version {
-  default = "v0.13.0"
+  default = "0.15.0"
+}
+variable metallb_version {
+  default = "0.9.3"
 }
 
 ###############################################################################
@@ -59,7 +62,7 @@ variable cert_manager_version {
 variable k8s_name {}
 variable k8s_domain {}
 variable k8s_version {
-  default = "v1.17.0-rancher1-2"
+  default = "v1.17.5-rancher1-1"
 }
 variable k8s_ingress_provider {
   default = "nginx"
@@ -71,8 +74,6 @@ variable cluster {
     cpu_cores         = number       # VM number of cores
     memory_mb         = number       # VM memory in MB
     longhorn_disk_gb  = number       # VM disk capacity in GB
-    address_cidr_ipv4 = string       # e.g "10.1.1.41/24"
-    gateway_ipv4      = string       # e.g. "10.1.1.1"
     roles             = list(string) # e.g. ["etcd", "controlplane", "worker"]
     labels            = map(string)  # e.g. {gateway = "vpn"}
   }))
@@ -82,8 +83,6 @@ variable cluster {
       cpu_cores         = 4
       memory_mb         = 4096
       longhorn_disk_gb  = 32
-      address_cidr_ipv4 = "10.1.1.41/24"
-      gateway_ipv4      = "10.1.1.1"
       roles             = ["etcd", "controlplane", "worker"]
       labels            = {}
     },
@@ -92,8 +91,6 @@ variable cluster {
       cpu_cores         = 4
       memory_mb         = 4096
       longhorn_disk_gb  = 32
-      address_cidr_ipv4 = "10.1.1.42/24"
-      gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
       labels = {
         gateway = "vpn"
@@ -104,8 +101,6 @@ variable cluster {
       cpu_cores         = 4
       memory_mb         = 4096
       longhorn_disk_gb  = 32
-      address_cidr_ipv4 = "10.1.1.43/24"
-      gateway_ipv4      = "10.1.1.250"
       roles             = ["etcd", "controlplane", "worker"]
       labels = {
         gateway = "vpn"

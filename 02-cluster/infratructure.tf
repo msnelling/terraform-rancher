@@ -34,25 +34,18 @@ resource vsphere_virtual_machine node {
   firmware         = data.vsphere_virtual_machine.template.firmware
   scsi_type        = data.vsphere_virtual_machine.template.scsi_type
   enable_disk_uuid = true
+  hardware_version = 17
 
   force_power_off       = true
   shutdown_wait_timeout = 1
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
-    //linked_clone  = true
+    linked_clone  = true
   }
-
+  
   extra_config = {
-    "disk.enableUUID" = "TRUE" // is this still needed? see enable_disk_uuid=true above
-    "guestinfo.metadata" = base64encode(templatefile("${path.module}/templates/cloud_init_metadata_ubuntu.yaml", {
-      address_cidr_ipv4 = var.cluster[count.index].address_cidr_ipv4
-      gateway_ipv4      = var.cluster[count.index].gateway_ipv4
-      dns_servers       = join(",", var.dns_servers)
-      dns_domain        = var.k8s_domain
-    }))
-    "guestinfo.metadata.encoding" = "base64"
-    "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/cloud_init_userdata_ubuntu.yaml", {
+    "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/user_data.yaml", {
       admin_user      = var.admin_user
       admin_ssh_keys  = join(",", data.github_user.cluster_admin.ssh_keys)
       rancher_ssh_key = tls_private_key.ssh.public_key_openssh
@@ -63,33 +56,54 @@ resource vsphere_virtual_machine node {
     "guestinfo.userdata.encoding" = "base64"
   }
 
+  /*
+  vapp {
+    properties = {
+      instance-id = uuid()
+      hostname    = var.cluster[count.index].name
+      password    = "ubuntu"
+      user-data = base64encode(templatefile("${path.module}/templates/cloud_init_ubuntu_vapp.yaml", {
+        hostname          = var.cluster[count.index].name
+        dns_domain        = var.k8s_domain
+        admin_user        = var.admin_user
+        admin_ssh_keys    = join(",", data.github_user.cluster_admin.ssh_keys)
+        rancher_ssh_key   = tls_private_key.ssh.public_key_openssh
+        docker_registry   = var.docker_registry
+      }))
+    }
+  }
+  cdrom { # Required for vApp properties
+    client_device = true
+  }
+  */
+
   network_interface {
     network_id   = data.vsphere_network.vm.id
     adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
   disk {
+    unit_number      = 0
     label            = "os.vmdk"
     size             = data.vsphere_virtual_machine.template.disks.0.size
     eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
     thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
-    unit_number      = 0
   }
 
   disk {
+    unit_number  = 1
     label        = "docker"
     path         = vsphere_virtual_disk.docker_data[count.index].vmdk_path
     attach       = true
     datastore_id = data.vsphere_datastore.vm_datastore.id
-    unit_number  = 1
   }
 
   disk {
+    unit_number  = 2
     label        = "longhorn"
     path         = vsphere_virtual_disk.longhorn_data[count.index].vmdk_path
     attach       = true
     datastore_id = data.vsphere_datastore.vm_datastore.id
-    unit_number  = 2
   }
 
   tags = [data.vsphere_tag.rancher.id]

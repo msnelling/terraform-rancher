@@ -18,7 +18,7 @@ EOF
 
     environment = {
       USER = "rancher"
-      IP   = data.null_data_source.node_values[count.index].outputs["address_ipv4"]
+      IP   = vsphere_virtual_machine.node[count.index].default_ip_address
       KEY  = "${path.root}/outputs/id_rsa"
       RET  = "1"
     }
@@ -38,7 +38,7 @@ resource null_resource add_to_cluster {
   provisioner remote-exec {
     connection {
       type        = "ssh"
-      host        = data.null_data_source.node_values[count.index].outputs["address_ipv4"]
+      host = vsphere_virtual_machine.node[count.index].default_ip_address
       user        = "rancher"
       private_key = tls_private_key.ssh.private_key_pem
     }

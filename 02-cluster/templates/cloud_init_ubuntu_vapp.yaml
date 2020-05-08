@@ -1,0 +1,143 @@
+#cloud-config
+hostname: ${hostname}
+fqdn: ${hostname}.${dns_domain}
+
+write_files:
+- path: /etc/netplan/99-cloud-init.yaml
+  content: |
+    network:
+      version: 2
+      ethernets:
+        ens192:
+          optional: true
+          dhcp4: no
+          dhcp6: no
+          accept-ra: false
+          addresses:
+            - ${address_cidr_ipv4}
+          gateway4: ${gateway_ipv4}
+          nameservers:
+            addresses:
+%{ for address in split(",", dns_servers) ~}
+              - ${address}
+%{ endfor ~}
+            search:
+              - ${dns_domain}
+- path: /etc/sysctl.d/60-disable-ipv6.conf
+  owner: root
+  content: |
+    net.ipv6.conf.all.disable_ipv6=1
+    net.ipv6.conf.default.disable_ipv6=1
+
+# Users and groups
+groups:
+  - docker
+users:
+  - default
+  - name: ${admin_user}
+    ssh_authorized_keys:
+%{ for ssh_key in split(",", admin_ssh_keys) ~}
+      - ${ssh_key}
+%{ endfor ~}  
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo, docker
+    shell: /bin/bash
+  - name: rancher
+    ssh_authorized_keys:
+      - ${rancher_ssh_key}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: docker
+    create_groups: false
+    no_user_group: true
+
+# Seeding entropy
+random_seed:
+  file: /dev/urandom
+  command: ["pollinate", "-r", "-s", "https://entropy.ubuntu.com"]
+  command_required: true
+
+# NTP
+ntp:
+  servers:
+    - 0.uk.pool.ntp.org
+    - 1.uk.pool.ntp.org
+    - 2.uk.pool.ntp.org
+    - 3.uk.pool.ntp.org
+
+# SSH config
+ssh_pwauth: no
+
+# Install packages
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - docker.io
+
+# Write docker config
+write_files:
+  - content: |
+      {
+        "registry-mirrors": ["https://${docker_registry}"],
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }
+    path: /etc/docker/daemon.json
+    permissions: '0644'
+
+# Setup disks
+disk_setup:
+  /dev/sdb:
+    table_type: gpt
+    layout: true
+    overwrite: false
+  /dev/sdc:
+    table_type: gpt
+    layout: true
+    overwrite: false
+fs_setup:
+  - label: docker_data
+    device: /dev/sdb1
+    filesystem: ext4
+    overwrite: true
+  - label: longhorn_data
+    device: /dev/sdc1
+    filesystem: ext4
+    overwrite: false
+mounts:
+  - [/dev/sdb1, /var/lib/docker,            ext4, 'defaults', '0', '2']
+  - [/dev/sdc1, /var/lib/rancher/longhorn,  ext4, 'defaults', '0', '2']
+
+runcmd:
+  # Networking
+  - sysctl -w net.ipv6.conf.all.disable_ipv6=1
+  - sysctl -w net.ipv6.conf.default.disable_ipv6=1
+  - netplan --debug generate
+  - netplan --debug apply
+  # Upgrade all packages
+  - apt update
+  - apt dist-upgrade -y
+  - apt autoremove --purge -y
+  - apt clean
+  # Enable iSCSI
+  - systemctl enable iscsid
+  # Disable swap
+  - swapoff --all
+  - sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
+  # tmp file settings
+  - sed -i "s/D \/tmp 1777 root root -/#D \/tmp 1777 root root -/g" /usr/lib/tmpfiles.d/tmp.conf
+  # Disable SSH password authentication
+  - sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication no/g" /etc/ssh/sshd_config
+  # Reset machine id
+  - echo -n > /etc/machine-id
+
+final_message: "The system is prepped, after $UPTIME seconds"
+power_state:
+  delay: now
+  timeout: 30
+  mode: reboot
+  message: Rebooting the OS
+  condition: if [ -e /var/run/reboot-required ]; then exit 0; else exit 1; fi
