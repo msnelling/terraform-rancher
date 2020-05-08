@@ -17,15 +17,6 @@ variable dns_ingress_a_record {
 }
 
 ###############################################################################
-# Maesh
-variable jaeger_domain {
-  default = "k8s.xmple.io"
-}
-variable jaeger_hostname {
-  default = "jaeger"
-}
-
-###############################################################################
 # Longhorn
 variable longhorn_backup_target {
   default = "s3://longhorn.k8s.xmple.io@minio/"
