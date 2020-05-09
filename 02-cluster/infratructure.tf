@@ -43,20 +43,25 @@ resource vsphere_virtual_machine node {
     template_uuid = data.vsphere_virtual_machine.template.id
     linked_clone  = true
   }
-  
+
   extra_config = {
+    "guestinfo.metadata.encoding" = "base64"
+    "guestinfo.metadata" = base64encode(templatefile("${path.module}/templates/meta_data.yaml", {
+      iface        = var.cluster[count.index].interface
+      gateway_ipv4 = var.cluster[count.index].gateway_ipv4
+    }))
+    "guestinfo.userdata.encoding" = "base64"
     "guestinfo.userdata" = base64encode(templatefile("${path.module}/templates/user_data.yaml", {
+      hostname        = var.cluster[count.index].name
+      dns_domain      = var.k8s_domain
       admin_user      = var.admin_user
       admin_ssh_keys  = join(",", data.github_user.cluster_admin.ssh_keys)
       rancher_ssh_key = tls_private_key.ssh.public_key_openssh
-      hostname        = "${var.cluster[count.index].name}.${var.k8s_domain}"
       docker_registry = var.docker_registry
-      dns_domain      = var.k8s_domain
     }))
-    "guestinfo.userdata.encoding" = "base64"
   }
 
-  /*
+  /* WIP for passing configuration through vApp parameters
   vapp {
     properties = {
       instance-id = uuid()

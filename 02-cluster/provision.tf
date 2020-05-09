@@ -38,7 +38,7 @@ resource null_resource add_to_cluster {
   provisioner remote-exec {
     connection {
       type        = "ssh"
-      host = vsphere_virtual_machine.node[count.index].default_ip_address
+      host        = vsphere_virtual_machine.node[count.index].default_ip_address
       user        = "rancher"
       private_key = tls_private_key.ssh.private_key_pem
     }

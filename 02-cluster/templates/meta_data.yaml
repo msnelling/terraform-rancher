@@ -1,0 +1,15 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    # Primary interface
+    ens160:
+      # Disable IPv6
+      dhcp6: false
+      accept-ra: false
+%{ if gateway_ipv4 != "" }
+      # Override DHCPv4 default gateway
+      gateway4: ${gateway_ipv4}
+      dhcp4-overrides:
+        use-routes: false
+%{ endif ~}

@@ -70,38 +70,48 @@ variable k8s_ingress_provider {
 variable cluster {
   description = "List of VM specifications"
   type = list(object({
-    name              = string       # VM name
-    cpu_cores         = number       # VM number of cores
-    memory_mb         = number       # VM memory in MB
-    longhorn_disk_gb  = number       # VM disk capacity in GB
-    roles             = list(string) # e.g. ["etcd", "controlplane", "worker"]
-    labels            = map(string)  # e.g. {gateway = "vpn"}
+    name             = string       # VM name
+    cpu_cores        = number       # VM number of cores
+    memory_mb        = number       # VM memory in MB
+    longhorn_disk_gb = number       # VM disk capacity in GB
+    interface        = string       # Primary network interface e.g. ens160
+    gateway_ipv4     = string       # IPv4 gateway e.g 10.1.1.250
+    roles            = list(string) # e.g. ["etcd", "controlplane", "worker"]
+    labels           = map(string)  # e.g. {gateway = "vpn"}
   }))
   default = [
     {
-      name              = "k8s01"
-      cpu_cores         = 4
-      memory_mb         = 4096
-      longhorn_disk_gb  = 32
-      roles             = ["etcd", "controlplane", "worker"]
-      labels            = {}
-    },
-    {
-      name              = "k8s02"
-      cpu_cores         = 4
-      memory_mb         = 4096
-      longhorn_disk_gb  = 32
-      roles             = ["etcd", "controlplane", "worker"]
+      name             = "k8s01"
+      cpu_cores        = 4
+      memory_mb        = 4096
+      longhorn_disk_gb = 32
+      interface        = "ens160"
+      gateway_ipv4     = "10.1.1.250"
+      roles            = ["etcd", "controlplane", "worker"]
       labels = {
         gateway = "vpn"
       }
     },
     {
-      name              = "k8s03"
-      cpu_cores         = 4
-      memory_mb         = 4096
-      longhorn_disk_gb  = 32
-      roles             = ["etcd", "controlplane", "worker"]
+      name             = "k8s02"
+      cpu_cores        = 4
+      memory_mb        = 4096
+      longhorn_disk_gb = 32
+      interface        = "ens160"
+      gateway_ipv4     = "10.1.1.250"
+      roles            = ["etcd", "controlplane", "worker"]
+      labels = {
+        gateway = "vpn"
+      }
+    },
+    {
+      name             = "k8s03"
+      cpu_cores        = 4
+      memory_mb        = 4096
+      longhorn_disk_gb = 32
+      interface        = "ens160"
+      gateway_ipv4     = "10.1.1.250"
+      roles            = ["etcd", "controlplane", "worker"]
       labels = {
         gateway = "vpn"
       }
