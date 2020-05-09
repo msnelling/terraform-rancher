@@ -33,7 +33,7 @@ resource kubernetes_persistent_volume_claim nzbget_nfs {
   }
   spec {
     storage_class_name = kubernetes_persistent_volume.nzbget_nfs[count.index].spec[0].storage_class_name
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
         storage = values(var.nzbget_nfs)[count.index].capacity

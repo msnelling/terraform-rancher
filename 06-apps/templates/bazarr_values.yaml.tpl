@@ -10,6 +10,8 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: ${certificate_issuer}
     kubernetes.io/ingress.class: ${ingress_class}
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
   hosts:
     - ${hostname}
   tls:

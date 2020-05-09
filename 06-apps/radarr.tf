@@ -33,7 +33,7 @@ resource kubernetes_persistent_volume_claim radarr_nfs {
   }
   spec {
     storage_class_name = kubernetes_persistent_volume.radarr_nfs[count.index].spec[0].storage_class_name
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
         storage = values(var.radarr_nfs)[count.index].capacity
