@@ -140,6 +140,32 @@ variable bazarr_nfs {
 }
 
 ###############################################################################
+# Jackett
+variable jackett_hostname {
+  default = "jackett"
+}
+
+variable jackett_iscsi {
+  default = {
+    config = {
+      name     = "jackett-config"
+      lun      = "0"
+      capacity = "1Gi"
+    }
+  }
+}
+
+variable jackett_nfs {
+  default = {
+    downloads = {
+      name     = "jackett-downloads"
+      nfs_path = "/mnt/tank/media/download/Jackett"
+      capacity = "1Gi"
+    }
+  }
+}
+
+###############################################################################
 # NZBGet
 variable nzbget_hostname {
   default = "nzbget"
