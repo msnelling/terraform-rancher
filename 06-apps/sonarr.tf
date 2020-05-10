@@ -102,7 +102,7 @@ data template_file sonarr_values {
 resource rancher2_app sonarr {
   name             = "sonarr"
   template_name    = "sonarr"
-  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.custom.name}"
+  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${data.rancher2_catalog.custom.name}"
   project_id       = data.rancher2_project.default.id
   target_namespace = rancher2_namespace.sonarr.name
   values_yaml      = base64encode(data.template_file.sonarr_values.rendered)

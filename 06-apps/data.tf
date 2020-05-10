@@ -32,3 +32,8 @@ data rancher2_project default {
   cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
   name       = "Default"
 }
+
+data rancher2_catalog custom {
+  name  = data.terraform_remote_state.cluster.outputs.custom_catalog
+  scope = "cluster"
+}

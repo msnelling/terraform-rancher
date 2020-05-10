@@ -16,6 +16,6 @@ output k8s_api_token {
   sensitive = true
 }
 
-output ingress_type {
-  value = var.k8s_ingress_provider
+output custom_catalog {
+  value = rancher2_catalog.custom.name
 }

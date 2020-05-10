@@ -5,7 +5,7 @@ resource rancher2_cluster cluster {
   rke_config {
     kubernetes_version = var.k8s_version
     addons_include = [
-      "https://github.com/jetstack/cert-manager/releases/download/v${var.cert_manager_version}/cert-manager.yaml",
+      "https://github.com/jetstack/cert-manager/releases/download/v${var.cert_manager_version}/cert-manager.crds.yaml",
       "https://raw.githubusercontent.com/metallb/metallb/v${var.metallb_version}/manifests/namespace.yaml",
       "https://raw.githubusercontent.com/metallb/metallb/v${var.metallb_version}/manifests/metallb.yaml",
     ]

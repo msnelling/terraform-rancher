@@ -102,7 +102,7 @@ data template_file bazarr_values {
 resource rancher2_app bazarr {
   name             = "bazarr"
   template_name    = "bazarr"
-  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.custom.name}"
+  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${data.rancher2_catalog.custom.name}"
   project_id       = data.rancher2_project.default.id
   target_namespace = rancher2_namespace.bazarr.name
   values_yaml      = base64encode(data.template_file.bazarr_values.rendered)

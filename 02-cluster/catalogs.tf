@@ -4,5 +4,5 @@ resource rancher2_catalog custom {
   scope      = "cluster"
   version    = "helm_v2"
   refresh    = true
-  cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
+  cluster_id = rancher2_cluster_sync.cluster.id
 }
