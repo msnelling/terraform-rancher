@@ -91,7 +91,7 @@ resource local_file kube_config {
 
 resource rancher2_notifier email {
   name       = "SMTP"
-  cluster_id = rancher2_cluster.cluster.id
+  cluster_id = local.cluster_id
   smtp_config {
     default_recipient = var.notifier_smtp_recipient
     host              = var.notifier_smtp_host

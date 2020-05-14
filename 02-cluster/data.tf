@@ -38,3 +38,8 @@ data rancher2_project system {
   cluster_id = rancher2_cluster_sync.cluster.id
   name       = "System"
 }
+
+locals {
+  cluster_id        = rancher2_cluster_sync.cluster.id
+  system_project_id = data.rancher2_project.system.id
+}

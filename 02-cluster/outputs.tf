@@ -4,7 +4,7 @@ output kube_config {
 }
 
 output cluster_id {
-  value = rancher2_cluster_sync.cluster.id
+  value = local.cluster_id
 }
 
 output k8s_api_endpoint {
@@ -14,4 +14,8 @@ output k8s_api_endpoint {
 output k8s_api_token {
   value     = local.k8s_api_token
   sensitive = true
+}
+
+output internal_catalog {
+  value = rancher2_catalog.internal.name
 }
