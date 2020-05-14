@@ -1,7 +1,7 @@
 resource rancher2_namespace jackett {
   name        = "jackett"
   description = "Namespace for jackett app components"
-  project_id  = data.rancher2_project.default.id
+  project_id  = local.default_project_id
 }
 
 resource kubernetes_persistent_volume jackett_nfs {
@@ -13,7 +13,7 @@ resource kubernetes_persistent_volume jackett_nfs {
     capacity = {
       storage = values(var.jackett_nfs)[count.index].capacity
     }
-    storage_class_name               = data.terraform_remote_state.system.outputs.nfs_storage_class
+    storage_class_name               = "nfs-client"
     access_modes                     = ["ReadWriteOnce"]
     persistent_volume_reclaim_policy = "Retain"
     persistent_volume_source {
@@ -32,7 +32,7 @@ resource kubernetes_persistent_volume_claim jackett_nfs {
     namespace = rancher2_namespace.jackett.name
   }
   spec {
-    storage_class_name = data.terraform_remote_state.system.outputs.nfs_storage_class
+    storage_class_name = "nfs-client"
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
@@ -101,8 +101,8 @@ data template_file jackett_values {
 resource rancher2_app jackett {
   name             = "jackett"
   template_name    = "jackett"
-  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${data.rancher2_catalog.custom.name}"
-  project_id       = data.rancher2_project.default.id
+  catalog_name     = "${local.cluster_id}:${data.rancher2_catalog.internal.name}"
+  project_id       = local.default_project_id
   target_namespace = rancher2_namespace.jackett.name
   values_yaml      = base64encode(data.template_file.jackett_values.rendered)
 

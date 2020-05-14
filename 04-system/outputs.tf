@@ -9,7 +9,3 @@ output nvme_storage_class {
 output ssd_storage_class {
   value = kubernetes_storage_class.longhorn_ssd.metadata[0].name
 }
-
-output nfs_storage_class {
-  value = var.nfs_storage_class
-}

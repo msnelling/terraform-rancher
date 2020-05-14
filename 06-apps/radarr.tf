@@ -1,7 +1,7 @@
 resource rancher2_namespace radarr {
   name        = "radarr"
   description = "Namespace for radarr app components"
-  project_id  = data.rancher2_project.default.id
+  project_id  = local.default_project_id
 }
 
 resource kubernetes_persistent_volume radarr_nfs {
@@ -13,7 +13,7 @@ resource kubernetes_persistent_volume radarr_nfs {
     capacity = {
       storage = values(var.radarr_nfs)[count.index].capacity
     }
-    storage_class_name               = data.terraform_remote_state.system.outputs.nfs_storage_class
+    storage_class_name               = "nfs-client"
     access_modes                     = ["ReadWriteOnce"]
     persistent_volume_reclaim_policy = "Retain"
     persistent_volume_source {
@@ -101,8 +101,8 @@ data template_file radarr_values {
 
 resource rancher2_app radarr {
   name             = "radarr"
-  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${data.rancher2_catalog.custom.name}"
-  project_id       = data.rancher2_project.default.id
+  catalog_name     = "${local.cluster_id}:${data.rancher2_catalog.internal.name}"
+  project_id       = local.default_project_id
   target_namespace = rancher2_namespace.radarr.name
   template_name    = "radarr"
   values_yaml      = base64encode(data.template_file.radarr_values.rendered)

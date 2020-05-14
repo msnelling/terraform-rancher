@@ -28,12 +28,23 @@ data terraform_remote_state system {
   }
 }
 
+data rancher2_project system {
+  cluster_id = local.cluster_id
+  name       = "System"
+}
+
 data rancher2_project default {
-  cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
+  cluster_id = local.cluster_id
   name       = "Default"
 }
 
-data rancher2_catalog custom {
-  name  = data.terraform_remote_state.cluster.outputs.custom_catalog
+data rancher2_catalog internal {
+  name  = data.terraform_remote_state.cluster.outputs.internal_catalog
   scope = "cluster"
+}
+
+locals {
+  cluster_id         = data.terraform_remote_state.cluster.outputs.cluster_id
+  system_project_id  = data.rancher2_project.system.id
+  default_project_id = data.rancher2_project.default.id
 }
