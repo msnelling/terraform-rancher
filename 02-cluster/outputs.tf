@@ -15,7 +15,3 @@ output k8s_api_token {
   value     = local.k8s_api_token
   sensitive = true
 }
-
-output custom_catalog {
-  value = rancher2_catalog.custom.name
-}

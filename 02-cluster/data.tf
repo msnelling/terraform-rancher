@@ -33,3 +33,8 @@ data vsphere_tag rancher {
   name        = data.terraform_remote_state.rancher.outputs.vm_tag_rancher
   category_id = data.terraform_remote_state.rancher.outputs.vm_tag_catagory_id
 }
+
+data rancher2_project system {
+  cluster_id = rancher2_cluster_sync.cluster.id
+  name       = "System"
+}

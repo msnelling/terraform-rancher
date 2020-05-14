@@ -1,4 +1,4 @@
-cert_mananger_version: '0.13.0'
+cert_mananger_version: '0.15.0'
 cert_manager_namespace: cert-manager
 acme_ca_server_staging: https://acme-staging-v02.api.letsencrypt.org/directory
 acme_ca_server_production: https://acme-v02.api.letsencrypt.org/directory

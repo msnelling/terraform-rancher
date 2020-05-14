@@ -2,7 +2,7 @@ resource rancher2_bootstrap admin {
   provider = rancher2.bootstrap
 
   # BEGIN Comment out this line if starting from scratch
-  #current_password = var.rancher_admin_password
+  current_password = var.rancher_admin_password
   # END
 
   password   = var.rancher_admin_password

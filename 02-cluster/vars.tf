@@ -58,6 +58,10 @@ variable metallb_version {
 }
 
 ###############################################################################
+# Metal-LB
+variable metallb_address_pool {}
+
+###############################################################################
 # Kubernetes Cluster
 variable k8s_name {}
 variable k8s_domain {}

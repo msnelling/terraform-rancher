@@ -1,10 +1,5 @@
 variable ingress_domain {}
-variable builtin_ingress_hostname {
-  default = "ingress"
-}
-variable nginxinc_ingress_hostname {
-  default = "nginxinc"
-}
+
 variable traefik_ingress_hostname {
   default = "traefik"
 }
@@ -19,26 +14,13 @@ variable acme_email {}
 ###############################################################################
 # Cert-Manager
 variable cert_manager_version {
-  default = "0.14.1"
-}
-
-###############################################################################
-# Traefik
-variable traefik_chart_version {
-  default = "latest"
+  default = "0.15.0"
 }
 
 ###############################################################################
 # Cloudflare
 variable cloudflare_api_email {}
 variable cloudflare_api_key {}
-
-###############################################################################
-# Metal-LB
-variable metallb_image_tag {
-  default = "v0.8.3"
-}
-variable metallb_address_pool {}
 
 ###############################################################################
 # RFC2136

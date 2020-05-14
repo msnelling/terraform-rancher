@@ -1,22 +1,22 @@
 resource rancher2_catalog traefik {
   name       = "traefik"
-  scope      = "cluster"
-  cluster_id = data.terraform_remote_state.cluster.outputs.cluster_id
   url        = "https://containous.github.io/traefik-helm-chart"
+  scope      = "cluster"
+  cluster_id = local.cluster_id
   version    = "helm_v3"
   refresh    = true
 }
 
 resource rancher2_namespace traefik {
   name       = "traefik"
-  project_id = data.rancher2_project.system.id
+  project_id = local.system_project_id
 }
 
 resource rancher2_app traefik {
   name             = "traefik"
   template_name    = "traefik"
-  catalog_name     = "${data.terraform_remote_state.cluster.outputs.cluster_id}:${rancher2_catalog.traefik.name}"
-  project_id       = data.rancher2_project.system.id
+  catalog_name     = "${local.cluster_id}:${rancher2_catalog.traefik.name}"
+  project_id       = local.system_project_id
   target_namespace = rancher2_namespace.traefik.name
   values_yaml      = base64encode(templatefile("${path.module}/templates/traefik_values.yaml.tpl", {}))
 }

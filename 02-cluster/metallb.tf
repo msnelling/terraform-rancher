@@ -18,10 +18,11 @@ resource random_string metallb_memberlist {
   length = 128
 }
 
-resource rancher2_secret metallb_memberlist {
-  name = "memberlist"
-  project_id = data.rancher2_project.system.id
-  namespace_id = data.rancher2_namespace.metallb.id
+resource kubernetes_secret metallb_memberlist {
+  metadata {
+    name      = "memberlist"
+    namespace = "metallb-system"
+  }
   data = {
     secretkey = base64encode(random_string.metallb_memberlist.result)
   }

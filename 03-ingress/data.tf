@@ -23,7 +23,7 @@ data rancher2_project system {
   name       = "System"
 }
 
-data rancher2_namespace metallb {
-  name = "metallb-system"
-  project_id = data.rancher2_project.system.id
+locals {
+  cluster_id           = data.terraform_remote_state.cluster.outputs.cluster_id
+  system_project_id    = data.rancher2_project.system.id
 }
