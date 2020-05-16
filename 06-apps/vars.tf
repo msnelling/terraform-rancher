@@ -19,7 +19,7 @@ variable ingress_class {
 }
 
 variable certificate_issuer {
-  default = "cluster-cert-manager-issuer-letsencrypt-staging"
+  default = "letsencrypt-production"
 }
 
 ###############################################################################
