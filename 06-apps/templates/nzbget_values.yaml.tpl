@@ -17,7 +17,7 @@ ingress:
   tls:
     - hosts:
       - ${hostname}
-      secretName: sonarr-tls
+      secretName: nzbget-tls
 persistence: 
   config: 
     existingClaim: ${pvc_config}

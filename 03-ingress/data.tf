@@ -24,6 +24,6 @@ data rancher2_project system {
 }
 
 locals {
-  cluster_id           = data.terraform_remote_state.cluster.outputs.cluster_id
-  system_project_id    = data.rancher2_project.system.id
+  cluster_id        = data.terraform_remote_state.cluster.outputs.cluster_id
+  system_project_id = data.rancher2_project.system.id
 }
