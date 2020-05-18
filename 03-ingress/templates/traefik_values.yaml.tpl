@@ -7,7 +7,6 @@ additionalArguments:
   - --log
   - --log.level=INFO
   - --accesslog
-  - --providers.kubernetesIngress=true
   - --providers.kubernetesingress.ingressclass=traefik
   - --entryPoints.websecure.http.tls=true
 ports:
